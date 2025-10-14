@@ -1,418 +1,745 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Controle de Validade com Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checklist</title>
+  <meta name="description" content="Checklist com dados da loja, categorias, geolocalização com validação e relatório." />
 
-  <!-- Firebase SDK (compat para auth) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+  <!-- Tailwind + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-  <!-- Fonte e estilo -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- React -->
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Fonts: Poppins (títulos) + Inter (texto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
+    @media print {
+      .print\:hidden { display: none !important; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+    :root { --laranja: #ff500a; --amarelo: #ffd600; }
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #f8f9fa;
-      padding: 20px;
-      margin: 0;
+      -webkit-font-smoothing: antialiased; 
+      -moz-osx-font-smoothing: grayscale;
+      background: linear-gradient(135deg, var(--laranja), var(--amarelo));
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     }
-    h1 {
-      color: #007bff;
-      text-align: center;
-      margin-bottom: 20px;
-      font-weight: 700;
-      font-size: 2rem;
-    }
-    h2 {
-      color: #28a745;
-      font-size: 1.6rem;
-      font-weight: 500;
-    }
-    input, select {
-      padding: 10px;
-      margin: 5px;
-      width: 200px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-    button {
-      padding: 10px 20px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      font-size: 1rem;
-      font-weight: 500;
-    }
-    .btn-danger {
-      background-color: #dc3545;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-    .btn-danger:hover {
-      background-color: #c82333;
-    }
-    .form-container {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 30px;
-    }
-    .form-container label {
-      display: inline-block;
-      width: 120px;
-      font-weight: 500;
-    }
-    .form-container input,
-    .form-container select {
-      width: calc(100% - 130px);
-      display: inline-block;
-    }
-    .form-container button {
-      margin-top: 15px;
-      display: block;
-      width: 100%;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: white;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-    th {
-      background-color: #e9f7ef;
-      color: #007bff;
-      font-weight: bold;
-      font-size: 1.1rem;
-    }
-    td {
-      font-size: 1rem;
-      color: #555;
-    }
-    .table-container {
-      margin-top: 40px;
-    }
-    #login-box {
-  max-width: 360px;
-  margin: 80px auto;
-  padding: 40px 30px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-family: 'Roboto', sans-serif;
-}
+    .title-font { font-family: 'Poppins', 'Inter', sans-serif; }
+    .btn-primary { background-color: var(--laranja); color: #fff; border: 2px solid transparent; transition: all .2s ease; }
+    .btn-primary:hover { background-color: #fff; color: var(--laranja); border-color: var(--laranja); }
+    .section-card { border-left: 6px solid var(--laranja); border-radius: 12px; background: #ffffff; }
+    .section-title, .subsection-title, .accent { color: var(--laranja); font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; }
+    .link-accent { color: var(--laranja); }
+    .link-accent:hover { color: #d64207; }
 
-#login-box h2 {
-  font-weight: 600;
-  font-size: 1.8rem;
-  margin-bottom: 8px;
-  color: #333;
-}
+    .accordion { border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; }
+    .accordion-header { background: #fff7f3; border-bottom: 1px solid #fde7df; cursor: pointer; user-select: none; }
+    .accordion-header:hover { background: #fff2eb; }
+    .category-title { color: var(--laranja); font-weight: 700; }
+    .separator-dot { width: 6px; height: 6px; background: var(--laranja); border-radius: 9999px; display: inline-block; }
 
-#login-box p {
-  color: #666;
-  font-size: 0.95rem;
-  margin-bottom: 20px;
-}
+    .drag-handle { cursor: grab; color: #9ca3af; }
+    .drag-handle:active { cursor: grabbing; }
+    .drag-over { outline: 2px dashed var(--laranja); outline-offset: 2px; background: #fffef7; }
 
-#login-box input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-#login-box button {
-  width: 100%;
-  background-color: #1a73e8;
-  color: white;
-  font-weight: 500;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  padding: 12px;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-#login-box button:hover {
-  background-color: #1765cc;
-}
-
-.login-links {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-}
-
-.login-links a {
-  color: #1a73e8;
-  text-decoration: none;
-}
-
-.login-links a:hover {
-  text-decoration: underline;
-}
-
-#sistema {
-  display: none;
-}
-
-
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 12px; font-weight: 700; }
   </style>
 </head>
 <body>
+  <div id="root"></div>
 
-<!-- LOGIN -->
-<div id="login-box">
-  <h2>Controle de Validade</h2>
-  <p>Entre com sua conta para continuar</p>
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, useRef } = React;
 
-  <input type="email" id="email" placeholder="E-mail" required>
-  <input type="password" id="senha" placeholder="Senha" required>
+    function App() {
+      const [perguntas, setPerguntas] = useState([
+        { id: 1, categoria: 'Segurança', texto: 'EPIs conferidos?', fotoObrigatoria: true },
+        { id: 2, categoria: 'Segurança', texto: 'Extintores dentro da validade?', fotoObrigatoria: false },
+        { id: 3, categoria: 'Operação', texto: 'Equipamentos verificados?', fotoObrigatoria: false },
+        { id: 4, categoria: 'Operação', texto: 'Procedimentos operacionais atualizados?', fotoObrigatoria: false },
+        { id: 5, categoria: 'Documentação', texto: 'Documentos atualizados?', fotoObrigatoria: false },
+      ]);
 
-  <button onclick="login()">Entrar</button>
+      const [novaPergunta, setNovaPergunta] = useState('');
+      const [novaCategoria, setNovaCategoria] = useState('');
+      const [novaFotoObrigatoria, setNovaFotoObrigatoria] = useState(false);
 
-  <div class="login-links">
-    <a href="#" onclick="esqueciSenha()">Esqueci minha senha</a>
-    <a href="#" onclick="criarConta()">Criar conta</a>
-  </div>
-</div>
+      const [editandoId, setEditandoId] = useState(null);
+      const [textoEdicao, setTextoEdicao] = useState('');
+      const [categoriaEdicao, setCategoriaEdicao] = useState('');
+      const [fotoObrigatoriaEdicao, setFotoObrigatoriaEdicao] = useState(false);
 
+      const [abertasInicial, setAbertasInicial] = useState({});
+      const [abertasExecucao, setAbertasExecucao] = useState({});
 
-<!-- SISTEMA -->
-<div id="sistema">
-  <h1>Controle de Validade de Produtos</h1>
+      const [checklistIniciado, setChecklistIniciado] = useState(false);
+      const [checklistFinalizado, setChecklistFinalizado] = useState(false);
 
-  <div class="form-container">
-    <h2>Adicionar Novo Produto</h2>
-    <form id="adicionarProdutoForm">
-      <label for="produto">Produto:</label>
-      <input type="text" id="produto" required><br><br>
+      const [lojaNome, setLojaNome] = useState('');
+      const [lojaEndereco, setLojaEndereco] = useState('');
+      const [avaliadorNome, setAvaliadorNome] = useState('');
 
-      <label for="medida">Medida:</label>
-      <select id="medida" required>
-        <option value="kg">Kg</option>
-        <option value="L">L</option>
-        <option value="g">g</option>
-        <option value="ml">ml</option>
-        <option value="unidade">Unidade</option>
-      </select><br><br>
+      const [geoStatus, setGeoStatus] = useState('idle');
+      const [coords, setCoords] = useState(null);
+      const [enderecoGPS, setEnderecoGPS] = useState('');
+      const [geoErro, setGeoErro] = useState('');
+      const [gpsConfereEndereco, setGpsConfereEndereco] = useState(null);
+      const [gpsValidando, setGpsValidando] = useState(false);
 
-      <label for="quantidade">Quantidade:</label>
-      <input type="number" id="quantidade" required><br><br>
+      const [alvoLat, setAlvoLat] = useState('');
+      const [alvoLon, setAlvoLon] = useState('');
+      const [alvoRaio, setAlvoRaio] = useState(100);
+      const [distancia, setDistancia] = useState(null);
+      const [dentroDaArea, setDentroDaArea] = useState(false);
 
-      <label for="validade">Validade:</label>
-      <input type="date" id="validade" required><br><br>
+      const [respostas, setRespostas] = useState({});
+      const [evidencias, setEvidencias] = useState({});
 
-      <button type="submit">Adicionar Produto</button>
-    </form>
-  </div>
+      const [inicioISO, setInicioISO] = useState(null);
+      const [fimISO, setFimISO] = useState(null);
 
-  <div class="table-container">
-    <h2>Lista de Produtos</h2>
-    <table id="produtosTabela">
-      <thead>
-        <tr>
-          <th>Produto</th>
-          <th>Medida</th>
-          <th>Quantidade</th>
-          <th>Validade</th>
-          <th>Status</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+      const [uploadErro, setUploadErro] = useState('');
 
-    <button onclick="baixarExcel()">Baixar Excel</button>
-    <button id="logout">Sair</button>
-  </div>
-</div>
+      const [nomeSet, setNomeSet] = useState('');
+      const [setsSalvos, setSetsSalvos] = useState([]);
+      const [setSelecionado, setSetSelecionado] = useState('');
 
-<!-- SCRIPT -->
-<script>
-  // 🔐 Firebase config personalizada
-  const firebaseConfig = {
-    apiKey: "AIzaSyAcDeqTrmIg30mpkAp2a9ctEGH5iuLibw4",
-    authDomain: "controle-validade-d2e14.firebaseapp.com",
-    projectId: "controle-validade-d2e14",
-    storageBucket: "controle-validade-d2e14.firebasestorage.app",
-    messagingSenderId: "252000133537",
-    appId: "1:252000133537:web:91f4ae48a3ac8300e72be0",
-    measurementId: "G-2Y1JV3KMXV"
-  };
+      const formatarDataHora = (iso) => {
+        if (!iso) return '';
+        const d = new Date(iso);
+        return d.toLocaleString('pt-BR');
+      };
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+      const duracaoHumana = (ms) => {
+        if (!ms || ms < 0) return '';
+        const s = Math.floor(ms / 1000);
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const seg = s % 60;
+        return [h ? h + 'h' : null, (m || h) ? m + 'm' : null, seg + 's'].filter(Boolean).join(' ');
+      };
 
-  function login() {
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
+      const toRad = (deg) => (deg * Math.PI) / 180;
+      const haversineMeters = (lat1, lon1, lat2, lon2) => {
+        const R = 6371000;
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+      };
 
-  auth.signInWithEmailAndPassword(email, senha)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      if (user.emailVerified) {
-        document.getElementById("login-box").style.display = "none";
-        document.getElementById("sistema").style.display = "block";
-      } else {
-        auth.signOut();
-        alert("Você precisa verificar seu e-mail antes de acessar o sistema.");
-      }
-    })
-    .catch(err => alert("Erro: " + err.message));
-}
+      // LocalStorage conjuntos
+      const LS_META_KEY = 'checklist_sets_meta';
+      const carregarMeta = () => { try { return JSON.parse(localStorage.getItem(LS_META_KEY) || '[]'); } catch { return []; } };
+      const salvarMeta = (meta) => localStorage.setItem(LS_META_KEY, JSON.stringify(meta));
+      const salvarSetLocal = (nome, lista) => {
+        if (!nome || !lista || !lista.length) return;
+        localStorage.setItem('checklist_set::' + nome, JSON.stringify(lista));
+        const meta = carregarMeta();
+        const idx = meta.findIndex(m => m.name === nome);
+        const item = { name: nome, count: lista.length, updatedAt: new Date().toISOString() };
+        if (idx >= 0) meta[idx] = item; else meta.push(item);
+        salvarMeta(meta);
+        setSetsSalvos(meta);
+      };
+      const carregarSetLocal = (nome) => { try { return JSON.parse(localStorage.getItem('checklist_set::' + nome) || 'null'); } catch { return null; } };
+      const excluirSetLocal = (nome) => {
+        localStorage.removeItem('checklist_set::' + nome);
+        const meta = carregarMeta().filter(m => m.name !== nome);
+        salvarMeta(meta);
+        setSetsSalvos(meta);
+      };
 
+      const carregarDadosLoja = () => {
+        setLojaNome(localStorage.getItem('loja_nome') || '');
+        setLojaEndereco(localStorage.getItem('loja_endereco') || '');
+        setAvaliadorNome(localStorage.getItem('avaliador_nome') || '');
+      };
 
-  function logout() {
-    auth.signOut().then(() => {
-      document.getElementById("sistema").style.display = "none";
-      document.getElementById("login-box").style.display = "block";
-    });
-  }
+      useEffect(() => {
+        setSetsSalvos(carregarMeta());
+        carregarDadosLoja();
+      }, []);
 
-  auth.onAuthStateChanged(user => {
-  if (user) {
-    document.getElementById("login-box").style.display = "none";
-    document.getElementById("sistema").style.display = "block";
-  } else {
-    document.getElementById("sistema").style.display = "none";
-    document.getElementById("login-box").style.display = "block";
-  }
-});
+      const salvarLojaNome = (nome) => { localStorage.setItem('loja_nome', nome); setLojaNome(nome); };
+      const salvarLojaEndereco = (end) => { localStorage.setItem('loja_endereco', end); setLojaEndereco(end); };
+      const salvarAvaliadorNome = (nome) => { localStorage.setItem('avaliador_nome', nome); setAvaliadorNome(nome); };
 
-  // ========== SISTEMA ==========
-  function formatarData(dataString) {
-  const [ano, mes, dia] = dataString.split("-");
-  return `${dia}/${mes}/${ano}`;
-}
+      // Normalizações
+      const normalizarTexto = (s) => (s || '').toString().replace(/\uFEFF/g, '').normalize('NFC').trim();
+      const normalizarParaComparacao = (s) => (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.,;:]/g, ' ').replace(/\s+/g, ' ').trim();
 
-function calcularStatus(dataString) {
-  const [ano, mes, dia] = dataString.split("-");
-  const dataValidade = new Date(Date.UTC(ano, mes - 1, dia));
-  
-  const hoje = new Date();
-  const hojeUTC = new Date(Date.UTC(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()));
+      // GEO
+      const extrairTokensEndereco = (s) => normalizarParaComparacao(s).split(' ').filter(w => w && !/^\d{1,2}$/.test(w));
+      const enderecoCoincide = (endLoja, endGPS) => {
+        const a = new Set(extrairTokensEndereco(endLoja));
+        const b = new Set(extrairTokensEndereco(endGPS));
+        let inter = 0; for (const token of a) if (b.has(token)) inter++;
+        return inter >= 3;
+      };
+      const validarEnderecoGPS = (endGPS, endLoja) => {
+        setGpsValidando(true);
+        try { setGpsConfereEndereco(enderecoCoincide(endLoja, endGPS)); }
+        finally { setGpsValidando(false); }
+      };
 
-  const diffTime = dataValidade - hojeUTC;
-  const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24));
+      const capturarLocalizacao = () => {
+        setGeoErro('');
+        if (!('geolocation' in navigator)) { setGeoStatus('erro'); setGeoErro('Geolocalização não suportada.'); return; }
+        setGeoStatus('buscando');
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            const { latitude, longitude, accuracy } = pos.coords;
+            setCoords({ latitude, longitude, accuracy });
+            setGeoStatus('ok');
 
-  if (diffDays < 0) return "Venceu há " + Math.abs(diffDays) + " dias";
-  else if (diffDays === 0) return "Vence hoje";
-  else if (diffDays === 1) return "Vence amanhã";
-  else return "Vence em " + diffDays + " dias";
-}
+            if (!alvoLat || !alvoLon) {
+              setAlvoLat(latitude.toString()); setAlvoLon(longitude.toString());
+              setDistancia(0); setDentroDaArea(true);
+            } else {
+              const d = haversineMeters(+latitude, +longitude, +alvoLat, +alvoLon);
+              setDistancia(d); setDentroDaArea(d <= (+alvoRaio || 0));
+            }
 
-  document.getElementById('adicionarProdutoForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+            try {
+              const url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + latitude + '&lon=' + longitude;
+              const resp = await fetch(url, { headers: { 'Accept-Language': 'pt-BR' } });
+              if (resp.ok) {
+                const data = await resp.json();
+                const end = data.display_name || '';
+                setEnderecoGPS(end);
+                if (lojaEndereco.trim()) validarEnderecoGPS(end, lojaEndereco);
+              }
+            } catch (e) { console.error('Erro ao buscar endereço:', e); }
+          },
+          (err) => { setGeoStatus('erro'); setGeoErro(err.message || 'Falha ao obter localização.'); },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+      };
 
-    const produto = document.getElementById('produto').value;
-    const medida = document.getElementById('medida').value;
-    const quantidade = document.getElementById('quantidade').value;
-    const validade = document.getElementById('validade').value;
+      // CRUD perguntas
+      const proximoId = useMemo(() => (perguntas.length ? Math.max(...perguntas.map(p => p.id)) + 1 : 1), [perguntas]);
+      const adicionarPergunta = () => {
+        if (!novaPergunta.trim()) return;
+        const cat = novaCategoria.trim() || 'Geral';
+        setPerguntas(p => [...p, { id: proximoId, categoria: normalizarTexto(cat), texto: normalizarTexto(novaPergunta), fotoObrigatoria: !!novaFotoObrigatoria }]);
+        setNovaPergunta(''); setNovaCategoria(''); setNovaFotoObrigatoria(false);
+      };
+      const removerPergunta = (id) => setPerguntas(perguntas.filter(p => p.id !== id));
+      const iniciarEdicao = (p) => { setEditandoId(p.id); setTextoEdicao(p.texto); setCategoriaEdicao(p.categoria); setFotoObrigatoriaEdicao(!!p.fotoObrigatoria); };
+      const salvarEdicao = () => {
+        if (editandoId == null) return;
+        setPerguntas(perguntas.map(p => p.id === editandoId ? ({ ...p, texto: normalizarTexto(textoEdicao) || p.texto, categoria: normalizarTexto(categoriaEdicao) || 'Geral', fotoObrigatoria: !!fotoObrigatoriaEdicao }) : p));
+        setEditandoId(null);
+      };
 
-    const validadeFormatada = formatarData(validade);
-    const status = calcularStatus(validade);
+      const handleEvidenciaUpload = (id, file) => {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => setEvidencias((ev) => ({ ...ev, [id]: e.target.result }));
+        reader.readAsDataURL(file);
+      };
 
-    const novaLinha = document.createElement('tr');
-novaLinha.innerHTML = `
-  <td data-label="Produto">${produto}</td>
-  <td data-label="Medida">${medida}</td>
-  <td data-label="Quantidade">${quantidade}</td>
-  <td data-label="Validade">${validadeFormatada}</td>
-  <td data-label="Status">${status}</td>
-  <td data-label="Ação"><button class="btn-danger">Apagar</button></td>
-`;
+      const responderPergunta = (id, resp) => setRespostas({ ...respostas, [id]: resp });
 
+      const requisitosAtendidosParaIniciar = () => {
+        if (!lojaNome.trim() || !lojaEndereco.trim() || !avaliadorNome.trim()) return false;
+        if (!coords) return false;
+        if (!dentroDaArea) return false;
+        if (gpsConfereEndereco !== true) return false;
+        if (perguntas.length === 0) return false;
+        return true;
+      };
+      const iniciarChecklist = () => {
+        if (!requisitosAtendidosParaIniciar()) {
+          let msg = 'Para iniciar: preencha os dados da loja, capture o GPS, esteja dentro da área e valide o endereço.';
+          if (gpsConfereEndereco === false) msg = 'O endereço do GPS não confere com o endereço da loja.';
+          alert(msg); return;
+        }
+        setChecklistIniciado(true); setRespostas({}); setInicioISO(new Date().toISOString()); setFimISO(null);
+      };
 
-    document.querySelector("#produtosTabela tbody").appendChild(novaLinha);
-    event.target.reset();
-  });
+      const todasRespondidas = perguntas.every((p) => respostas[p.id]);
+      const evidenciasOk = perguntas.every((p) => p.fotoObrigatoria ? !!evidencias[p.id] : true);
+      const finalizarChecklist = () => {
+        if (!todasRespondidas) return alert('Responda todas as perguntas.');
+        if (!evidenciasOk) return alert('Há itens com foto obrigatória sem evidência.');
+        setFimISO(new Date().toISOString()); setChecklistFinalizado(true);
+      };
 
-  document.addEventListener('click', function(event) {
-    if (event.target.classList.contains('btn-danger')) {
-      event.target.closest('tr').remove();
-    }
-  });
+      const calcularNotaPct = () => {
+        const total = perguntas.length;
+        const pos = perguntas.filter(p => respostas[p.id] === 'sim').length;
+        const pct = total > 0 ? (pos / total) * 100 : 0;
+        return pct.toFixed(2) + '%';
+      };
 
-  function baixarExcel() {
-    const tabela = document.getElementById("produtosTabela");
-    const linhas = tabela.getElementsByTagName("tr");
-    const dados = [];
+      const reiniciar = () => {
+        setChecklistIniciado(false); setChecklistFinalizado(false); setRespostas({}); setEvidencias({});
+        setCoords(null); setEnderecoGPS(''); setGeoStatus('idle'); setGeoErro('');
+        setDistancia(null); setDentroDaArea(false); setGpsConfereEndereco(null);
+        setInicioISO(null); setFimISO(null); setAlvoLat(''); setAlvoLon('');
+      };
 
-    for (let i = 1; i < linhas.length; i++) {
-      const cols = linhas[i].getElementsByTagName("td");
-      const linha = [];
+      // CSV
+      const detectarDelimitador = (text) => {
+        const primeiroBloco = text.split(/\r?\n/).slice(0, 5).join('\n');
+        const c1 = (primeiroBloco.match(/;/g) || []).length;
+        const c2 = (primeiroBloco.match(/,/g) || []).length;
+        const c3 = (primeiroBloco.match(/\t/g) || []).length;
+        if (c1 >= c2 && c1 >= c3) return ';';
+        if (c2 >= c1 && c2 >= c3) return ',';
+        return '\t';
+      };
+      const parseBooleanLoose = (v) => {
+        const t = (v || '').toString().trim().toLowerCase();
+        return ['sim','yes','true','1','y'].includes(t);
+      };
+      const decodeWithFallback = async (file) => {
+        try {
+          const text = await file.text();
+          if (text.includes(' ')) throw new Error('bad-utf8');
+          return text;
+        } catch {
+          const buf = await file.arrayBuffer();
+          const bytes = new Uint8Array(buf);
+          const map1252 = {0x80:'€',0x82:'‚',0x83:'ƒ',0x84:'„',0x85:'…',0x86:'†',0x87:'‡',0x88:'ˆ',0x89:'‰',0x8A:'Š',0x8B:'‹',0x8C:'Œ',0x8E:'Ž',0x91:'‘',0x92:'’',0x93:'“',0x94:'”',0x95:'•',0x96:'–',0x97:'—',0x98:'˜',0x99:'™',0x9A:'š',0x9B:'›',0x9C:'œ',0x9E:'ž',0x9F:'Ÿ'};
+          let out=''; for (let i=0;i<bytes.length;i++){ const b=bytes[i]; if (b<0x80 || b>=0xA0) out+=String.fromCharCode(b); else out+=(map1252[b]||' '); }
+          return out;
+        }
+      };
+      const parseCSVToPerguntas = (text) => {
+        const linhas = text.split(/\r?\n/).map(l => l.replace(/\uFEFF/g,'').trim()).filter(Boolean);
+        if (!linhas.length) return [];
+        const delim = detectarDelimitador(text);
+        const headerCells = linhas[0].split(delim).map(c => c.trim().toLowerCase());
+        const hasHeader = ['categoria','pergunta','perguntas','foto_obrigatoria','foto obrigatoria','foto-obrigatoria','foto obrigatória','foto obrigatória?'].some(h => headerCells.includes(h));
+        const out = [];
+        if (hasHeader) {
+          const idxCategoria = headerCells.findIndex(h => h === 'categoria');
+          const idxPergunta = headerCells.findIndex(h => ['pergunta','perguntas'].includes(h));
+          const idxFoto = headerCells.findIndex(h => ['foto_obrigatoria','foto obrigatoria','foto-obrigatoria','foto obrigatória','foto obrigatória?'].includes(h));
+          for (let i = 1; i < linhas.length; i++) {
+            const cols = linhas[i].split(delim).map(c => normalizarTexto(c));
+            const texto = idxPergunta >= 0 ? (cols[idxPergunta] || '') : '';
+            if (!texto) continue;
+            const categoria = idxCategoria >= 0 ? (cols[idxCategoria] || 'Geral') : 'Geral';
+            const fotoObrigatoria = idxFoto >= 0 ? parseBooleanLoose(cols[idxFoto] || 'não') : false;
+            out.push({ categoria, texto, fotoObrigatoria });
+          }
+        } else {
+          for (const l of linhas) out.push({ categoria: 'Geral', texto: normalizarTexto(l), fotoObrigatoria: false });
+        }
+        const uniq = []; const seen = new Set();
+        for (const p of out) { const key = (p.categoria + '__' + p.texto).toLowerCase(); if (!seen.has(key)) { seen.add(key); uniq.push(p); } }
+        return uniq;
+      };
+      const handleArquivoCSV = async (file) => {
+        setUploadErro(''); if (!file) return;
+        if (!/\.csv$/i.test(file.name)) { setUploadErro('Formato não suportado. Exporte o Excel como CSV (.csv).'); return; }
+        try {
+          const raw = await decodeWithFallback(file);
+          const dados = parseCSVToPerguntas(raw);
+          if (!dados.length) { setUploadErro('Nenhuma pergunta válida encontrada no CSV.'); return; }
+          const novos = dados.map((d, i) => ({ id: i + 1, categoria: normalizarTexto(d.categoria || 'Geral'), texto: normalizarTexto(d.texto), fotoObrigatoria: !!d.fotoObrigatoria }));
+          setPerguntas(novos); setRespostas({}); setEvidencias({});
+        } catch (err) { setUploadErro('Falha ao processar o CSV. ' + (err.message || '')); }
+      };
 
-      for (let j = 0; j < cols.length - 1; j++) {
-        linha.push(cols[j].innerText);
-      }
-      dados.push(linha);
-    }
+      // Agrupamento
+      const categorias = useMemo(() => {
+        const map = new Map();
+        for (const p of perguntas) { const cat = p.categoria || 'Geral'; if (!map.has(cat)) map.set(cat, []); map.get(cat).push(p); }
+        return Array.from(map.entries());
+      }, [perguntas]);
 
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.aoa_to_sheet([["Produto", "Medida", "Quantidade", "Validade", "Status"], ...dados]);
-    XLSX.utils.book_append_sheet(wb, ws, "Produtos");
-    XLSX.writeFile(wb, "controle_validade.xlsx");
-  }
+      useEffect(() => {
+        const init = {}; for (const [cat] of categorias) init[cat] = false;
+        setAbertasInicial(prev => ({...init, ...prev}));
+        setAbertasExecucao(prev => ({...init, ...prev}));
+      }, [categorias.length]);
 
+      const toggleInicial = (cat) => setAbertasInicial(prev => ({ ...prev, [cat]: !prev[cat] }));
+      const toggleExecucao = (cat) => setAbertasExecucao(prev => ({ ...prev, [cat]: !prev[cat] }));
 
-  function criarConta() {
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
-
-  if (!email || !senha) {
-    alert("Digite e-mail e senha para criar conta.");
-    return;
-  }
-
-  auth.createUserWithEmailAndPassword(email, senha)
-    .then(() => {
-      auth.currentUser.sendEmailVerification()
-        .then(() => {
-          alert("Conta criada! Verifique seu e-mail antes de fazer login.");
-          auth.signOut();
+      // Drag and Drop
+      const dragItemRef = useRef(null);
+      const onDragStartPergunta = (p) => (e) => {
+        dragItemRef.current = { id: p.id };
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', String(p.id));
+      };
+      const onDragOverPergunta = (p) => (e) => { e.preventDefault(); if (e.currentTarget) e.currentTarget.classList.add('drag-over'); };
+      const onDragLeavePergunta = (e) => { if (e.currentTarget) e.currentTarget.classList.remove('drag-over'); };
+      const onDropPergunta = (p) => (e) => {
+        e.preventDefault(); if (e.currentTarget) e.currentTarget.classList.remove('drag-over');
+        const drag = dragItemRef.current; if (!drag || drag.id === p.id) return;
+        setPerguntas((list) => {
+          const fromIdx = list.findIndex(x => x.id === drag.id);
+          const toIdx = list.findIndex(x => x.id === p.id);
+          if (fromIdx < 0 || toIdx < 0) return list.slice();
+          const novo = list.slice();
+          const [moved] = novo.splice(fromIdx, 1);
+          // Garante categoria do alvo
+          const alvo = novo.find(x => x.id === p.id) || p;
+          moved.categoria = alvo.categoria;
+          const insertIndex = novo.findIndex(x => x.id === p.id);
+          novo.splice(insertIndex, 0, moved);
+          return novo;
         });
-    })
-    .catch(err => alert("Erro ao criar conta: " + err.message));
-}
+        dragItemRef.current = null;
+      };
+      const onDragOverCategoria = (cat) => (e) => { e.preventDefault(); if (e.currentTarget) e.currentTarget.classList.add('drag-over'); };
+      const onDragLeaveCategoria = (e) => { if (e.currentTarget) e.currentTarget.classList.remove('drag-over'); };
+      const onDropCategoria = (cat) => (e) => {
+        e.preventDefault(); if (e.currentTarget) e.currentTarget.classList.remove('drag-over');
+        const drag = dragItemRef.current; if (!drag) return;
+        setPerguntas((list) => {
+          const fromIdx = list.findIndex(x => x.id === drag.id);
+          if (fromIdx < 0) return list.slice();
+          const novo = list.slice();
+          const [moved] = novo.splice(fromIdx, 1);
+          moved.categoria = cat;
+          // insere no final da categoria
+          let lastIdx = -1;
+          for (let i = novo.length - 1; i >= 0; i--) { if (novo[i].categoria === cat) { lastIdx = i; break; } }
+          if (lastIdx >= 0) novo.splice(lastIdx + 1, 0, moved); else novo.push(moved);
+          return novo;
+        });
+        dragItemRef.current = null;
+      };
 
+      // Relatório final
+      if (checklistFinalizado) {
+        const total = perguntas.length;
+        const pos = perguntas.filter(p => respostas[p.id] === 'sim').length;
+        const duracao = inicioISO && fimISO ? duracaoHumana(new Date(fimISO) - new Date(inicioISO)) : '';
+        const notaPct = calcularNotaPct();
 
-function esqueciSenha() {
-  const email = document.getElementById("email").value;
+        return (
+          <div className="min-h-screen p-4 print:bg-white print:p-0">
+            <div className="max-w-4xl mx-auto section-card shadow-2xl p-4 sm:p-8 print:shadow-none bg-white">
+              <h1 className="title-font text-3xl font-bold text-center mb-6" style={{color: 'var(--laranja)'}}>
+                <i className="fas fa-file-alt mr-2"></i>Relatório do Checklist
+              </h1>
 
-  if (!email) {
-    alert("Informe seu e-mail para recuperar a senha.");
-    return;
-  }
+              <div className="mb-6 bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+                <h3 className="subsection-title text-lg mb-2">Dados da Auditoria</h3>
+                <div className="text-sm text-gray-700 space-y-1">
+                  <div><strong>Loja:</strong> {lojaNome}</div>
+                  <div><strong>Endereço:</strong> {lojaEndereco}</div>
+                  <div><strong>Avaliador:</strong> {avaliadorNome}</div>
+                </div>
+              </div>
 
-  auth.sendPasswordResetEmail(email)
-    .then(() => alert("Link de recuperação enviado para seu e-mail."))
-    .catch(err => alert("Erro ao enviar e-mail: " + err.message));
-}
+              <div className="text-sm text-gray-700 space-y-1 mb-6">
+                <div><strong>Início:</strong> {formatarDataHora(inicioISO)}</div>
+                <div><strong>Término:</strong> {formatarDataHora(fimISO)}</div>
+                <div><strong>Duração:</strong> {duracao}</div>
+                {coords && (
+                  <div className="mt-2 space-y-1">
+                    <div className="break-all"><strong>Lat:</strong> {coords.latitude.toFixed(6)} | <strong>Lon:</strong> {coords.longitude.toFixed(6)}</div>
+                    {coords.accuracy && (<div><strong>Precisão:</strong> ±{Math.round(coords.accuracy)} m</div>)}
+                    {enderecoGPS && (<div className="break-words"><strong>Endereço GPS:</strong> {enderecoGPS}</div>)}
+                    {distancia != null && (
+                      <div>
+                        <strong>Distância ao alvo:</strong> {Math.round(distancia)} m | <strong>Status:</strong> {dentroDaArea ? 'Dentro da área' : 'Fora da área'}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
-</script>
+              <div className="bg-white rounded-lg p-6 mb-6 text-center border">
+                <h2 className="title-font text-5xl font-bold mb-2" style={{color: 'var(--laranja)'}}>{notaPct}</h2>
+                <p className="text-sm sm:text-base text-gray-600">Nota Final — {pos} de {total} respostas positivas</p>
+              </div>
 
+              <div className="mb-4 sm:mb-6">
+                <h3 className="text-base sm:text-lg font-bold mb-3">Resumo por Categoria</h3>
+                <div className="space-y-4">
+                  {categorias.map(([cat, itens]) => (
+                    <div key={cat} className="border rounded-lg">
+                      <div className="px-3 py-2 bg-gray-100 font-semibold">{cat}</div>
+                      <div className="p-3 space-y-2">
+                        {itens.map((p) => (
+                          <div key={p.id} className="p-3 bg-gray-50 rounded">
+                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                              <div className="flex-1">
+                                <div className="text-sm font-semibold mb-1 break-words">{p.texto}</div>
+                                <div className={'text-sm font-bold ' + (respostas[p.id] === 'sim' ? 'text-green-600' : 'text-red-600')}>
+                                  {respostas[p.id] === 'sim' ? '✓ SIM' : '✗ NÃO'}
+                                </div>
+                                {p.fotoObrigatoria && (
+                                  <div className="mt-1 badge bg-yellow-100 text-yellow-700">
+                                    <i className="fas fa-camera mr-1"></i>Foto obrigatória
+                                  </div>
+                                )}
+                              </div>
+                              <div className="w-full sm:w-40 text-center">
+                                {evidencias[p.id] ? (
+                                  <img src={evidencias[p.id]} alt={'Evidência ' + p.id} className="w-full sm:w-40 h-28 object-cover rounded border mx-auto" />
+                                ) : (
+                                  <div className="text-xs text-gray-500">Sem evidência</div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 print:hidden">
+                <button onClick={() => window.print()} className="flex-1 btn-primary py-3 rounded-lg font-bold">
+                  <i className="fas fa-print mr-2"></i>Imprimir / Salvar em PDF
+                </button>
+                <button onClick={reiniciar} className="flex-1 btn-primary py-3 rounded-lg font-bold">
+                  <i className="fas fa-redo mr-2"></i>Novo Checklist
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // Execução com accordion
+      if (checklistIniciado) {
+        return (
+          <div className="min-h-screen p-4">
+            <div className="max-w-4xl mx-auto section-card shadow-2xl p-4 sm:p-8">
+              <h1 className="title-font text-3xl font-bold text-center mb-6" style={{color: 'var(--laranja)'}}>
+                <i className="fas fa-clipboard-check mr-2"></i>Checklist
+              </h1>
+
+              <div className="mb-4 bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                <h3 className="font-bold text-sm mb-2" style={{color: 'var(--laranja)'}}>
+                  <i className="fas fa-store mr-2"></i>
+                  <span>Loja: <span style={{color: 'var(--laranja)'}}>Aquiraz</span></span>
+                  <span className="mx-1"> | </span>
+                  <span>Avaliador: <span style={{color: 'var(--laranja)'}}>Marcus</span></span>
+                </h3>
+                <div className="text-xs text-gray-700">{lojaEndereco}</div>
+              </div>
+
+              <div className="space-y-4 mb-6">
+                {categorias.map(([cat, itens]) => (
+                  <div key={cat} className="accordion">
+                    <div className="accordion-header px-4 py-3 flex items-center justify-between" onClick={() => toggleExecucao(cat)}>
+                      <div className="flex items-center gap-2">
+                        <span className="separator-dot"></span>
+                        <span className="category-title">{cat}</span>
+                      </div>
+                      <i className={'fas ' + (abertasExecucao[cat] ? 'fa-chevron-up' : 'fa-chevron-down')} style={{color:'var(--laranja)'}}></i>
+                    </div>
+                    {abertasExecucao[cat] && (
+                      <div className="p-4 space-y-4">
+                        {itens.map((p) => (
+                          <div key={p.id} className="bg-gray-50 p-3 sm:p-4 rounded-lg border">
+                            <p className="font-semibold mb-3 text-sm sm:text-base break-words">{p.texto}</p>
+                            <div className="flex flex-col gap-3">
+                              <div className="flex gap-3">
+                                <button onClick={() => responderPergunta(p.id, 'sim')} className={'flex-1 py-2 rounded-lg font-bold transition text-sm sm:text-base ' + (respostas[p.id] === 'sim' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-green-100')}><i className="fas fa-check mr-1 sm:mr-2"></i>SIM</button>
+                                <button onClick={() => responderPergunta(p.id, 'nao')} className={'flex-1 py-2 rounded-lg font-bold transition text-sm sm:text-base ' + (respostas[p.id] === 'nao' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-red-100')}><i className="fas fa-times mr-1 sm:mr-2"></i>NÃO</button>
+                              </div>
+                              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                                <label className="text-xs text-gray-600 whitespace-nowrap">Foto de evidência {p.fotoObrigatoria && <span className="text-yellow-700 font-semibold">(obrigatória)</span>}:</label>
+                                <input type="file" accept="image/*" capture="environment" onChange={(e) => handleEvidenciaUpload(p.id, e.target.files[0])} className="text-xs w-full sm:w-auto" />
+                                {evidencias[p.id] && <span className="text-green-600 text-xs whitespace-nowrap"><i className="fas fa-check mr-1"></i>Anexada</span>}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <button onClick={finalizarChecklist} disabled={!todasRespondidas || !evidenciasOk} className={'w-full py-3 rounded-lg font-bold transition text-sm sm:text-base ' + ((todasRespondidas && evidenciasOk) ? 'btn-primary' : 'bg-gray-300 text-gray-500 cursor-not-allowed')}>
+                <i className="fas fa-flag-checkered mr-2"></i>Finalizar e Gerar Relatório
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      // Tela inicial
+      return (
+        <div className="min-h-screen p-4">
+          <div className="max-w-6xl mx-auto section-card shadow-2xl p-4 sm:p-8">
+            <h1 className="title-font text-4xl font-bold text-center mb-8" style={{color: 'var(--laranja)'}}>
+              <i className="fas fa-tasks mr-3"></i>Checklist
+            </h1>
+
+            <div className="mb-8 bg-white p-4 sm:p-6 rounded-lg border">
+              <h2 className="section-title text-2xl mb-4"><i className="fas fa-store mr-2"></i>1. Dados da Auditoria</h2>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-gray-700">Nome da Loja</label>
+                  <input type="text" value={lojaNome} onChange={(e) => setLojaNome(e.target.value)} onBlur={(e) => salvarLojaNome(e.target.value)} placeholder="Ex.: Loja Centro - Matriz" className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 text-sm sm:text-base focus:ring-yellow-400" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-gray-700">Nome do Avaliador</label>
+                  <input type="text" value={avaliadorNome} onChange={(e) => setAvaliadorNome(e.target.value)} onBlur={(e) => salvarAvaliadorNome(e.target.value)} placeholder="Seu nome completo" className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 text-sm sm:text-base focus:ring-yellow-400" />
+                </div>
+                <div className="lg:col-span-3">
+                  <label className="block text-sm font-semibold mb-2 text-gray-700">Endereço da Loja</label>
+                  <input type="text" value={lojaEndereco} onChange={(e) => setLojaEndereco(e.target.value)} onBlur={(e) => salvarLojaEndereco(e.target.value)} placeholder="Ex.: Rua das Flores, 123 - Centro, Cidade/UF" className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 text-sm sm:text-base focus:ring-yellow-400" />
+                </div>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <button onClick={() => { salvarLojaNome(lojaNome); salvarAvaliadorNome(avaliadorNome); salvarLojaEndereco(lojaEndereco); alert('Dados da auditoria salvos!'); }} className="btn-primary px-4 py-2 rounded-lg font-bold text-sm"><i className="fas fa-save mr-2"></i>Salvar Agora</button>
+                <span className="text-xs text-gray-500">Os dados são salvos automaticamente ao sair do campo.</span>
+              </div>
+            </div>
+
+            <div className="mb-8 bg-white p-4 sm:p-6 rounded-lg border">
+              <h2 className="section-title text-2xl mb-4"><i className="fas fa-map-marker-alt mr-2"></i>2. Localização GPS</h2>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-3">
+                <button onClick={capturarLocalizacao} className="w-full sm:w-auto btn-primary px-4 py-2 rounded-lg font-bold text-sm sm:text-base"><i className="fas fa-location-arrow mr-2"></i>Capturar Localização</button>
+                {geoStatus === 'buscando' && (<span className="text-xs sm:text-sm text-gray-600 animate-pulse">Buscando…</span>)}
+                {geoStatus === 'ok' && (<span className="text-xs sm:text-sm text-green-600"><i className="fas fa-check-circle mr-1"></i>Capturada</span>)}
+              </div>
+              {geoErro && (<div className="mb-3 text-xs sm:text-sm text-red-600 bg-red-50 p-2 rounded">{geoErro}</div>)}
+              {coords && (
+                <div className="text-xs sm:text-sm text-gray-700 mb-2 space-y-1">
+                  <div className="break-all"><strong>Lat:</strong> {coords.latitude.toFixed(6)} | <strong>Lon:</strong> {coords.longitude.toFixed(6)}</div>
+                  {coords.accuracy && (<div><strong>Precisão:</strong> ±{Math.round(coords.accuracy)} m</div>)}
+                  {enderecoGPS && (<div className="break-words"><strong>Endereço GPS:</strong> {enderecoGPS}</div>)}
+                  <div className={'font-semibold ' + (gpsConfereEndereco === true ? 'text-green-700' : gpsConfereEndereco === false ? 'text-red-700' : 'text-gray-600')}>
+                    {gpsValidando ? 'Validando endereço...' :
+                      gpsConfereEndereco === true ? '✓ Endereço GPS confere com o endereço da loja.' :
+                      gpsConfereEndereco === false ? '✗ Endereço GPS NÃO confere com o endereço da loja.' :
+                      'Capture a localização para validar com o endereço da loja.'
+                    }
+                  </div>
+                  {distancia != null && (<div className={'font-semibold ' + (dentroDaArea ? 'text-green-600' : 'text-red-600')}>Distância: {Math.round(distancia)} m — {dentroDaArea ? 'Dentro' : 'Fora'} da área</div>)}
+                </div>
+              )}
+            </div>
+
+            <div className="mb-8 bg-white p-4 sm:p-6 rounded-lg border">
+              <h2 className="section-title text-2xl mb-1"><i className="fas fa-edit mr-2"></i>3. Gerenciar Perguntas</h2>
+              <p className="text-xs sm:text-sm text-gray-600 mb-4">CSV com cabeçalho recomendado: categoria;pergunta;foto_obrigatoria (valores: sim/não).</p>
+
+              {/* Salvar/Carregar Conjuntos */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="p-3 border rounded-lg">
+                  <div className="font-semibold mb-2"><i className="fas fa-folder-plus mr-2"></i>Salvar perguntas como conjunto</div>
+                  <div className="flex items-stretch gap-2">
+                    <input type="text" value={nomeSet} onChange={(e)=>setNomeSet(e.target.value)} placeholder="Nome do conjunto (ex.: Auditoria Loja A)" className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm" />
+                    <button onClick={()=>{ if (!nomeSet.trim()) return alert('Informe um nome para o conjunto.'); salvarSetLocal(nomeSet.trim(), perguntas); alert('Conjunto salvo!'); }} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold text-sm">Salvar</button>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">Dica: importe/edite e salve como conjunto nomeado.</div>
+                </div>
+
+                <div className="p-3 border rounded-lg">
+                  <div className="font-semibold mb-2"><i className="fas fa-folder-open mr-2"></i>Carregar conjunto salvo</div>
+                  <div className="flex items-stretch gap-2">
+                    <select value={setSelecionado} onChange={(e)=>setSetSelecionado(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm">
+                      <option value="">Selecione um conjunto</option>
+                      {setsSalvos.map(s => (<option key={s.name} value={s.name}>{s.name} ({s.count})</option>))}
+                    </select>
+                    <button onClick={()=>{
+                      if (!setSelecionado) return alert('Selecione um conjunto.');
+                      const dados = carregarSetLocal(setSelecionado);
+                      if (!dados || !Array.isArray(dados) || !dados.length) return alert('Conjunto vazio ou inválido.');
+                      const novos = dados.map((d, i)=>({ id: i+1, categoria: normalizarTexto(d.categoria||'Geral'), texto: normalizarTexto(d.texto||''), fotoObrigatoria: !!d.fotoObrigatoria }));
+                      setPerguntas(novos); setRespostas({}); setEvidencias({}); alert('Conjunto carregado!');
+                    }} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm">Carregar</button>
+                    <button onClick={()=>{
+                      if (!setSelecionado) return alert('Selecione um conjunto.');
+                      if (confirm('Excluir o conjunto "'+setSelecionado+'"?')) excluirSetLocal(setSelecionado);
+                    }} className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg font-bold text-sm" title="Excluir conjunto"><i className="fas fa-trash"></i></button>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">Conjuntos salvos no seu navegador (localStorage).</div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
+                  <input type="text" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} placeholder="Categoria (ex.: Segurança)" className="md:col-span-3 px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 text-sm sm:text-base focus:ring-yellow-400" />
+                  <input type="text" value={novaPergunta} onChange={(e) => setNovaPergunta(e.target.value)} onKeyPress={(e) => { if (e.key === 'Enter') adicionarPergunta(); }} placeholder="Digite uma nova pergunta..." className="md:col-span-7 px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 text-sm sm:text-base focus:ring-yellow-400" />
+                  <label className="md:col-span-2 flex items-center gap-2 px-2 text-sm"><input type="checkbox" checked={novaFotoObrigatoria} onChange={(e) => setNovaFotoObrigatoria(e.target.checked)} />Foto obrigatória</label>
+                </div>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                  <input type="file" accept=".csv" onChange={(e) => handleArquivoCSV(e.target.files[0])} className="block text-xs sm:text-sm w-full" title="Importar perguntas (CSV)" />
+                  <button onClick={()=>{
+                    const linhas = ['categoria;pergunta;foto_obrigatoria','Segurança;EPIs conferidos?;sim','Operação;Equipamentos verificados?;nao','Documentação;Documentos atualizados?;nao'];
+                    const csv = linhas.join('\n');
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a'); a.href = url; a.download = 'modelo_perguntas_checklist.csv';
+                    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+                  }} className="underline text-xs sm:text-sm whitespace-nowrap link-accent" title="Baixar modelo CSV">Baixar modelo CSV</button>
+                </div>
+                {uploadErro && (<div className="bg-red-50 text-red-700 p-3 rounded mb-1 text-xs sm:text-sm"><i className="fas fa-exclamation-triangle mr-2"></i>{uploadErro}</div>)}
+              </div>
+
+              {/* Accordion inicial com drag-and-drop */}
+              <div className="space-y-4">
+                {categorias.map(([cat, itens]) => (
+                  <div key={cat} className="accordion">
+                    <div className="accordion-header px-4 py-3 flex items-center justify-between" onClick={() => toggleInicial(cat)}>
+                      <div className="flex items-center gap-2"><span className="separator-dot"></span><span className="category-title">{cat}</span></div>
+                      <i className={'fas ' + (abertasInicial[cat] ? 'fa-chevron-up' : 'fa-chevron-down')} style={{color:'var(--laranja)'}}></i>
+                    </div>
+                    {abertasInicial[cat] && (
+                      <div className="p-3 sm:p-4" onDragOver={onDragOverCategoria(cat)} onDrop={onDropCategoria(cat)} onDragLeave={onDragLeaveCategoria}>
+                        <div className="space-y-2">
+                          {itens.map((p) => (
+                            <div key={p.id} className="flex items-center gap-2 bg-white p-3 rounded-lg shadow border" draggable onDragStart={onDragStartPergunta(p)} onDragOver={onDragOverPergunta(p)} onDragLeave={onDragLeavePergunta} onDrop={onDropPergunta(p)}>
+                              <i className="fas fa-grip-vertical drag-handle"></i>
+                              {editandoId === p.id ? (
+                                <>
+                                  <input type="text" value={categoriaEdicao} onChange={(e) => setCategoriaEdicao(e.target.value)} placeholder="Categoria" className="w-40 px-2 sm:px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 text-sm sm:text-base focus:ring-yellow-400" />
+                                  <input type="text" value={textoEdicao} onChange={(e) => setTextoEdicao(e.target.value)} className="flex-1 px-2 sm:px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 text-sm sm:text-base focus:ring-yellow-400" />
+                                  <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={fotoObrigatoriaEdicao} onChange={(e) => setFotoObrigatoriaEdicao(e.target.checked)} />Foto obrigatória</label>
+                                  <button onClick={salvarEdicao} className="bg-green-500 text-white px-2 sm:px-3 py-1 rounded hover:bg-green-600 text-sm sm:text-base" title="Salvar"><i className="fas fa-check"></i></button>
+                                  <button onClick={() => setEditandoId(null)} className="bg-gray-500 text-white px-2 sm:px-3 py-1 rounded hover:bg-gray-600 text-sm sm:text-base" title="Cancelar"><i className="fas fa-times"></i></button>
+                                </>
+                              ) : (
+                                <>
+                                  <span className="badge bg-gray-100 text-gray-700">{p.categoria || 'Geral'}</span>
+                                  <span className="flex-1 text-sm sm:text-base break-words">{p.texto}</span>
+                                  {p.fotoObrigatoria && <span className="badge bg-yellow-100 text-yellow-700"><i className="fas fa-camera mr-1"></i>Foto obrigatória</span>}
+                                  <button onClick={() => iniciarEdicao(p)} className="px-2 link-accent" title="Editar"><i className="fas fa-edit"></i></button>
+                                  <button onClick={() => removerPergunta(p.id)} className="text-red-500 hover:text-red-700 px-2" title="Excluir"><i className="fas fa-trash"></i></button>
+                                </>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button onClick={iniciarChecklist} disabled={!requisitosAtendidosParaIniciar() || gpsValidando} className={'w-full py-4 rounded-lg font-bold text-lg transition mt-6 ' + (requisitosAtendidosParaIniciar() && !gpsValidando ? 'btn-primary' : 'bg-gray-300 text-gray-500 cursor-not-allowed')} title={gpsConfereEndereco === false ? 'Endereço GPS não confere com o da loja' : ''}>
+              <i className="fas fa-play-circle mr-2"></i>Iniciar Checklist
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
 </body>
 </html>
