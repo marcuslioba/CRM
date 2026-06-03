@@ -289,7 +289,8 @@ select:focus{outline:none;border-color:var(--green)}
 
     <div class="sec-head"><span class="sec-title">Satisfação por Canais</span></div>
     <div class="card">
-      <canvas id="lineChart" height="140" style="width:100%; display:none;"></canvas> <div id="canal-bars"></div>
+      <canvas id="lineChart" height="140" style="width:100%; display:none;"></canvas>
+      <div id="canal-bars"></div>
     </div>
   </div>
 
@@ -367,7 +368,6 @@ function parseCSV(text) {
     if (c.length >= 5 && (c[4] === 'elogio' || c[4].startsWith('reclama'))) {
       if (c[4].startsWith('reclama')) c[4] = 'reclamação';
       
-      // Conversão inteligente da coluna 1 (data) para objeto Date
       let partesData = c[1].split(/[-/]/);
       if(partesData.length === 3) {
         if(partesData[0].length === 4) {
@@ -400,7 +400,6 @@ function buildFilters() {
   });
   sel.onchange = () => { filtroUnd = sel.value; render(); };
 
-  // Gatilho inicial padrão para os últimos 7 dias
   setPeriodo(7, document.querySelector('#pills-periodo .pill'));
 }
 
@@ -515,7 +514,6 @@ function renderStatScroll(data) {
 }
 
 function renderTrend(data) {
-  // Cria subdivisões temporais baseadas nas datas presentes no filtro
   const fatias = {};
   data.forEach(r => {
     const chave = r[1].toLocaleDateString('pt-BR', {day:'2digit', month:'2digit'});
@@ -523,11 +521,11 @@ function renderTrend(data) {
     r[4] === 'elogio' ? fatias[chave].el++ : fatias[chave].rec++;
   });
 
-  const chaves Ordenadas = Object.keys(fatias).sort((a,b) => {
+  const chavesOrdenadas = Object.keys(fatias).sort((a,b) => {
     const [dA, mA] = a.split('/').map(Number);
     const [dB, mB] = b.split('/').map(Number);
     return mA !== mB ? mA - mB : dA - dB;
-  }).slice(-8); // Limita às últimas 8 datas com movimentação para manter legível
+  }).slice(-8);
 
   if (!chavesOrdenadas.length) {
     document.getElementById('trend-chart').innerHTML = `<span style="font-size:11px;color:var(--text3);padding:10px;">Sem dados de linha temporal</span>`;
@@ -574,19 +572,16 @@ function renderAlerts(data) {
   const mediaReclamacoes = totalReclamacoes / (unds.length || 1);
   const alerts = [];
   
-  // 1. Alerta crítico de satisfação baixa (< 50%) com amostragem aceitável
   const worst = unds.filter(u=>u.tot >= 3 && u.pct < 50).sort((a,b)=>a.pct-b.pct);
   if(worst.length > 0) {
     alerts.push({type:'danger',icon:'🚨',title:`Crítico: ${cap(worst[0].n)}`,desc:`Satisfação despencou para ${worst[0].pct}% — com ${worst[0].rec} reclamações registradas.`});
   }
 
-  // 2. Alta de reclamações acima da média geral da rede
   const highRec = unds.filter(u => u.rec > mediaReclamacoes && u.rec >= 2).sort((a,b)=>b.rec-a.rec);
   if(highRec.length > 0 && (!worst[0] || worst[0].n !== highRec[0].n)) {
     alerts.push({type:'warn',icon:'⚠️',title:`Anomalia: ${cap(highRec[0].n)}`,desc:`Registrou ${highRec[0].rec} reclamações — acima da média da rede (${Math.round(mediaReclamacoes)}).`});
   }
 
-  // 3. Unidade destaque positivo
   const best = unds.filter(u=>u.tot >= 4 && u.pct >= 75).sort((a,b)=>b.pct-a.pct);
   if (best[0]) {
     alerts.push({type:'good',icon:'✅',title:`Performance: ${cap(best[0].n)}`,desc:`Operando com ótimo índice de ${best[0].pct}% de satisfação (${best[0].el} elogios).` });
@@ -604,7 +599,6 @@ function renderAlerts(data) {
 }
 
 function renderRanking(data) {
-  // Usar dados sem filtro de unidade para compor o ranking comparativo completo
   const rankingData = getFiltered().filter(() => true); 
   const byUnd = {};
   rankingData.forEach(r=>{ if(!byUnd[r[2]])byUnd[r[2]]={el:0,rec:0}; r[4]==='elogio'?byUnd[r[2]].el++:byUnd[r[2]].rec++; });
@@ -614,7 +608,6 @@ function renderRanking(data) {
   if (rankTab==='saldo') {
     arr.sort((a,b)=>b.saldo-a.saldo);
   } else if (rankTab==='satisfacao') {
-    // CORREÇÃO METODOLÓGICA: Aplicação de trava de volumetria mínima (Ex: min 2 avaliações no período)
     arr = arr.filter(u => u.tot >= 2);
     arr.sort((a,b)=>b.pct-a.pct);
   } else {
