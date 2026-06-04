@@ -289,6 +289,66 @@ body {
 .chip-outros.on { background: var(--yellow); color: #fff; }
 
 .divider { height: 1px; background: var(--border); margin: 16px; }
+
+/* STORE DROPDOWN */
+.store-select {
+  flex: 1; padding: 8px 12px; border-radius: 10px;
+  border: 1.5px solid var(--border); background: var(--bg3);
+  color: var(--text); font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238890b0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  padding-right: 32px;
+}
+.store-select:focus { outline: none; border-color: var(--purple); }
+
+/* ALERT BELL */
+.bell-btn {
+  position: relative; background: var(--bg3); border: 1.5px solid var(--border);
+  border-radius: 10px; width: 40px; height: 40px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+  flex-shrink: 0; transition: all .2s;
+}
+.bell-btn:active { opacity: .7; }
+.bell-badge {
+  position: absolute; top: -5px; right: -5px;
+  background: var(--red); color: #fff; border-radius: 10px;
+  font-size: 0.6rem; font-weight: 800; padding: 2px 5px;
+  border: 2px solid var(--bg); display: none;
+}
+.bell-badge.show { display: block; }
+.bell-badge.green { background: var(--green); }
+
+/* ALERTS PANEL (bottom sheet) */
+.alerts-panel {
+  display: none; position: fixed; inset: 0;
+  background: #00000099; z-index: 500; align-items: flex-end; justify-content: center;
+}
+.alerts-panel.show { display: flex; }
+.alerts-sheet {
+  background: var(--bg2); border-radius: 24px 24px 0 0;
+  padding: 0 0 32px; width: 100%; max-width: 430px;
+  border-top: 1px solid var(--border);
+  animation: slideUp .25s ease; max-height: 75vh; overflow-y: auto;
+}
+.alerts-sheet-header {
+  padding: 16px 20px 12px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg2);
+}
+.alerts-sheet-title { font-size: 0.95rem; font-weight: 700; }
+.alerts-close { background: none; border: none; color: var(--text2); font-size: 1.1rem; cursor: pointer; padding: 4px 8px; }
+.alerts-list { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+.alert-card {
+  border-radius: 14px; padding: 12px 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+  border: 1.5px solid;
+}
+.alert-critical { background: #e74c3c18; border-color: #e74c3c55; }
+.alert-success  { background: #2ecc7118; border-color: #2ecc7155; }
+.alert-ico { font-size: 1.2rem; flex-shrink: 0; }
+.alert-body { flex: 1; }
+.alert-title { font-size: 0.82rem; font-weight: 700; }
+.alert-desc  { font-size: 0.72rem; color: var(--text2); margin-top: 2px; line-height: 1.4; }
 </style>
 </head>
 <body>
@@ -299,7 +359,24 @@ body {
     <div class="header-title">📊 Avaliações</div>
     <div class="header-sub" id="period-label">Últimos 30 dias</div>
   </div>
-  <button class="sync-btn" onclick="recarregar()">↻ Sincronizar</button>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="bell-btn" onclick="openAlerts()" title="Alertas">
+      🔔
+      <div class="bell-badge" id="bell-badge"></div>
+    </button>
+    <button class="sync-btn" onclick="recarregar()">↻ Sincronizar</button>
+  </div>
+</div>
+
+<!-- ALERTS PANEL -->
+<div class="alerts-panel" id="alerts-panel" onclick="if(event.target===this)closeAlerts()">
+  <div class="alerts-sheet">
+    <div class="alerts-sheet-header">
+      <div class="alerts-sheet-title">🔔 Alertas</div>
+      <button class="alerts-close" onclick="closeAlerts()">✕</button>
+    </div>
+    <div class="alerts-list" id="alerts-list"></div>
+  </div>
 </div>
 
 <!-- PERIOD BAR -->
@@ -321,6 +398,13 @@ body {
     <div class="loading-text">Carregando dados...</div>
   </div>
   <div id="inicio-content" style="display:none">
+
+    <!-- Seletor de Loja -->
+    <div style="padding: 12px 16px 14px; display:flex; align-items:center; gap:10px;">
+      <select class="store-select" id="store-select" onchange="setLoja(this.value)">
+        <option value="todas">🏠 Todas as lojas</option>
+      </select>
+    </div>
 
     <!-- Gauge satisfação -->
     <div class="gauge-wrap">
@@ -488,6 +572,7 @@ let TODOS = [];
 let periodDays = 30;
 let customIni = null, customFim = null;
 let tipoFiltro = 'todos';
+let lojaFiltro = 'todas';
 
 // ── CORES CANAL ──────────────────────────────────────
 const CANAL_COLORS = {
@@ -530,6 +615,7 @@ function recarregar() {
 
 function onDados(r) {
   try {
+    lojaFiltro = 'todas';
     TODOS = r.table.rows.map(row => {
       const c = row.c;
       function v(i) {
@@ -550,6 +636,7 @@ function onDados(r) {
         categoria: v(5),
       };
     }).filter(d => d.unidade || d.canal);
+    buildStoreBar();
     renderAll();
     document.getElementById('loading-inicio').style.display = 'none';
     document.getElementById('inicio-content').style.display = 'block';
@@ -561,7 +648,7 @@ function onDados(r) {
 }
 
 // ── FILTER ───────────────────────────────────────────
-function getFiltered() {
+function getByPeriod() {
   const hoje = new Date(); hoje.setHours(23,59,59,999);
   let ini, fim;
   if (customIni && customFim) {
@@ -572,10 +659,149 @@ function getFiltered() {
     ini = new Date(hoje); ini.setDate(ini.getDate() - periodDays + 1); ini.setHours(0,0,0,0);
   }
   return TODOS.filter(d => {
-    if (!(d.data instanceof Date)) return true; // sem data, inclui
+    if (!(d.data instanceof Date)) return true;
     return d.data >= ini && d.data <= fim;
   });
 }
+
+function getFiltered() {
+  const byPeriod = getByPeriod();
+  if (lojaFiltro === 'todas') return byPeriod;
+  return byPeriod.filter(d => d.unidade === lojaFiltro);
+}
+
+// ── STORE SELECTOR ───────────────────────────────────
+function buildStoreBar() {
+  const lojas = [...new Set(TODOS.map(x => x.unidade).filter(Boolean))].sort();
+  const sel = document.getElementById('store-select');
+  sel.innerHTML = '<option value="todas">🏠 Todas as lojas</option>' +
+    lojas.map(l => `<option value="${l.replace(/"/g,'&quot;')}">${l}</option>`).join('');
+  sel.value = 'todas';
+}
+
+function setLoja(loja) {
+  lojaFiltro = loja;
+  renderAll();
+}
+
+// ── ALERTS ───────────────────────────────────────────
+let _alertsData = [];
+
+function openAlerts()  { document.getElementById('alerts-panel').classList.add('show'); }
+function closeAlerts() { document.getElementById('alerts-panel').classList.remove('show'); }
+
+function renderAlerts(byPeriod, filtered) {
+  _alertsData = [];
+  const alerts = _alertsData;
+
+  // Métricas da REDE (todos do período, sem filtro de loja)
+  const redeTotal   = byPeriod.length;
+  const redeSat     = redeTotal ? byPeriod.filter(x => isElogio(x.tipo)).length / redeTotal : 0;
+  const redeReclam  = redeTotal ? byPeriod.filter(x => isReclamacao(x.tipo)).length / redeTotal : 0;
+
+  if (lojaFiltro === 'todas') {
+    // Modo rede: alertas por loja
+    const lojaMap = {};
+    byPeriod.forEach(x => {
+      if (!x.unidade) return;
+      if (!lojaMap[x.unidade]) lojaMap[x.unidade] = { e:0, r:0, t:0 };
+      lojaMap[x.unidade].t++;
+      if (isElogio(x.tipo)) lojaMap[x.unidade].e++;
+      else if (isReclamacao(x.tipo)) lojaMap[x.unidade].r++;
+    });
+
+    Object.entries(lojaMap).forEach(([loja, v]) => {
+      if (v.t < 3) return; // ignora lojas com poucos dados
+      const sat   = v.e / v.t;
+      const reclam= v.r / v.t;
+      const diffReclam = reclam - redeReclam;
+      const diffSat    = sat - redeSat;
+
+      if (diffReclam > 0.10) { // +10pp acima da rede
+        alerts.push({
+          type: 'critical',
+          icon: '🚨',
+          title: `Reclamações altas — ${loja}`,
+          desc: `${pct(reclam)} de reclamações vs ${pct(redeReclam)} da rede (+${pct(diffReclam)}pp acima da média)`
+        });
+      }
+      if (diffSat > 0.10) { // +10pp acima da rede
+        alerts.push({
+          type: 'success',
+          icon: '🌟',
+          title: `Destaque positivo — ${loja}`,
+          desc: `${pct(sat)} de satisfação vs ${pct(redeSat)} da rede (+${pct(diffSat)}pp acima da média)`
+        });
+      }
+    });
+  } else {
+    // Modo loja específica
+    const total  = filtered.length;
+    if (total >= 3) {
+      const sat   = filtered.filter(x => isElogio(x.tipo)).length / total;
+      const reclam= filtered.filter(x => isReclamacao(x.tipo)).length / total;
+      const diffReclam = reclam - redeReclam;
+      const diffSat    = sat - redeSat;
+
+      if (diffReclam > 0.10) {
+        alerts.push({
+          type: 'critical',
+          icon: '🚨',
+          title: `Reclamações acima da rede`,
+          desc: `Esta loja tem ${pct(reclam)} de reclamações vs ${pct(redeReclam)} da rede (+${pct(diffReclam)}pp)`
+        });
+      } else if (reclam > 0.30) {
+        alerts.push({
+          type: 'critical',
+          icon: '⚠️',
+          title: `Taxa de reclamação elevada`,
+          desc: `${pct(reclam)} das avaliações são reclamações. Atenção ao atendimento.`
+        });
+      }
+      if (diffSat > 0.10) {
+        alerts.push({
+          type: 'success',
+          icon: '🌟',
+          title: `Acima da média da rede`,
+          desc: `Satisfação de ${pct(sat)} vs ${pct(redeSat)} da rede (+${pct(diffSat)}pp). Ótimo trabalho!`
+        });
+      }
+    }
+  }
+
+  // Críticos primeiro
+  alerts.sort((a,b) => a.type === 'critical' ? -1 : 1);
+
+  // Atualiza sino
+  const badge = document.getElementById('bell-badge');
+  const critCount = alerts.filter(a => a.type === 'critical').length;
+  const sucCount  = alerts.filter(a => a.type === 'success').length;
+
+  if (alerts.length === 0) {
+    badge.classList.remove('show','green');
+    badge.textContent = '';
+  } else if (critCount > 0) {
+    badge.classList.add('show'); badge.classList.remove('green');
+    badge.textContent = critCount;
+  } else {
+    badge.classList.add('show','green');
+    badge.textContent = sucCount;
+  }
+
+  // Preenche o painel
+  document.getElementById('alerts-list').innerHTML = alerts.length
+    ? alerts.map(a => `
+        <div class="alert-card alert-${a.type}">
+          <div class="alert-ico">${a.icon}</div>
+          <div class="alert-body">
+            <div class="alert-title" style="color:${a.type==='critical'?'#e74c3c':'#2ecc71'}">${a.title}</div>
+            <div class="alert-desc">${a.desc}</div>
+          </div>
+        </div>`).join('')
+    : '<div style="text-align:center;padding:32px;color:var(--text2);font-size:.88rem">Nenhum alerta no período ✅</div>';
+}
+
+function pct(n) { return Math.round(n * 100) + '%'; }
 
 // ── PERIOD ───────────────────────────────────────────
 function setPeriod(days, el) {
@@ -629,11 +855,13 @@ function goPage(name, el) {
 
 // ── RENDER ALL ───────────────────────────────────────
 function renderAll() {
-  const d = getFiltered();
-  renderInicio(d);
-  renderCanais(d);
-  renderLojas(d);
-  renderKPIs(d);
+  const byPeriod = getByPeriod();
+  const filtered = getFiltered();
+  renderAlerts(byPeriod, filtered);
+  renderInicio(filtered);
+  renderCanais(filtered);
+  renderLojas(byPeriod, filtered);
+  renderKPIs(byPeriod, filtered);
 }
 
 // ── RENDER INÍCIO ────────────────────────────────────
@@ -774,7 +1002,7 @@ function renderCanais(d) {
 }
 
 // ── RENDER LOJAS ─────────────────────────────────────
-function renderLojas(d) {
+function renderLojas(byPeriod, d) {
   const lojaMap = {};
   d.forEach(x => {
     if (!x.unidade) return;
@@ -786,8 +1014,8 @@ function renderLojas(d) {
     if (x.categoria) lj.cats[x.categoria] = (lj.cats[x.categoria]||0)+1;
   });
 
-  const redeTotal = d.length;
-  const redeSat   = redeTotal ? Math.round(d.filter(x=>isElogio(x.tipo)).length / redeTotal * 100) : 0;
+  const redeTotal = byPeriod.length;
+  const redeSat   = redeTotal ? Math.round(byPeriod.filter(x=>isElogio(x.tipo)).length / redeTotal * 100) : 0;
 
   const ranked = Object.entries(lojaMap)
     .map(([n,v]) => ({ n, ...v, sat: v.t ? Math.round(v.e/v.t*100) : 0 }))
@@ -841,7 +1069,7 @@ function toggleDetail(el) {
 }
 
 // ── RENDER KPIs ──────────────────────────────────────
-function renderKPIs(d) {
+function renderKPIs(byPeriod, d) {
   const total  = d.length;
   const elogios= d.filter(x=>isElogio(x.tipo)).length;
   const reclam = d.filter(x=>isReclamacao(x.tipo)).length;
@@ -868,15 +1096,16 @@ function renderKPIs(d) {
   // Trend chart
   renderTrend(d);
 
-  // Loja vs Rede
+  // Loja vs Rede (sempre usa byPeriod como rede)
   const lojaMap = {};
-  d.forEach(x => {
+  byPeriod.forEach(x => {
     if (!x.unidade) return;
     if (!lojaMap[x.unidade]) lojaMap[x.unidade] = {e:0,t:0};
     lojaMap[x.unidade].t++;
     if (isElogio(x.tipo)) lojaMap[x.unidade].e++;
   });
-  const redeSat = total ? Math.round(elogios/total*100) : 0;
+  const redeElogios = byPeriod.filter(x=>isElogio(x.tipo)).length;
+  const redeSat = byPeriod.length ? Math.round(redeElogios/byPeriod.length*100) : 0;
   const lojas = Object.entries(lojaMap)
     .map(([n,v]) => [n, v.t?Math.round(v.e/v.t*100):0])
     .sort((a,b)=>b[1]-a[1]);
