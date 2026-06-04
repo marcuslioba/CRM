@@ -2,459 +2,951 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coleta de Dados</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Avaliações</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f1117;
+  --bg2: #1a1d27;
+  --bg3: #22253a;
+  --card: #1e2133;
+  --border: #2a2e45;
+  --blue: #4f8ef7;
+  --green: #2ecc71;
+  --red: #e74c3c;
+  --yellow: #f39c12;
+  --purple: #9b59b6;
+  --pink: #e91e8c;
+  --text: #f0f2ff;
+  --text2: #8890b0;
+  --nav-h: 64px;
+  --header-h: 56px;
+}
 
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #f0f2f5;
-    color: #333;
-    min-height: 100vh;
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-  header {
-    background: #1a73e8;
-    color: white;
-    padding: 20px 32px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  }
+body {
+  font-family: -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+  position: relative;
+  overflow-x: hidden;
+}
 
-  header h1 { font-size: 1.4rem; font-weight: 600; }
+/* HEADER */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg);
+  padding: 14px 20px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-title { font-size: 1.1rem; font-weight: 700; }
+.header-sub { font-size: 0.72rem; color: var(--text2); margin-top: 1px; }
+.sync-btn {
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text2); border-radius: 20px; padding: 6px 12px;
+  font-size: 0.75rem; cursor: pointer; transition: all .2s;
+}
+.sync-btn:active { opacity: .7; }
 
-  .reload-btn {
-    margin-left: auto;
-    background: rgba(255,255,255,0.2);
-    border: none;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background 0.2s;
-  }
-  .reload-btn:hover { background: rgba(255,255,255,0.35); }
+/* PERIOD SELECTOR */
+.period-bar {
+  padding: 12px 20px 8px;
+  display: flex; gap: 8px; align-items: center;
+  overflow-x: auto; scrollbar-width: none;
+}
+.period-bar::-webkit-scrollbar { display: none; }
+.pill {
+  flex-shrink: 0;
+  padding: 7px 16px; border-radius: 20px;
+  font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all .2s;
+  border: 1.5px solid var(--border);
+  color: var(--text2); background: transparent;
+}
+.pill.active {
+  background: var(--blue); border-color: var(--blue); color: #fff;
+}
+.pill-custom { display: flex; align-items: center; gap: 5px; }
 
-  .container { padding: 24px 32px; }
+.date-range {
+  display: none; padding: 0 20px 12px;
+  gap: 10px;
+}
+.date-range.show { display: flex; }
+.date-range input {
+  flex: 1; padding: 8px 12px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--bg3);
+  color: var(--text); font-size: 0.82rem;
+}
+.date-range input::-webkit-calendar-picker-indicator { filter: invert(1); }
 
-  /* Cards de resumo */
-  .cards {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
+/* PAGES */
+.page { display: none; padding: 0 0 calc(var(--nav-h) + 12px); }
+.page.active { display: block; }
 
-  .card {
-    background: white;
-    border-radius: 10px;
-    padding: 18px 24px;
-    flex: 1;
-    min-width: 150px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    border-left: 4px solid #1a73e8;
-  }
+.section { padding: 0 16px 20px; }
+.section-title {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--text2); margin-bottom: 12px;
+}
 
-  .card .label { font-size: 0.78rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
-  .card .value { font-size: 1.8rem; font-weight: 700; color: #1a73e8; margin-top: 4px; }
+/* CARDS */
+.cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cards-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.card {
+  background: var(--card); border-radius: 16px; padding: 16px;
+  border: 1px solid var(--border);
+}
+.card-label { font-size: 0.7rem; color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.card-value { font-size: 1.7rem; font-weight: 800; margin: 4px 0 2px; line-height: 1; }
+.card-sub { font-size: 0.72rem; color: var(--text2); }
+.card-trend { font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
+.trend-up { color: var(--green); }
+.trend-down { color: var(--red); }
 
-  /* Filtros */
-  .filters {
-    background: white;
-    border-radius: 10px;
-    padding: 18px 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: flex-end;
-  }
+.card-full { grid-column: 1 / -1; }
 
-  .filter-group { display: flex; flex-direction: column; gap: 4px; }
-  .filter-group label { font-size: 0.78rem; color: #666; font-weight: 500; }
+/* SATISFACTION GAUGE */
+.gauge-wrap {
+  background: var(--card); border-radius: 20px; padding: 20px;
+  border: 1px solid var(--border); text-align: center; margin: 0 16px 20px;
+}
+.gauge-title { font-size: 0.72rem; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 700; }
+.gauge-svg { display: block; margin: 0 auto; }
+.gauge-value { font-size: 2.2rem; font-weight: 900; }
+.gauge-label { font-size: 0.85rem; color: var(--text2); margin-top: 4px; }
+.gauge-legs {
+  display: flex; justify-content: space-between; margin-top: 14px;
+  padding: 0 4px;
+}
+.gauge-leg { text-align: center; }
+.gauge-leg-val { font-size: 1rem; font-weight: 800; }
+.gauge-leg-label { font-size: 0.68rem; color: var(--text2); margin-top: 2px; }
 
-  .filters input, .filters select {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    background: #fafafa;
-    color: #333;
-    min-width: 140px;
-  }
+/* BAR CHART */
+.bar-chart { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: flex; align-items: center; gap: 10px; }
+.bar-label { font-size: 0.78rem; color: var(--text2); min-width: 80px; max-width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { flex: 1; height: 8px; background: var(--bg3); border-radius: 6px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 6px; transition: width .5s ease; }
+.bar-val { font-size: 0.78rem; font-weight: 700; min-width: 30px; text-align: right; }
 
-  .filters input:focus, .filters select:focus {
-    outline: none;
-    border-color: #1a73e8;
-    background: white;
-  }
+/* CANAL CARDS */
+.canal-list { display: flex; flex-direction: column; gap: 10px; }
+.canal-card {
+  background: var(--card); border-radius: 16px; padding: 14px 16px;
+  border: 1px solid var(--border); display: flex; align-items: center; gap: 14px;
+}
+.canal-icon {
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.canal-info { flex: 1; }
+.canal-name { font-size: 0.88rem; font-weight: 700; }
+.canal-count { font-size: 0.72rem; color: var(--text2); margin-top: 2px; }
+.canal-bar-mini { margin-top: 6px; height: 4px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+.canal-bar-mini-fill { height: 100%; border-radius: 4px; }
+.canal-score { text-align: right; }
+.canal-score-val { font-size: 1rem; font-weight: 800; }
+.canal-score-label { font-size: 0.65rem; color: var(--text2); margin-top: 1px; }
 
-  .btn-limpar {
-    padding: 8px 16px;
-    background: #f1f3f4;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: #555;
-    align-self: flex-end;
-    transition: background 0.2s;
-  }
-  .btn-limpar:hover { background: #e0e0e0; }
+/* RANKING */
+.ranking-list { display: flex; flex-direction: column; gap: 8px; }
+.ranking-item {
+  background: var(--card); border-radius: 14px; padding: 12px 14px;
+  border: 1px solid var(--border); cursor: pointer; transition: all .2s;
+}
+.ranking-item:active { opacity: .8; }
+.ranking-top { display: flex; align-items: center; gap: 10px; }
+.ranking-pos {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.82rem; font-weight: 800; flex-shrink: 0;
+}
+.pos-1 { background: #b8860b22; color: #f0c040; border: 1.5px solid #b8860b; }
+.pos-2 { background: #80808022; color: #bbb; border: 1.5px solid #888; }
+.pos-3 { background: #8b4513aa; color: #cd853f; border: 1.5px solid #8b4513; }
+.pos-n { background: var(--bg3); color: var(--text2); border: 1.5px solid var(--border); }
 
-  /* Tabela */
-  .table-wrap {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    overflow: hidden;
-  }
+.ranking-name { flex: 1; font-size: 0.88rem; font-weight: 700; }
+.ranking-score { font-size: 1rem; font-weight: 800; }
 
-  .table-info {
-    padding: 12px 20px;
-    font-size: 0.85rem;
-    color: #888;
-    border-bottom: 1px solid #f0f0f0;
-  }
+.ranking-detail {
+  display: none; margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.ranking-detail.open { display: block; }
+.detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.detail-label { font-size: 0.75rem; color: var(--text2); }
+.detail-val { font-size: 0.82rem; font-weight: 700; }
+.compare-bar { margin-top: 8px; }
+.compare-label { font-size: 0.68rem; color: var(--text2); margin-bottom: 4px; }
+.compare-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.compare-tag { font-size: 0.65rem; min-width: 42px; color: var(--text2); }
+.compare-track { flex: 1; height: 6px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+.compare-fill { height: 100%; border-radius: 4px; }
+.compare-num { font-size: 0.72rem; font-weight: 700; min-width: 30px; text-align: right; }
 
-  .table-scroll { overflow-x: auto; }
+/* TREND CHART (SVG) */
+.trend-wrap {
+  background: var(--card); border-radius: 20px; padding: 16px;
+  border: 1px solid var(--border); margin: 0 16px 16px;
+}
+.trend-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.trend-title { font-size: 0.72rem; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+.trend-legend { display: flex; gap: 12px; }
+.legend-dot { display: flex; align-items: center; gap: 4px; font-size: 0.68rem; color: var(--text2); }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.88rem;
-  }
+/* KPI TABLE */
+.kpi-table { background: var(--card); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; }
+.kpi-row {
+  display: flex; align-items: center; padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.kpi-row:last-child { border-bottom: none; }
+.kpi-name { flex: 1; font-size: 0.82rem; color: var(--text2); }
+.kpi-val { font-size: 0.88rem; font-weight: 800; margin-left: 8px; }
+.kpi-badge {
+  font-size: 0.68rem; padding: 3px 8px; border-radius: 10px; margin-left: 8px; font-weight: 700;
+}
+.badge-green { background: #2ecc7122; color: var(--green); }
+.badge-red { background: #e74c3c22; color: var(--red); }
+.badge-yellow { background: #f39c1222; color: var(--yellow); }
 
-  thead th {
-    background: #f8f9fa;
-    padding: 12px 16px;
-    text-align: left;
-    font-weight: 600;
-    color: #555;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    border-bottom: 2px solid #e8e8e8;
-    white-space: nowrap;
-  }
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 430px;
+  background: var(--bg2); border-top: 1px solid var(--border);
+  display: flex; height: var(--nav-h);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 200;
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 3px;
+  cursor: pointer; transition: all .2s;
+  color: var(--text2); padding: 8px 0;
+}
+.nav-item.active { color: var(--blue); }
+.nav-icon { font-size: 1.3rem; line-height: 1; }
+.nav-label { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  tbody tr { border-bottom: 1px solid #f5f5f5; transition: background 0.15s; }
-  tbody tr:hover { background: #f0f6ff; }
+/* MODAL */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: #00000099; z-index: 500; align-items: flex-end; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--bg2); border-radius: 24px 24px 0 0;
+  padding: 20px; width: 100%; max-width: 430px;
+  border-top: 1px solid var(--border);
+  animation: slideUp .25s ease;
+}
+@keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 4px; margin: 0 auto 16px; }
+.modal-title { font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+.modal-close { float: right; background: none; border: none; color: var(--text2); font-size: 1.2rem; cursor: pointer; }
 
-  td {
-    padding: 11px 16px;
-    color: #444;
-    white-space: nowrap;
-  }
+/* LOADING */
+.loading-screen {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 50vh; gap: 16px;
+}
+.spinner {
+  width: 36px; height: 36px; border: 3px solid var(--border);
+  border-top-color: var(--blue); border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: var(--text2); font-size: 0.88rem; }
 
-  /* Badges */
-  .badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.78rem;
-    font-weight: 500;
-  }
+/* EMPTY */
+.empty-state { text-align: center; padding: 48px 20px; color: var(--text2); }
+.empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
 
-  .badge-elogio    { background: #e6f4ea; color: #137333; }
-  .badge-reclamacao { background: #fce8e6; color: #c5221f; }
-  .badge-sugestao  { background: #e8f0fe; color: #1a73e8; }
-  .badge-duvida    { background: #fef7e0; color: #b06000; }
-  .badge-default   { background: #f1f3f4; color: #555; }
+/* CHIPS tipo */
+.tipo-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.tipo-chip {
+  padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+  border: 1.5px solid; cursor: pointer; transition: all .2s;
+}
+.chip-all { border-color: var(--blue); color: var(--blue); background: transparent; }
+.chip-all.on { background: var(--blue); color: #fff; }
+.chip-elogio { border-color: var(--green); color: var(--green); background: transparent; }
+.chip-elogio.on { background: var(--green); color: #fff; }
+.chip-reclamacao { border-color: var(--red); color: var(--red); background: transparent; }
+.chip-reclamacao.on { background: var(--red); color: #fff; }
+.chip-outros { border-color: var(--yellow); color: var(--yellow); background: transparent; }
+.chip-outros.on { background: var(--yellow); color: #fff; }
 
-  .empty {
-    text-align: center;
-    padding: 48px;
-    color: #aaa;
-    font-size: 1rem;
-  }
-
-  .loading {
-    text-align: center;
-    padding: 48px;
-    color: #888;
-  }
-
-  .spinner {
-    display: inline-block;
-    width: 28px; height: 28px;
-    border: 3px solid #ddd;
-    border-top-color: #1a73e8;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-bottom: 12px;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .error {
-    background: #fce8e6;
-    color: #c5221f;
-    padding: 16px 20px;
-    border-radius: 8px;
-    margin: 16px 0;
-    font-size: 0.9rem;
-  }
+.divider { height: 1px; background: var(--border); margin: 16px; }
 </style>
 </head>
 <body>
 
-<header>
-  <span style="font-size:1.5rem">📋</span>
-  <h1>Coleta de Dados</h1>
-  <button class="reload-btn" onclick="carregar()">↻ Atualizar</button>
-</header>
-
-<div class="container">
-
-  <!-- Cards -->
-  <div class="cards">
-    <div class="card">
-      <div class="label">Total de registros</div>
-      <div class="value" id="card-total">—</div>
-    </div>
-    <div class="card" style="border-color:#34a853">
-      <div class="label">Elogios</div>
-      <div class="value" style="color:#34a853" id="card-elogios">—</div>
-    </div>
-    <div class="card" style="border-color:#ea4335">
-      <div class="label">Reclamações</div>
-      <div class="value" style="color:#ea4335" id="card-reclamacoes">—</div>
-    </div>
-    <div class="card" style="border-color:#fbbc04">
-      <div class="label">Sugestões / Dúvidas</div>
-      <div class="value" style="color:#b06000" id="card-outros">—</div>
-    </div>
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-title">📊 Avaliações</div>
+    <div class="header-sub" id="period-label">Últimos 30 dias</div>
   </div>
-
-  <!-- Filtros -->
-  <div class="filters">
-    <div class="filter-group">
-      <label>🔍 Busca geral</label>
-      <input type="text" id="f-busca" placeholder="Qualquer campo..." oninput="filtrar()">
-    </div>
-    <div class="filter-group">
-      <label>Mês</label>
-      <select id="f-mes" onchange="filtrar()"><option value="">Todos</option></select>
-    </div>
-    <div class="filter-group">
-      <label>Unidade</label>
-      <select id="f-unidade" onchange="filtrar()"><option value="">Todas</option></select>
-    </div>
-    <div class="filter-group">
-      <label>Canal</label>
-      <select id="f-canal" onchange="filtrar()"><option value="">Todos</option></select>
-    </div>
-    <div class="filter-group">
-      <label>Tipo</label>
-      <select id="f-tipo" onchange="filtrar()"><option value="">Todos</option></select>
-    </div>
-    <div class="filter-group">
-      <label>Categoria</label>
-      <select id="f-categoria" onchange="filtrar()"><option value="">Todas</option></select>
-    </div>
-    <button class="btn-limpar" onclick="limparFiltros()">✕ Limpar</button>
-  </div>
-
-  <!-- Tabela -->
-  <div class="table-wrap">
-    <div class="table-info" id="table-info"></div>
-    <div class="table-scroll">
-      <div class="loading" id="loading">
-        <div class="spinner"></div><br>Carregando dados...
-      </div>
-      <div id="error-msg" style="display:none"></div>
-      <table id="tabela" style="display:none">
-        <thead>
-          <tr>
-            <th>Mês</th>
-            <th>Data</th>
-            <th>Unidade</th>
-            <th>Canal</th>
-            <th>Tipo</th>
-            <th>Categoria</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-      <div class="empty" id="empty" style="display:none">Nenhum registro encontrado.</div>
-    </div>
-  </div>
-
+  <button class="sync-btn" onclick="recarregar()">↻ Sincronizar</button>
 </div>
 
+<!-- PERIOD BAR -->
+<div class="period-bar">
+  <button class="pill" onclick="setPeriod(7,this)">7 dias</button>
+  <button class="pill" onclick="setPeriod(15,this)">15 dias</button>
+  <button class="pill active" onclick="setPeriod(30,this)">30 dias</button>
+  <button class="pill pill-custom" onclick="toggleCustom(this)">📅 Personalizado</button>
+</div>
+<div class="date-range" id="date-range">
+  <input type="date" id="dt-ini" onchange="applyCustom()">
+  <input type="date" id="dt-fim" onchange="applyCustom()">
+</div>
+
+<!-- PAGE: INÍCIO -->
+<div class="page active" id="pg-inicio">
+  <div id="loading-inicio" class="loading-screen">
+    <div class="spinner"></div>
+    <div class="loading-text">Carregando dados...</div>
+  </div>
+  <div id="inicio-content" style="display:none">
+
+    <!-- Gauge satisfação -->
+    <div class="gauge-wrap">
+      <div class="gauge-title">Índice de Satisfação</div>
+      <svg class="gauge-svg" width="200" height="110" viewBox="0 0 200 110">
+        <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#2a2e45" stroke-width="16" stroke-linecap="round"/>
+        <path id="gauge-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#2ecc71" stroke-width="16" stroke-linecap="round"
+          stroke-dasharray="251" stroke-dashoffset="251" style="transition: stroke-dashoffset 1s ease, stroke .5s"/>
+        <text x="100" y="88" text-anchor="middle" fill="#f0f2ff" font-size="28" font-weight="900" id="gauge-pct">—</text>
+        <text x="100" y="105" text-anchor="middle" fill="#8890b0" font-size="10" id="gauge-cat">calculando</text>
+      </svg>
+      <div class="gauge-legs">
+        <div class="gauge-leg">
+          <div class="gauge-leg-val" id="g-elogios" style="color:var(--green)">—</div>
+          <div class="gauge-leg-label">😊 Elogios</div>
+        </div>
+        <div class="gauge-leg">
+          <div class="gauge-leg-val" id="g-neutros" style="color:var(--yellow)">—</div>
+          <div class="gauge-leg-label">💬 Outros</div>
+        </div>
+        <div class="gauge-leg">
+          <div class="gauge-leg-val" id="g-reclamacoes" style="color:var(--red)">—</div>
+          <div class="gauge-leg-label">😟 Reclam.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="section">
+      <div class="section-title">Visão Geral</div>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-label">Total</div>
+          <div class="card-value" id="k-total" style="color:var(--blue)">—</div>
+          <div class="card-sub">avaliações no período</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Satisfação</div>
+          <div class="card-value" id="k-sat" style="color:var(--green)">—%</div>
+          <div class="card-sub">elogios / total</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Lojas Ativas</div>
+          <div class="card-value" id="k-lojas" style="color:var(--purple)">—</div>
+          <div class="card-sub">com avaliações</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Canais</div>
+          <div class="card-value" id="k-canais" style="color:var(--yellow)">—</div>
+          <div class="card-sub">fontes ativas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top canais rápido -->
+    <div class="section">
+      <div class="section-title">Top Canais</div>
+      <div class="bar-chart" id="home-canais"></div>
+    </div>
+
+    <!-- Top lojas rápido -->
+    <div class="section">
+      <div class="section-title">Melhores Lojas (satisfação)</div>
+      <div class="bar-chart" id="home-lojas"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PAGE: CANAIS -->
+<div class="page" id="pg-canais">
+  <div style="height:12px"></div>
+  <div class="section">
+    <div class="section-title">Avaliações por Canal</div>
+    <div class="canal-list" id="canal-list"></div>
+  </div>
+  <div class="divider"></div>
+  <div class="section">
+    <div class="section-title">Distribuição por Tipo</div>
+    <div class="tipo-chips" id="tipo-chips">
+      <div class="tipo-chip chip-all on" onclick="filtroTipo('todos',this)">Todos</div>
+      <div class="tipo-chip chip-elogio" onclick="filtroTipo('elogio',this)">😊 Elogio</div>
+      <div class="tipo-chip chip-reclamacao" onclick="filtroTipo('reclamacao',this)">😟 Reclamação</div>
+      <div class="tipo-chip chip-outros" onclick="filtroTipo('outros',this)">💬 Outros</div>
+    </div>
+    <div class="bar-chart" id="tipo-canais-chart"></div>
+  </div>
+  <div class="divider"></div>
+  <div class="section">
+    <div class="section-title">Categorias Mais Citadas</div>
+    <div class="bar-chart" id="cat-chart"></div>
+  </div>
+</div>
+
+<!-- PAGE: LOJAS -->
+<div class="page" id="pg-lojas">
+  <div style="height:12px"></div>
+  <div class="section">
+    <div class="section-title">Ranking de Lojas</div>
+    <div class="ranking-list" id="ranking-list"></div>
+  </div>
+</div>
+
+<!-- PAGE: KPIs -->
+<div class="page" id="pg-kpis">
+  <div style="height:12px"></div>
+
+  <!-- Trend chart -->
+  <div class="trend-wrap">
+    <div class="trend-header">
+      <div class="trend-title">Tendência no Período</div>
+      <div class="trend-legend">
+        <div class="legend-dot"><div class="dot" style="background:var(--green)"></div>Elogios</div>
+        <div class="legend-dot"><div class="dot" style="background:var(--red)"></div>Reclam.</div>
+      </div>
+    </div>
+    <svg id="trend-svg" width="100%" height="120" viewBox="0 0 360 120" preserveAspectRatio="none"></svg>
+    <div id="trend-labels" style="display:flex;justify-content:space-between;margin-top:4px;padding:0 4px;"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">KPIs da Rede</div>
+    <div class="kpi-table" id="kpi-table"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="margin-top:4px">Loja vs Rede — Satisfação</div>
+    <div class="bar-chart" id="loja-vs-rede"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="nav-item active" onclick="goPage('inicio',this)">
+    <div class="nav-icon">🏠</div>
+    <div class="nav-label">Início</div>
+  </div>
+  <div class="nav-item" onclick="goPage('canais',this)">
+    <div class="nav-icon">📡</div>
+    <div class="nav-label">Canais</div>
+  </div>
+  <div class="nav-item" onclick="goPage('lojas',this)">
+    <div class="nav-icon">🏪</div>
+    <div class="nav-label">Lojas</div>
+  </div>
+  <div class="nav-item" onclick="goPage('kpis',this)">
+    <div class="nav-icon">📈</div>
+    <div class="nav-label">KPIs</div>
+  </div>
+</nav>
+
 <script>
+// ── CONFIG ──────────────────────────────────────────
 const SHEET_ID = '1YUa7oCGS5KyYQeUP6UVlOOQCDVBOg0uiTTxnDxmmyeY';
 const GID      = '1972543405';
 
-let dadosOriginais = [];
+window.google = {
+  visualization: {
+    Query: { setResponse: r => onDados(r) }
+  }
+};
 
-function carregar() {
-  mostrar('loading');
-  // Remove script anterior se existir
-  const velho = document.getElementById('gviz-script');
-  if (velho) velho.remove();
+// ── STATE ────────────────────────────────────────────
+let TODOS = [];
+let periodDays = 30;
+let customIni = null, customFim = null;
+let tipoFiltro = 'todos';
 
-  const script = document.createElement('script');
-  script.id = 'gviz-script';
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}&callback=onDadosCarregados`;
-  script.src = url;
-  script.onerror = () => {
-    document.getElementById('error-msg').innerHTML =
-      '<div class="error">⚠️ Não foi possível carregar os dados.<br><small>Verifique sua conexão com a internet.</small></div>';
-    mostrar('error');
-  };
-  document.head.appendChild(script);
+// ── CORES CANAL ──────────────────────────────────────
+const CANAL_COLORS = {
+  ifood:      '#ea1d2c', rappi: '#ff6327', uber: '#000000',
+  google:     '#4285f4', instagram: '#e91e8c', facebook: '#1877f2',
+  whatsapp:   '#25d366', tripadvisor: '#34e0a1', '': '#4f8ef7'
+};
+const CANAL_ICONS = {
+  ifood: '🍔', rappi: '🛵', uber: '🚗', google: '🔍',
+  instagram: '📷', facebook: '👍', whatsapp: '💬',
+  tripadvisor: '🌿', default: '📡'
+};
+
+function canalColor(c) {
+  const k = (c||'').toLowerCase();
+  for (const key in CANAL_COLORS) if (k.includes(key)) return CANAL_COLORS[key];
+  return '#4f8ef7';
+}
+function canalIcon(c) {
+  const k = (c||'').toLowerCase();
+  for (const key in CANAL_ICONS) if (k.includes(key)) return CANAL_ICONS[key];
+  return CANAL_ICONS.default;
 }
 
-function onDadosCarregados(resposta) {
-  try {
-    const colunas = resposta.table.cols.map(c => c.label);
-    const linhas  = resposta.table.rows;
+// ── TIPO HELPERS ─────────────────────────────────────
+function isElogio(t)     { return /elogio/i.test(t); }
+function isReclamacao(t) { return /reclama/i.test(t); }
+function isOutro(t)      { return !isElogio(t) && !isReclamacao(t); }
+function tipoColor(t)    { return isElogio(t) ? '#2ecc71' : isReclamacao(t) ? '#e74c3c' : '#f39c12'; }
 
-    dadosOriginais = linhas.map(linha => {
-      const cells = linha.c;
-      function val(i) {
-        const c = cells[i];
-        if (!c || c.v === null || c.v === undefined) return '';
-        // Datas vêm como "Date(2026,0,4)" — converte para DD/MM/AAAA
-        if (typeof c.v === 'string' && c.v.startsWith('Date(')) {
-          const partes = c.v.replace('Date(','').replace(')','').split(',');
-          const d = new Date(+partes[0], +partes[1], +partes[2]);
-          return d.toLocaleDateString('pt-BR');
+// ── LOAD DATA ────────────────────────────────────────
+function recarregar() {
+  const old = document.getElementById('gviz');
+  if (old) old.remove();
+  const s = document.createElement('script');
+  s.id = 'gviz';
+  s.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}&t=${Date.now()}`;
+  document.head.appendChild(s);
+}
+
+function onDados(r) {
+  try {
+    TODOS = r.table.rows.map(row => {
+      const c = row.c;
+      function v(i) {
+        const cell = c[i];
+        if (!cell || cell.v == null) return '';
+        if (typeof cell.v === 'string' && cell.v.startsWith('Date(')) {
+          const p = cell.v.replace('Date(','').replace(')','').split(',');
+          return new Date(+p[0], +p[1], +p[2]);
         }
-        return String(c.f || c.v).trim();
+        return String(cell.f || cell.v).trim();
       }
       return {
-        mes:       val(0),
-        data:      val(1),
-        unidade:   val(2),
-        canal:     val(3),
-        tipo:      val(4),
-        categoria: val(5),
+        mes:       v(0),
+        data:      v(1), // Date object or string
+        unidade:   v(2),
+        canal:     v(3),
+        tipo:      v(4),
+        categoria: v(5),
       };
-    }).filter(d => d.mes || d.unidade || d.canal);
-
-    popularFiltros();
-    filtrar();
-    mostrar('tabela');
+    }).filter(d => d.unidade || d.canal);
+    renderAll();
+    document.getElementById('loading-inicio').style.display = 'none';
+    document.getElementById('inicio-content').style.display = 'block';
   } catch(e) {
-    document.getElementById('error-msg').innerHTML =
-      '<div class="error">⚠️ Erro ao processar os dados.<br><small>' + e.message + '</small></div>';
-    mostrar('error');
+    console.error(e);
+    document.getElementById('loading-inicio').innerHTML =
+      '<div class="empty-state"><div class="empty-icon">⚠️</div><div>Erro ao carregar dados</div></div>';
   }
 }
 
-function popularFiltros() {
-  const campos = ['mes','unidade','canal','tipo','categoria'];
-  const ids    = ['f-mes','f-unidade','f-canal','f-tipo','f-categoria'];
-  campos.forEach((campo, i) => {
-    const vals = [...new Set(dadosOriginais.map(d => d[campo]).filter(Boolean))].sort();
-    const sel = document.getElementById(ids[i]);
-    sel.innerHTML = '<option value="">Todos</option>';
-    vals.forEach(v => {
-      const op = document.createElement('option');
-      op.value = v; op.textContent = v;
-      sel.appendChild(op);
-    });
+// ── FILTER ───────────────────────────────────────────
+function getFiltered() {
+  const hoje = new Date(); hoje.setHours(23,59,59,999);
+  let ini, fim;
+  if (customIni && customFim) {
+    ini = new Date(customIni); ini.setHours(0,0,0,0);
+    fim = new Date(customFim); fim.setHours(23,59,59,999);
+  } else {
+    fim = new Date(hoje);
+    ini = new Date(hoje); ini.setDate(ini.getDate() - periodDays + 1); ini.setHours(0,0,0,0);
+  }
+  return TODOS.filter(d => {
+    if (!(d.data instanceof Date)) return true; // sem data, inclui
+    return d.data >= ini && d.data <= fim;
   });
 }
 
-function filtrar() {
-  const busca    = document.getElementById('f-busca').value.toLowerCase();
-  const mes      = document.getElementById('f-mes').value;
-  const unidade  = document.getElementById('f-unidade').value;
-  const canal    = document.getElementById('f-canal').value;
-  const tipo     = document.getElementById('f-tipo').value;
-  const categoria= document.getElementById('f-categoria').value;
-
-  const resultado = dadosOriginais.filter(d => {
-    if (mes       && d.mes !== mes)           return false;
-    if (unidade   && d.unidade !== unidade)   return false;
-    if (canal     && d.canal !== canal)       return false;
-    if (tipo      && d.tipo !== tipo)         return false;
-    if (categoria && d.categoria !== categoria) return false;
-    if (busca) {
-      const tudo = Object.values(d).join(' ').toLowerCase();
-      if (!tudo.includes(busca)) return false;
-    }
-    return true;
-  });
-
-  renderizar(resultado);
-  atualizarCards(resultado);
+// ── PERIOD ───────────────────────────────────────────
+function setPeriod(days, el) {
+  periodDays = days; customIni = null; customFim = null;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('date-range').classList.remove('show');
+  document.getElementById('period-label').textContent =
+    days === 7 ? 'Últimos 7 dias' : days === 15 ? 'Últimos 15 dias' : 'Últimos 30 dias';
+  renderAll();
 }
 
-function renderizar(dados) {
-  const tbody = document.getElementById('tbody');
-  const empty = document.getElementById('empty');
-  const info  = document.getElementById('table-info');
+function toggleCustom(el) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  const dr = document.getElementById('date-range');
+  dr.classList.toggle('show');
+  if (!document.getElementById('dt-fim').value) {
+    const t = new Date();
+    document.getElementById('dt-fim').value = fmtDate(t);
+    t.setDate(t.getDate() - 30);
+    document.getElementById('dt-ini').value = fmtDate(t);
+    applyCustom();
+  }
+}
 
-  info.textContent = dados.length + ' registro(s) exibido(s)';
+function applyCustom() {
+  customIni = document.getElementById('dt-ini').value;
+  customFim = document.getElementById('dt-fim').value;
+  if (customIni && customFim) {
+    document.getElementById('period-label').textContent =
+      fmtBR(customIni) + ' – ' + fmtBR(customFim);
+    renderAll();
+  }
+}
 
-  if (dados.length === 0) {
-    tbody.innerHTML = '';
-    document.getElementById('tabela').style.display = 'none';
-    empty.style.display = 'block';
+function fmtDate(d) {
+  return d.toISOString().slice(0,10);
+}
+function fmtBR(s) {
+  const p = s.split('-'); return `${p[2]}/${p[1]}/${p[0]}`;
+}
+
+// ── NAVIGATION ───────────────────────────────────────
+function goPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('pg-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── RENDER ALL ───────────────────────────────────────
+function renderAll() {
+  const d = getFiltered();
+  renderInicio(d);
+  renderCanais(d);
+  renderLojas(d);
+  renderKPIs(d);
+}
+
+// ── RENDER INÍCIO ────────────────────────────────────
+function renderInicio(d) {
+  const total = d.length;
+  const elogios = d.filter(x => isElogio(x.tipo)).length;
+  const reclam  = d.filter(x => isReclamacao(x.tipo)).length;
+  const outros  = total - elogios - reclam;
+  const sat     = total ? Math.round(elogios / total * 100) : 0;
+
+  document.getElementById('k-total').textContent = total;
+  document.getElementById('k-sat').textContent = sat + '%';
+  document.getElementById('k-lojas').textContent = new Set(d.map(x => x.unidade).filter(Boolean)).size;
+  document.getElementById('k-canais').textContent = new Set(d.map(x => x.canal).filter(Boolean)).size;
+
+  document.getElementById('g-elogios').textContent = elogios;
+  document.getElementById('g-neutros').textContent = outros;
+  document.getElementById('g-reclamacoes').textContent = reclam;
+
+  // Gauge
+  const arc = document.getElementById('gauge-arc');
+  const pct = sat / 100;
+  const dashLen = 251;
+  arc.style.strokeDashoffset = dashLen - pct * dashLen;
+  arc.style.stroke = sat >= 70 ? '#2ecc71' : sat >= 45 ? '#f39c12' : '#e74c3c';
+  document.getElementById('gauge-pct').textContent = sat + '%';
+  document.getElementById('gauge-cat').textContent =
+    sat >= 70 ? 'Excelente 🌟' : sat >= 45 ? 'Regular ⚠️' : 'Crítico 🔴';
+
+  // Top canais
+  const canalMap = {};
+  d.forEach(x => {
+    if (!x.canal) return;
+    if (!canalMap[x.canal]) canalMap[x.canal] = 0;
+    canalMap[x.canal]++;
+  });
+  const maxC = Math.max(...Object.values(canalMap), 1);
+  const topCanais = Object.entries(canalMap).sort((a,b) => b[1]-a[1]).slice(0,5);
+  document.getElementById('home-canais').innerHTML = topCanais.map(([canal, cnt]) => `
+    <div class="bar-row">
+      <div class="bar-label" title="${canal}">${canal || '—'}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${cnt/maxC*100}%;background:${canalColor(canal)}"></div></div>
+      <div class="bar-val">${cnt}</div>
+    </div>`).join('');
+
+  // Top lojas
+  const lojaMap = {};
+  d.forEach(x => {
+    if (!x.unidade) return;
+    if (!lojaMap[x.unidade]) lojaMap[x.unidade] = { e: 0, t: 0 };
+    lojaMap[x.unidade].t++;
+    if (isElogio(x.tipo)) lojaMap[x.unidade].e++;
+  });
+  const topLojas = Object.entries(lojaMap)
+    .map(([n,v]) => [n, v.t ? Math.round(v.e/v.t*100) : 0])
+    .sort((a,b) => b[1]-a[1]).slice(0,5);
+  document.getElementById('home-lojas').innerHTML = topLojas.map(([loja, pct]) => `
+    <div class="bar-row">
+      <div class="bar-label" title="${loja}">${loja}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${pct>=70?'#2ecc71':pct>=45?'#f39c12':'#e74c3c'}"></div></div>
+      <div class="bar-val">${pct}%</div>
+    </div>`).join('');
+}
+
+// ── RENDER CANAIS ────────────────────────────────────
+let _tipoFiltroCanal = 'todos';
+
+function filtroTipo(tipo, el) {
+  _tipoFiltroCanal = tipo;
+  document.querySelectorAll('.tipo-chip').forEach(c => {
+    c.classList.remove('on');
+  });
+  el.classList.add('on');
+  renderCanais(getFiltered());
+}
+
+function renderCanais(d) {
+  // Canal cards
+  const cmap = {};
+  d.forEach(x => {
+    if (!x.canal) return;
+    if (!cmap[x.canal]) cmap[x.canal] = { total:0, e:0, r:0, o:0 };
+    cmap[x.canal].total++;
+    if (isElogio(x.tipo)) cmap[x.canal].e++;
+    else if (isReclamacao(x.tipo)) cmap[x.canal].r++;
+    else cmap[x.canal].o++;
+  });
+  const sorted = Object.entries(cmap).sort((a,b)=>b[1].total-a[1].total);
+  const maxT = Math.max(...sorted.map(x=>x[1].total), 1);
+
+  document.getElementById('canal-list').innerHTML = sorted.map(([canal, v]) => {
+    const sat = v.total ? Math.round(v.e/v.total*100) : 0;
+    const color = canalColor(canal);
+    return `<div class="canal-card">
+      <div class="canal-icon" style="background:${color}22;border:1.5px solid ${color}44">${canalIcon(canal)}</div>
+      <div class="canal-info">
+        <div class="canal-name">${canal}</div>
+        <div class="canal-count">${v.total} avaliações · 😊${v.e} 😟${v.r} 💬${v.o}</div>
+        <div class="canal-bar-mini"><div class="canal-bar-mini-fill" style="width:${v.total/maxT*100}%;background:${color}"></div></div>
+      </div>
+      <div class="canal-score">
+        <div class="canal-score-val" style="color:${sat>=70?'#2ecc71':sat>=45?'#f39c12':'#e74c3c'}">${sat}%</div>
+        <div class="canal-score-label">satisfação</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Tipo × Canal chart
+  let filtered = d;
+  if (_tipoFiltroCanal === 'elogio')     filtered = d.filter(x => isElogio(x.tipo));
+  else if (_tipoFiltroCanal === 'reclamacao') filtered = d.filter(x => isReclamacao(x.tipo));
+  else if (_tipoFiltroCanal === 'outros')     filtered = d.filter(x => isOutro(x.tipo));
+
+  const fc = {};
+  filtered.forEach(x => { if (!x.canal) return; fc[x.canal] = (fc[x.canal]||0)+1; });
+  const fmax = Math.max(...Object.values(fc), 1);
+  const fcolor = _tipoFiltroCanal === 'elogio' ? '#2ecc71' : _tipoFiltroCanal === 'reclamacao' ? '#e74c3c' : _tipoFiltroCanal === 'outros' ? '#f39c12' : '#4f8ef7';
+
+  document.getElementById('tipo-canais-chart').innerHTML = Object.entries(fc)
+    .sort((a,b)=>b[1]-a[1]).map(([canal, cnt]) => `
+    <div class="bar-row">
+      <div class="bar-label" title="${canal}">${canal}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${cnt/fmax*100}%;background:${fcolor}"></div></div>
+      <div class="bar-val">${cnt}</div>
+    </div>`).join('') || '<div style="color:var(--text2);font-size:.85rem;padding:8px 0">Sem dados</div>';
+
+  // Categorias
+  const catMap = {};
+  d.forEach(x => { if (x.categoria) catMap[x.categoria] = (catMap[x.categoria]||0)+1; });
+  const cats = Object.entries(catMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const catMax = Math.max(...cats.map(x=>x[1]), 1);
+  document.getElementById('cat-chart').innerHTML = cats.map(([cat, cnt]) => `
+    <div class="bar-row">
+      <div class="bar-label" title="${cat}">${cat}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${cnt/catMax*100}%;background:#9b59b6"></div></div>
+      <div class="bar-val">${cnt}</div>
+    </div>`).join('') || '<div style="color:var(--text2);font-size:.85rem;padding:8px 0">Sem dados</div>';
+}
+
+// ── RENDER LOJAS ─────────────────────────────────────
+function renderLojas(d) {
+  const lojaMap = {};
+  d.forEach(x => {
+    if (!x.unidade) return;
+    if (!lojaMap[x.unidade]) lojaMap[x.unidade] = { e:0, r:0, o:0, t:0, canais:{}, cats:{} };
+    const lj = lojaMap[x.unidade];
+    lj.t++;
+    if (isElogio(x.tipo)) lj.e++; else if (isReclamacao(x.tipo)) lj.r++; else lj.o++;
+    if (x.canal) lj.canais[x.canal] = (lj.canais[x.canal]||0)+1;
+    if (x.categoria) lj.cats[x.categoria] = (lj.cats[x.categoria]||0)+1;
+  });
+
+  const redeTotal = d.length;
+  const redeSat   = redeTotal ? Math.round(d.filter(x=>isElogio(x.tipo)).length / redeTotal * 100) : 0;
+
+  const ranked = Object.entries(lojaMap)
+    .map(([n,v]) => ({ n, ...v, sat: v.t ? Math.round(v.e/v.t*100) : 0 }))
+    .sort((a,b) => b.sat - a.sat);
+
+  document.getElementById('ranking-list').innerHTML = ranked.map((lj, i) => {
+    const posClass = i===0?'pos-1':i===1?'pos-2':i===2?'pos-3':'pos-n';
+    const satColor = lj.sat>=70?'#2ecc71':lj.sat>=45?'#f39c12':'#e74c3c';
+    const vsRede   = lj.sat - redeSat;
+    const vsStr    = vsRede >= 0 ? `+${vsRede}pp` : `${vsRede}pp`;
+    const vsColor  = vsRede >= 0 ? '#2ecc71' : '#e74c3c';
+    const topCanal = Object.entries(lj.canais).sort((a,b)=>b[1]-a[1])[0];
+    const topCat   = Object.entries(lj.cats).sort((a,b)=>b[1]-a[1])[0];
+
+    return `<div class="ranking-item" onclick="toggleDetail(this)">
+      <div class="ranking-top">
+        <div class="ranking-pos ${posClass}">${i+1}</div>
+        <div class="ranking-name">${lj.n}</div>
+        <div style="text-align:right">
+          <div class="ranking-score" style="color:${satColor}">${lj.sat}%</div>
+          <div style="font-size:.65rem;color:${vsColor};font-weight:700">${vsStr} vs rede</div>
+        </div>
+      </div>
+      <div class="ranking-detail">
+        <div class="detail-row"><span class="detail-label">Total avaliações</span><span class="detail-val">${lj.t}</span></div>
+        <div class="detail-row"><span class="detail-label">😊 Elogios</span><span class="detail-val" style="color:#2ecc71">${lj.e}</span></div>
+        <div class="detail-row"><span class="detail-label">😟 Reclamações</span><span class="detail-val" style="color:#e74c3c">${lj.r}</span></div>
+        <div class="detail-row"><span class="detail-label">💬 Outros</span><span class="detail-val" style="color:#f39c12">${lj.o}</span></div>
+        ${topCanal ? `<div class="detail-row"><span class="detail-label">Canal principal</span><span class="detail-val">${topCanal[0]} (${topCanal[1]})</span></div>` : ''}
+        ${topCat   ? `<div class="detail-row"><span class="detail-label">Categoria principal</span><span class="detail-val">${topCat[0]}</span></div>` : ''}
+        <div class="compare-bar">
+          <div class="compare-label">Satisfação: loja vs rede</div>
+          <div class="compare-row">
+            <div class="compare-tag">Esta loja</div>
+            <div class="compare-track"><div class="compare-fill" style="width:${lj.sat}%;background:${satColor}"></div></div>
+            <div class="compare-num" style="color:${satColor}">${lj.sat}%</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-tag">Rede</div>
+            <div class="compare-track"><div class="compare-fill" style="width:${redeSat}%;background:#4f8ef7"></div></div>
+            <div class="compare-num" style="color:#4f8ef7">${redeSat}%</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('') || '<div class="empty-state"><div class="empty-icon">🏪</div><div>Sem dados no período</div></div>';
+}
+
+function toggleDetail(el) {
+  el.querySelector('.ranking-detail').classList.toggle('open');
+}
+
+// ── RENDER KPIs ──────────────────────────────────────
+function renderKPIs(d) {
+  const total  = d.length;
+  const elogios= d.filter(x=>isElogio(x.tipo)).length;
+  const reclam = d.filter(x=>isReclamacao(x.tipo)).length;
+  const sat    = total ? Math.round(elogios/total*100) : 0;
+  const satReclam = total ? Math.round(reclam/total*100) : 0;
+
+  // KPI table
+  const kpis = [
+    { label: 'Total de avaliações', val: total, badge: null },
+    { label: 'Taxa de satisfação', val: sat+'%', badge: sat>=70?'Ótimo':sat>=45?'Regular':'Crítico', bc: sat>=70?'badge-green':sat>=45?'badge-yellow':'badge-red' },
+    { label: 'Taxa de reclamação', val: satReclam+'%', badge: satReclam<=15?'OK':satReclam<=30?'Atenção':'Alto', bc: satReclam<=15?'badge-green':satReclam<=30?'badge-yellow':'badge-red' },
+    { label: 'Lojas avaliadas', val: new Set(d.map(x=>x.unidade).filter(Boolean)).size, badge: null },
+    { label: 'Canais ativos', val: new Set(d.map(x=>x.canal).filter(Boolean)).size, badge: null },
+    { label: 'Categorias distintas', val: new Set(d.map(x=>x.categoria).filter(Boolean)).size, badge: null },
+  ];
+  document.getElementById('kpi-table').innerHTML = kpis.map(k =>
+    `<div class="kpi-row">
+      <div class="kpi-name">${k.label}</div>
+      <div class="kpi-val">${k.val}</div>
+      ${k.badge ? `<div class="kpi-badge ${k.bc}">${k.badge}</div>` : ''}
+    </div>`
+  ).join('');
+
+  // Trend chart
+  renderTrend(d);
+
+  // Loja vs Rede
+  const lojaMap = {};
+  d.forEach(x => {
+    if (!x.unidade) return;
+    if (!lojaMap[x.unidade]) lojaMap[x.unidade] = {e:0,t:0};
+    lojaMap[x.unidade].t++;
+    if (isElogio(x.tipo)) lojaMap[x.unidade].e++;
+  });
+  const redeSat = total ? Math.round(elogios/total*100) : 0;
+  const lojas = Object.entries(lojaMap)
+    .map(([n,v]) => [n, v.t?Math.round(v.e/v.t*100):0])
+    .sort((a,b)=>b[1]-a[1]);
+
+  document.getElementById('loja-vs-rede').innerHTML = lojas.slice(0,8).map(([loja, pct]) => {
+    const color = pct >= redeSat ? '#2ecc71' : '#e74c3c';
+    return `<div class="bar-row">
+      <div class="bar-label" title="${loja}">${loja}</div>
+      <div class="bar-track" style="position:relative">
+        <div class="bar-fill" style="width:${pct}%;background:${color}"></div>
+        <div style="position:absolute;top:0;left:${redeSat}%;width:2px;height:100%;background:#4f8ef7;opacity:.8"></div>
+      </div>
+      <div class="bar-val" style="color:${color}">${pct}%</div>
+    </div>`;
+  }).join('') + (lojas.length ? `<div style="font-size:.68rem;color:var(--text2);margin-top:6px;">▐ linha azul = média da rede (${redeSat}%)</div>` : '');
+}
+
+function renderTrend(d) {
+  // Agrupa por data (últimos N dias)
+  const dateMap = {};
+  d.forEach(x => {
+    if (!(x.data instanceof Date)) return;
+    const key = x.data.toISOString().slice(0,10);
+    if (!dateMap[key]) dateMap[key] = { e:0, r:0 };
+    if (isElogio(x.tipo)) dateMap[key].e++;
+    else if (isReclamacao(x.tipo)) dateMap[key].r++;
+  });
+
+  const keys = Object.keys(dateMap).sort();
+  if (keys.length < 2) {
+    document.getElementById('trend-svg').innerHTML = '<text x="180" y="60" text-anchor="middle" fill="#8890b0" font-size="12">Dados insuficientes para tendência</text>';
+    document.getElementById('trend-labels').innerHTML = '';
     return;
   }
 
-  empty.style.display = 'none';
-  document.getElementById('tabela').style.display = 'table';
+  const maxVal = Math.max(...keys.map(k => Math.max(dateMap[k].e, dateMap[k].r)), 1);
+  const W = 360, H = 110, pad = 10;
+  const xStep = (W - pad*2) / (keys.length - 1);
 
-  tbody.innerHTML = dados.map(d => `
-    <tr>
-      <td>${d.mes}</td>
-      <td>${d.data}</td>
-      <td>${d.unidade}</td>
-      <td>${d.canal}</td>
-      <td>${badgeTipo(d.tipo)}</td>
-      <td>${d.categoria}</td>
-    </tr>
-  `).join('');
+  function pts(type) {
+    return keys.map((k,i) => {
+      const v = dateMap[k][type];
+      const x = pad + i * xStep;
+      const y = H - pad - (v / maxVal) * (H - pad*2);
+      return `${x},${y}`;
+    }).join(' ');
+  }
+
+  const svg = `
+    <polyline points="${pts('e')}" fill="none" stroke="#2ecc71" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <polyline points="${pts('r')}" fill="none" stroke="#e74c3c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${keys.map((k,i) => {
+      const x = pad + i * xStep;
+      const ye = H - pad - (dateMap[k].e / maxVal) * (H - pad*2);
+      const yr = H - pad - (dateMap[k].r / maxVal) * (H - pad*2);
+      return `<circle cx="${x}" cy="${ye}" r="3" fill="#2ecc71"/><circle cx="${x}" cy="${yr}" r="3" fill="#e74c3c"/>`;
+    }).join('')}
+  `;
+  document.getElementById('trend-svg').innerHTML = svg;
+
+  // Labels (mostrar 4 no máximo)
+  const step = Math.ceil(keys.length / 4);
+  const labelKeys = keys.filter((_,i) => i % step === 0 || i === keys.length-1);
+  document.getElementById('trend-labels').innerHTML = labelKeys.map(k => {
+    const p = k.split('-'); return `<span style="font-size:.6rem;color:var(--text2)">${p[2]}/${p[1]}</span>`;
+  }).join('');
 }
 
-function badgeTipo(tipo) {
-  const t = (tipo || '').toLowerCase();
-  let cls = 'badge-default';
-  if (t.includes('elogio'))     cls = 'badge-elogio';
-  else if (t.includes('reclama')) cls = 'badge-reclamacao';
-  else if (t.includes('sugest')) cls = 'badge-sugestao';
-  else if (t.includes('d' + 'ú' + 'vida')) cls = 'badge-duvida';
-  return `<span class="badge ${cls}">${tipo}</span>`;
-}
-
-function atualizarCards(dados) {
-  document.getElementById('card-total').textContent      = dadosOriginais.length;
-  document.getElementById('card-elogios').textContent    = dadosOriginais.filter(d => d.tipo.toLowerCase().includes('elogio')).length;
-  document.getElementById('card-reclamacoes').textContent = dadosOriginais.filter(d => d.tipo.toLowerCase().includes('reclama')).length;
-  document.getElementById('card-outros').textContent     = dadosOriginais.filter(d => {
-    const t = d.tipo.toLowerCase();
-    return !t.includes('elogio') && !t.includes('reclama');
-  }).length;
-}
-
-function limparFiltros() {
-  document.getElementById('f-busca').value = '';
-  ['f-mes','f-unidade','f-canal','f-tipo','f-categoria'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
-  filtrar();
-}
-
-function mostrar(o) {
-  document.getElementById('loading').style.display   = o === 'loading' ? 'block' : 'none';
-  document.getElementById('error-msg').style.display = o === 'error'   ? 'block' : 'none';
-  document.getElementById('empty').style.display     = 'none';
-  if (o !== 'tabela') document.getElementById('tabela').style.display = 'none';
-}
-
-carregar();
+// ── INIT ─────────────────────────────────────────────
+recarregar();
 </script>
 </body>
 </html>
