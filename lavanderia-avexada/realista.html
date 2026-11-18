@@ -76,7 +76,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero .palco{position:absolute;left:50%;bottom:-2%;width:min(54vw,520px);aspect-ratio:788/866;transform:translateX(-50%);z-index:2;perspective:1200px}
 .hero .maq{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
 .hero .maq img{width:100%;height:auto;filter:drop-shadow(0 40px 40px rgba(0,0,0,.55))}
-.hero .zoom{position:absolute;inset:0;z-index:3;clip-path:circle(0% at 50% 60%);will-change:clip-path}
+.hero .zoom{position:absolute;inset:0;z-index:3;clip-path:circle(0px at 50% 60%);will-change:clip-path}
 .hero .zoom img{width:100%;height:100%;object-fit:cover;object-position:60% 50%}
 .hero .zoom::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,8,26,.85),rgba(4,8,26,.1) 55%)}
 .hero .frase{position:absolute;left:0;right:0;bottom:12%;z-index:4;text-align:center;opacity:0;padding-inline:var(--gl)}
@@ -408,6 +408,50 @@ body{background:var(--preto)}
 .zap{background:#25d366;color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.35)}
 .zap svg{width:26px;height:26px}
 .topo{mix-blend-mode:normal;text-shadow:0 1px 12px rgba(0,0,0,.25)}
+
+/* ===== Fluxo real (vídeo que anda com a rolagem) ===== */
+.fluxo{position:relative;height:420vh;background:var(--preto)}
+.fluxo-cena{position:sticky;top:0;height:100svh;overflow:hidden;background:radial-gradient(ellipse 60% 65% at 60% 55%,#3a80f5,#1f5fd6 45%,#0d2f7a 90%)}
+.fluxo video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fluxo-reserva{position:absolute;inset:0;display:none;place-items:center}
+.fluxo-reserva img{width:min(38vw,420px);height:auto;margin-left:22vw;filter:drop-shadow(0 50px 50px rgba(0,0,0,.5));transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.fluxo.sem-video .fluxo-reserva{display:grid}
+.fluxo.sem-video video{display:none}
+.fluxo-veu{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,17,49,.88) 0%,rgba(6,17,49,.55) 38%,rgba(6,17,49,0) 65%)}
+.fluxo-texto{position:absolute;left:var(--gl);top:50%;transform:translateY(-50%);width:min(440px,88vw);display:grid;gap:22px;z-index:2}
+.fluxo-passos{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fluxo-passos li{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start;padding:14px 0;border-top:1px solid var(--linha);opacity:.32;transition:opacity .4s}
+.fluxo-passos li.on{opacity:1}
+.fluxo-passos b{font-family:var(--gigante);font-weight:400;font-size:2rem;line-height:1;color:var(--verde)}
+.fluxo-passos h3{font-family:var(--gigante);font-weight:400;text-transform:uppercase;font-size:clamp(1.7rem,3vw,2.4rem);line-height:.95}
+.fluxo-passos p{color:var(--fg2);font-size:.95rem;max-height:0;overflow:hidden;transition:max-height .45s ease,margin .45s ease}
+.fluxo-passos li.on p{max-height:4.5em;margin-top:6px}
+.fluxo-barra{position:absolute;left:var(--gl);right:var(--gr);bottom:28px;height:2px;background:rgba(255,255,255,.2);z-index:2}
+.fluxo-barra i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--verde)}
+.fluxo-barra span{position:absolute;top:-4px;width:10px;height:10px;margin-left:-1px;border-radius:50%;background:#fff}
+@media (max-width:760px){
+  .fluxo-veu{background:linear-gradient(0deg,rgba(6,17,49,.92) 0%,rgba(6,17,49,.6) 45%,rgba(6,17,49,.1) 75%)}
+  .fluxo-texto{top:auto;bottom:56px;transform:none}
+  .fluxo-reserva{place-items:start center}
+  .fluxo-reserva img{margin:12vh 0 0;width:min(62vw,300px)}
+}
+
+/* ===== Preços ===== */
+.precos{padding-block:120px;background:var(--preto)}
+.precos-cab{display:grid;gap:16px;margin-bottom:50px}
+.precos-cab h2{font-family:var(--gigante);font-weight:400;text-transform:uppercase;font-size:clamp(2.6rem,6vw,5rem);line-height:.9}
+.precos-cab h2 span{color:var(--verde)}
+.precos-grade{display:grid;grid-template-columns:1fr 1.15fr 1fr;border-top:1px solid var(--linha)}
+.precos-grade article{display:grid;gap:8px;align-content:start;padding:34px 28px;border-right:1px solid var(--linha);min-width:0}
+.precos-grade article:last-child{border-right:0}
+.precos-grade img{width:120px;height:auto;margin-bottom:14px;filter:drop-shadow(0 18px 18px rgba(0,0,0,.45))}
+.precos-grade .duas{display:flex;gap:4px;margin-bottom:14px}
+.precos-grade .duas img{width:96px;margin:0}
+.precos-grade b{font-family:var(--gigante);font-weight:400;font-size:clamp(2.8rem,5vw,4.2rem);line-height:.95}
+.precos-grade p{color:var(--fg2)}
+.precos-grade .destaque{background:linear-gradient(180deg,rgba(111,224,74,.14),transparent 80%)}
+.precos-grade .destaque b{color:var(--verde)}
+@media (max-width:860px){.precos-grade{grid-template-columns:1fr}.precos-grade article{border-right:0;border-bottom:1px solid var(--linha)}}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -427,7 +471,7 @@ body{background:var(--preto)}
 
 <header class="topo">
   <a class="marca" href="#inicio" aria-label="Avexada Lavanderia Inteligente"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="27" cy="27" r="12" fill="none" stroke="currentColor" stroke-width="3.5"/><path d="M27 27v-7M27 27l4.5 3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="23.5" y="9" width="7" height="4" rx="1.2" fill="currentColor"/><path d="M4 22h9M6 27h7M8 32h6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>AVEXADA<small>Lavanderia Inteligente</small></span></a>
-  <nav aria-label="Seções"><a href="#servicos">Serviços</a><a href="#como">Como usar</a><a href="#duvidas">Dúvidas</a><a class="sempre" href="#onde">Onde fica</a></nav>
+  <nav aria-label="Seções"><a href="#fluxo">Como funciona</a><a href="#precos">Preços</a><a href="#duvidas">Dúvidas</a><a class="sempre" href="#onde">Onde fica</a></nav>
 </header>
 
 <main id="inicio">
@@ -449,34 +493,35 @@ body{background:var(--preto)}
     <span>Lavagem R$ 14,90</span><span>Secagem R$ 14,90</span><span>Das 6h às 23h</span><span>Centro de Aquiraz</span><span>Lavanderia inteligente</span>
   </div></div>
 
-  <section class="servicos" id="servicos" aria-label="Serviços">
-    <div class="trilho-s" id="trilhoS">
-      <article class="painel p-azul">
-        <div class="nome" aria-hidden="true">LAVAR</div>
-        <div class="esq"><span class="num">01 / 04 — Lavagem</span><h3>Lave sem<br><b>perder tempo</b></h3><p>Máquinas profissionais. Coloque a roupa, pague e o ciclo começa sozinho.</p></div>
-        <div class="foto"><img src="img/lavadora.webp" alt="Lavadora" width="788" height="866" loading="lazy"></div>
-        <div class="dir"><div class="preco">R$ 14,90<small>por ciclo</small></div></div>
-      </article>
-      <article class="painel p-laranja">
-        <div class="nome" aria-hidden="true">SECAR</div>
-        <div class="esq"><span class="num">02 / 04 — Secagem</span><h3>Seque e saia<br><b>com tudo pronto</b></h3><p>Secadora profissional. A roupa sai quentinha e pronta pra dobrar.</p></div>
-        <div class="foto"><img src="img/secadora.webp" alt="Secadora" width="788" height="866" loading="lazy"></div>
-        <div class="dir"><div class="preco">R$ 14,90<small>por ciclo</small></div></div>
-      </article>
-      <article class="painel p-verde">
-        <div class="nome" aria-hidden="true">COMBO</div>
-        <div class="esq"><span class="num">03 / 04 — Lavar + secar</span><h3>Lave e seque<br><b>no mesmo lugar</b></h3><p>Chegue com a roupa suja e saia com ela pronta, numa visita só.</p></div>
-        <div class="foto duas"><img src="img/secadora.webp" alt="" width="788" height="866" loading="lazy"><img src="img/lavadora.webp" alt="" width="788" height="866" loading="lazy"></div>
-        <div class="dir"><div class="preco">R$ 29,80<small>lavar + secar</small></div></div>
-      </article>
-      <article class="painel p-preto">
-        <div class="nome" aria-hidden="true" style="color:rgba(255,255,255,.08)">CENTRO</div>
-        <div class="esq"><span class="num">04 / 04 — Onde fica</span><h3>No Centro<br><b>de Aquiraz</b></h3><p>Av. Raimundo Pires Cardoso, 217, Loja 4. Fácil de chegar, a pé ou de carro.</p></div>
-        <div class="relogio-g pino-g" aria-hidden="true"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg></div>
-        <div class="dir"><div class="preco">217<small>Loja 4 · Centro</small></div><a class="btn claro magnetico" data-cursor="Mapa" href="https://www.google.com/maps/search/?api=1&query=Av.+Raimundo+Pires+Cardoso+217+Centro+Aquiraz+CE" target="_blank" rel="noopener">Abrir no mapa</a></div>
-      </article>
+  <section class="fluxo" id="fluxo" aria-label="Como funciona na prática">
+    <div class="fluxo-cena">
+      <video id="fluxoVideo" muted playsinline preload="auto" aria-hidden="true">
+        <source src="img/fluxo.mp4" type="video/mp4">
+      </video>
+      <div class="fluxo-reserva" aria-hidden="true"><img src="img/lavadora.webp" alt="" width="788" height="866" loading="lazy"></div>
+      <div class="fluxo-veu"></div>
+      <div class="fluxo-texto">
+        <span class="tag">Na prática</span>
+        <ol class="fluxo-passos" id="fluxoPassos">
+          <li class="on"><b>01</b><div><h3>Chegou</h3><p>Entre e escolha uma máquina livre. Sem fila, sem agendamento.</p></div></li>
+          <li><b>02</b><div><h3>Coloque a roupa</h3><p>Separe claras e escuras e coloque tudo na lavadora.</p></div></li>
+          <li><b>03</b><div><h3>Pague e lave</h3><p>R$ 14,90 por ciclo. A máquina começa sozinha.</p></div></li>
+          <li><b>04</b><div><h3>Seque e vá</h3><p>Passe pra secadora e saia com tudo pronto.</p></div></li>
+        </ol>
+      </div>
+      <div class="fluxo-barra" aria-hidden="true"><i id="fluxoBarra"></i><span style="left:0%"></span><span style="left:25%"></span><span style="left:50%"></span><span style="left:75%"></span></div>
     </div>
-    
+  </section>
+
+  <section class="precos" id="precos">
+    <div class="in">
+      <div class="precos-cab"><span class="tag">Preço justo</span><h2>Preço por ciclo, <span>sem surpresa</span></h2></div>
+      <div class="precos-grade">
+        <article><img src="img/lavadora.webp" alt="" width="788" height="866" loading="lazy"><span class="rot">Lavar</span><b>R$ 14,90</b><p>Ciclo completo na lavadora profissional.</p></article>
+        <article class="destaque"><div class="duas"><img src="img/secadora.webp" alt="" width="788" height="866" loading="lazy"><img src="img/lavadora.webp" alt="" width="788" height="866" loading="lazy"></div><span class="rot">Lavar + secar</span><b>R$ 29,80</b><p>Roupa limpa e seca na mesma visita.</p></article>
+        <article><img src="img/secadora.webp" alt="" width="788" height="866" loading="lazy"><span class="rot">Secar</span><b>R$ 14,90</b><p>Secadora profissional, sai pronta pra dobrar.</p></article>
+      </div>
+    </div>
   </section>
 
   <section class="manifesto">
@@ -486,17 +531,7 @@ body{background:var(--preto)}
     </div>
   </section>
 
-  <section class="como" id="como">
-    <div class="in">
-      <div class="cab"><h2>Como<br><span>usar</span></h2><span class="rot">4 passos simples</span></div>
-      <ol class="passos">
-        <li class="passo"><span class="selo">Comece aqui</span><h3>Separe</h3><p>Claras de um lado, escuras do outro. Confira as etiquetas.</p></li>
-        <li class="passo"><img src="img/lavadora.webp" alt="" width="788" height="866" loading="lazy"><h3>Coloque</h3><p>Escolha uma lavadora livre, coloque as roupas e feche a porta.</p></li>
-        <li class="passo"><h3>Pague e lave</h3><p>Faça o pagamento e o ciclo começa sozinho.</p></li>
-        <li class="passo"><h3>Seque e vá</h3><p>Passe para a secadora e saia com tudo pronto.</p></li>
-      </ol>
-    </div>
-  </section>
+  
 
   <section class="horario" id="horario">
     <div class="in">
@@ -660,6 +695,34 @@ if (!reduz){
   document.getElementById("hero").addEventListener("touchmove", e => { const t = e.touches[0]; inclina(t.clientX/innerWidth - .5, t.clientY/innerHeight - .5); }, {passive:true});
 }
 
+
+/* ===== Fluxo real: vídeo controlado pela rolagem ===== */
+(function(){
+  const sec = document.getElementById("fluxo"), v = document.getElementById("fluxoVideo");
+  const passos = [...document.querySelectorAll("#fluxoPassos li")], barra = document.getElementById("fluxoBarra");
+  const reserva = sec.querySelector(".fluxo-reserva img");
+  let alvo = 0, atualT = 0, temVideo = false;
+  const semVideo = () => { sec.classList.add("sem-video"); temVideo = false; };
+  v.addEventListener("loadedmetadata", () => { temVideo = v.duration > 0; if (!temVideo) semVideo(); });
+  v.addEventListener("error", semVideo, true);
+  v.querySelector("source").addEventListener("error", semVideo);
+  setTimeout(() => { if (!temVideo) semVideo(); }, 4000);
+  function progresso(){
+    const r = sec.getBoundingClientRect(), total = r.height - innerHeight;
+    return Math.min(1, Math.max(0, -r.top / total));
+  }
+  function quadro(){
+    const p = progresso();
+    const i = Math.min(3, Math.floor(p * 4));
+    passos.forEach((li, k) => li.classList.toggle("on", k === i));
+    barra.style.width = (p * 100) + "%";
+    if (temVideo){ alvo = p * (v.duration - .05); atualT += (alvo - atualT) * .18; if (Math.abs(v.currentTime - atualT) > .01) v.currentTime = atualT; }
+    else if (reserva && !reduz){ reserva.style.transform = `translateY(${(p - .5) * -40}px) rotate(${(p - .5) * 6}deg)`; }
+    requestAnimationFrame(quadro);
+  }
+  requestAnimationFrame(quadro);
+})();
+
 /* rolagem */
 if (temGsap && !reduz){
   gsap.registerPlugin(ScrollTrigger);
@@ -674,12 +737,25 @@ if (temGsap && !reduz){
   }
 
   // topo: zoom na porta e mergulho
+  // o vidro da porta fica em 69,2% x 50,8% da foto, com raio de 20,95% da largura
+  const palco = document.getElementById("palco"), zoom = document.getElementById("zoom"), heroEl = document.getElementById("hero");
+  const camera = {s:1};
+  gsap.set(palco, {transformOrigin:"69.2% 50.8%"});
+  function mergulho(){
+    gsap.set(palco, {scale: camera.s});
+    const r = palco.getBoundingClientRect(), h = heroEl.getBoundingClientRect();
+    const cx = r.left - h.left + .692 * r.width, cy = r.top - h.top + .508 * r.height, vidro = .2095 * r.width;
+    const abre = gsap.utils.clamp(0, 1, (camera.s - 1.15) / 1.1);           // o círculo cresce de dentro do vidro
+    const raio = vidro * abre * (1 + Math.max(0, camera.s - 2.25) * .55);   // depois passa do vidro e cobre a tela
+    zoom.style.clipPath = `circle(${raio.toFixed(1)}px at ${cx.toFixed(1)}px ${cy.toFixed(1)}px)`;
+  }
+  mergulho();
   const tl = gsap.timeline({scrollTrigger:{trigger:"#hero", start:"top top", end:"+=160%", scrub:.8, pin:true, anticipatePin:1}});
   tl.to("#titulo .l1 .letra", {yPercent:-120, opacity:0, stagger:.02, ease:"power2.in"}, 0)
     .to("#titulo .l2 .letra", {yPercent:-120, opacity:0, stagger:.02, ease:"power2.in"}, .05)
     .to("#heroInfo", {opacity:0}, 0)
-    .to("#palco", {scale:3.4, yPercent:-18, transformOrigin:"69% 51%", ease:"power2.in", duration:1}, 0)
-    .to("#zoom", {clipPath:"circle(150% at 50% 60%)", ease:"power2.in", duration:.7}, .45)
+    .to("#titulo", {opacity:0, duration:.35}, .1)
+    .to(camera, {s:7, ease:"power2.in", duration:1, onUpdate: mergulho}, 0)
     .to("#frase", {opacity:1, y:0, duration:.3}, .9)
     .from("#frase h2", {scale:1.3, duration:.3}, .9);
 
@@ -688,21 +764,13 @@ if (temGsap && !reduz){
   gsap.ticker.add(() => { fx -= vel; const w = faixa.scrollWidth / 2; if (-fx >= w) fx += w; if (fx > 0) fx -= w; faixa.style.transform = `translateX(${fx}px)`; vel += (1 - vel) * .06; });
   ScrollTrigger.create({onUpdate: s => { vel = 1 + Math.min(18, Math.abs(s.getVelocity()) / 120) * (s.direction > 0 ? 1 : -1); }});
 
-  // serviços: cada cartão sobe e o anterior recua um pouco
-  const paineis = gsap.utils.toArray(".painel");
-  paineis.forEach((p, i) => {
-    const prox = paineis[i + 1];
-    if (prox) gsap.fromTo(p, {scale:1, filter:"brightness(1)"}, {scale:.96, filter:"brightness(.88)", ease:"none", scrollTrigger:{trigger:prox, start:"top bottom", end:"top top", scrub:true}});
-    revela(p.querySelectorAll(".foto, .relogio-g"), {y:80, opacity:0}, {para:{duration:1.1}, gatilho: null});
-  });
-
   // manifesto acende palavra por palavra
   const pals = man.querySelectorAll(".pal");
   ScrollTrigger.create({trigger:man, start:"top 80%", end:"bottom 45%", scrub:true, onUpdate: s => { const n = Math.round(s.progress * pals.length); pals.forEach((p,i) => p.style.opacity = i < n ? 1 : .14); }});
 
-  // como usar: cartões entram
-  revela(".passo", {y:40, opacity:0}, {para:{stagger:.08, duration:1.1}, gatilho:".passos"});
-  revela(".como h2", {xPercent:-8, opacity:0}, {para:{duration:1.1}});
+  // (como usar agora é o fluxo)
+  
+  
 
   // roleta do horário
   new IntersectionObserver((es, o) => { if (!es[0].isIntersecting) return; o.disconnect(); (() => {
@@ -710,6 +778,8 @@ if (temGsap && !reduz){
   })(); }, {threshold:.3}).observe(document.getElementById("roleta"));
 
   // final: letras sobem
+  // fluxo: o vídeo anda com a rolagem
+  revela(".precos-grade article", {y:40, opacity:0}, {para:{stagger:.1}, gatilho:".precos-grade"});
   revela(".split-final .letra", {yPercent:100, opacity:0}, {para:{stagger:.05, ease:"power4.out"}, gatilho:".split-final"});
   addEventListener("load", () => ScrollTrigger.refresh());
 } else {
