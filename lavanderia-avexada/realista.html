@@ -103,6 +103,28 @@ p{margin:0}
 @keyframes onda{50%{transform:translateX(5%) rotate(3deg)}}
 @keyframes pisca{50%{opacity:.5}}
 
+/* Fotos recortadas */
+.flutua.foto{width:82%;height:auto;display:grid;place-items:center}
+.flutua.foto img{width:100%;height:auto;display:block;filter:drop-shadow(0 34px 34px rgba(0,0,0,.45)) drop-shadow(0 6px 10px rgba(0,0,0,.25))}
+.flutua.foto.pilha-foto{width:47%;display:grid;gap:0}
+.flutua.foto.pilha-foto img+img{margin-top:-3%}
+.proximo .mini .flutua.foto{width:70%;left:15%;top:10%;height:auto}
+
+/* Close-up */
+.detalhe{position:relative;min-height:78svh;display:grid;align-items:end;overflow:hidden;background:#050a18}
+.detalhe img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 50%;transform:scale(1.08);transition:transform 1.2s ease}
+.detalhe.visto img{transform:scale(1)}
+.detalhe::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(5,10,24,.92) 0%,rgba(5,10,24,.55) 45%,rgba(5,10,24,0) 75%),linear-gradient(0deg,rgba(5,10,24,.8),transparent 40%)}
+.detalhe .txt{position:relative;z-index:2;max-width:1240px;width:100%;margin:0 auto;padding:0 var(--gr) 64px var(--gl);display:grid;gap:14px}
+.detalhe .rot{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#9fb3e0}
+.detalhe h2{margin:0;font-size:clamp(2rem,4.6vw,3.6rem);line-height:1.02;font-weight:500;letter-spacing:-.02em;max-width:14ch}
+.detalhe h2 b{font-weight:800;font-style:italic}
+.detalhe p{color:rgba(255,255,255,.75);max-width:42ch}
+.detalhe ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:28px}
+.detalhe li{display:grid}
+.detalhe li b{font-weight:800;font-style:italic;font-size:1.3rem}
+.detalhe li span{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#9fb3e0}
+
 /* Combo empilhado */
 .pilha{position:absolute;inset:0;display:grid;grid-template-rows:1fr 1fr;gap:2%}
 .pilha .maq{position:relative;inset:auto}
@@ -169,7 +191,7 @@ p{margin:0}
   .palco{grid-template-columns:1fr 1fr;grid-template-areas:"prod prod" "esq dir";gap:18px;padding-top:4px}
   .produto{grid-area:prod;width:min(78vw,340px)}
   .esq{grid-area:esq}.dir{grid-area:dir}
-  .nome{top:28%;font-size:clamp(2.6rem,13vw,6rem);letter-spacing:.12em}
+  .nome{top:calc(min(78vw,340px) * .74);font-size:clamp(2.6rem,13vw,6rem);letter-spacing:.12em;z-index:3;text-shadow:0 2px 6px rgba(0,0,0,.45),0 8px 40px rgba(0,0,0,.55)}
   .lema{display:none}
   .base{grid-template-columns:1fr auto}
   .info .wrap{grid-template-columns:1fr 1fr}
@@ -179,7 +201,6 @@ p{margin:0}
   .dir{justify-items:start;text-align:left}
   .chips{justify-content:flex-start}
   .ficha{grid-template-columns:repeat(3,auto);gap:16px}
-  .nome{top:22%}
   .esq h1{font-size:1.9rem}
   .base{padding-bottom:90px}
   .info .wrap{grid-template-columns:1fr}
@@ -249,6 +270,16 @@ p{margin:0}
   </div>
 </section>
 
+<section class="detalhe" id="detalhe">
+  <img src="img/porta.webp" alt="Roupas girando com espuma dentro da lavadora" loading="lazy" width="1600" height="900">
+  <div class="txt">
+    <span class="rot">Tecnologia que cuida das suas roupas</span>
+    <h2>Lavagem <b>profissional</b>, do jeito certo</h2>
+    <p>Máquinas de alta capacidade que dão conta do dia a dia e do edredom de casal. Você só coloca a roupa e acompanha o ciclo.</p>
+    <ul><li><b>R$ 14,90</b><span>lavar</span></li><li><b>R$ 14,90</b><span>secar</span></li><li><b>06h–23h</b><span>todos os dias</span></li></ul>
+  </div>
+</section>
+
 <section class="info" aria-label="Informações">
   <div class="wrap">
     <dl>
@@ -267,8 +298,9 @@ p{margin:0}
 const ZAP = "https://wa.me/5585982031297?text=" + encodeURIComponent("Oi! Vim pelo site da Avexada e queria tirar uma dúvida.");
 document.querySelectorAll(".js-zap").forEach(a => a.href = ZAP);
 
-const maquina = (tipo) => `<div class="flutua"><div class="maq ${tipo||""}"><div class="tampo"></div><div class="visor">${tipo==="secadora"?"45:00":"32:00"}</div><div class="gaveta"></div><div class="knob"></div><div class="aro"><div class="vidro"><div class="tambor"><i></i><i></i><i></i></div><div class="agua"></div><div class="brilho"></div></div></div><div class="pe a"></div><div class="pe b"></div></div></div>`;
-const pilha = () => `<div class="flutua" style="width:50%;height:88%"><div class="pilha">${["secadora",""].map(t=>`<div class="maq ${t}"><div class="tampo"></div><div class="visor">${t?"45:00":"32:00"}</div><div class="gaveta"></div><div class="knob"></div><div class="aro"><div class="vidro"><div class="tambor"><i></i><i></i><i></i></div><div class="agua"></div><div class="brilho"></div></div></div><div class="pe a"></div><div class="pe b"></div></div>`).join("")}</div></div>`;
+const foto = (n) => `<img src="img/${n}.webp" alt="" width="788" height="866" decoding="async">`;
+const maquina = (tipo) => `<div class="flutua foto">${foto(tipo === "secadora" ? "secadora" : "lavadora")}</div>`;
+const pilha = () => `<div class="flutua foto pilha-foto">${foto("secadora")}${foto("lavadora")}</div>`;
 const relogio = () => { let n=""; for(let i=1;i<=12;i++) n+=`<b style="--a:${i*30}deg">${i}</b>`;
   return `<div class="flutua" style="width:70%;height:80%"><div class="relogio"><div class="sino a"></div><div class="sino b"></div><div class="martelo"></div><div class="perna a"></div><div class="perna b"></div><div class="corpo"><div class="face">${n}<div class="ponteiro h"></div><div class="ponteiro m"></div><div class="ponteiro s"></div><div class="pino"></div></div></div></div></div>`; };
 
@@ -336,6 +368,7 @@ function relogioHora(){
   });
 }
 setInterval(relogioHora, 1000);
+try { new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visto"); o.disconnect(); } }), {threshold:.3}).observe(document.getElementById("detalhe")); } catch(e) { document.getElementById("detalhe").classList.add("visto"); }
 
 $("ant").onclick = () => { ir(atual-1,-1); parar(); };
 $("prox").onclick = () => { ir(atual+1,1); parar(); };
