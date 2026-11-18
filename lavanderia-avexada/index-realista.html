@@ -191,6 +191,113 @@ p{margin:0}
 .zap svg{width:28px;height:28px}
 @media (min-width:901px){.zap{display:none}}
 
+
+/* ===== Seções de baixo ===== */
+.sec{background:#050a18;padding-block:110px;position:relative}
+.sec .in{max-width:1240px;margin:0 auto;padding-left:var(--gl);padding-right:var(--gr)}
+.cab{display:grid;gap:12px;max-width:640px;margin-bottom:46px}
+.cab .rot,.rot2{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#9fb3e0;font-weight:600}
+.cab h2{margin:0;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.02;font-weight:500;letter-spacing:-.02em;text-wrap:balance}
+.cab h2 b{font-weight:800;font-style:italic}
+.cab p{color:rgba(255,255,255,.68)}
+
+/* Como usar */
+.passos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:p}
+.passos li{counter-increment:p;position:relative;overflow:hidden;border-radius:22px;padding:28px 24px 26px;min-height:260px;display:grid;align-content:end;gap:10px;min-width:0;
+  background:radial-gradient(circle at 80% 0%,rgba(47,116,239,.35),transparent 60%),linear-gradient(180deg,#0d1a3d,#081127);border:1px solid rgba(255,255,255,.08)}
+.passos li::before{content:"0" counter(p);position:absolute;right:16px;top:6px;font-family:var(--mono);font-weight:600;font-size:5.5rem;line-height:1;color:rgba(255,255,255,.07)}
+.passos li:nth-child(2){background:radial-gradient(circle at 80% 0%,rgba(79,191,51,.32),transparent 60%),linear-gradient(180deg,#0d1a3d,#081127)}
+.passos li:nth-child(3){background:radial-gradient(circle at 80% 0%,rgba(242,133,42,.32),transparent 60%),linear-gradient(180deg,#0d1a3d,#081127)}
+.passos li:nth-child(4){background:radial-gradient(circle at 80% 0%,rgba(255,255,255,.18),transparent 60%),linear-gradient(180deg,#0d1a3d,#081127)}
+.passos .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.passos .ico svg{width:22px;height:22px}
+.passos h3{margin:0;font-size:1.4rem;font-weight:800;font-style:italic}
+.passos p{color:rgba(255,255,255,.68);font-size:.92rem}
+
+/* Por que */
+.colunas{display:flex;gap:10px;height:440px}
+.col{flex:1;min-width:0;border-radius:22px;border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;cursor:pointer;transition:flex .55s cubic-bezier(.2,.8,.2,1);
+  background:radial-gradient(circle at 50% 25%,var(--cc,rgba(47,116,239,.45)),transparent 62%),linear-gradient(180deg,#0d1a3d,#060c1e)}
+.col .vert{position:absolute;left:50%;top:26px;transform:translateX(-50%);writing-mode:vertical-rl;font-weight:600;font-size:.86rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.75);white-space:nowrap;transition:opacity .3s}
+.col .num{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-family:var(--mono);color:rgba(255,255,255,.5);font-size:.8rem;transition:opacity .3s}
+.col .conteudo{position:absolute;left:30px;right:30px;bottom:30px;display:grid;gap:10px;opacity:0;transform:translateY(14px);transition:opacity .35s .12s,transform .35s .12s}
+.col .conteudo h3{margin:0;font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:800;font-style:italic;line-height:1.05}
+.col .conteudo p{color:rgba(255,255,255,.75);max-width:40ch}
+.col .grande{position:absolute;right:26px;top:22px;font-family:var(--mono);font-weight:600;font-size:clamp(3rem,6vw,5rem);line-height:1;color:rgba(255,255,255,.9);opacity:0;transition:opacity .35s .1s}
+.col.aberta{flex:4}
+.col.aberta .vert,.col.aberta .num{opacity:0}
+.col.aberta .conteudo,.col.aberta .grande{opacity:1;transform:none}
+
+/* Horário */
+.horario{background:radial-gradient(ellipse 70% 90% at 50% 50%,#2a2f3d,#07090f 75%);text-align:center;overflow:hidden}
+.horario .in{display:grid;justify-items:center;gap:18px}
+.horas{font-family:var(--mono);font-weight:600;font-size:clamp(4.2rem,17vw,14rem);letter-spacing:.06em;line-height:.95;white-space:nowrap}
+.horas i{font-style:normal;color:var(--verde)}
+.agora{display:inline-flex;align-items:center;gap:10px;padding:9px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);font-weight:600}
+.agora .luz{width:10px;height:10px;border-radius:50%;background:var(--verde);box-shadow:0 0 12px var(--verde);animation:luz 1.6s ease-in-out infinite}
+.agora.fechado .luz{background:#ff8a7a;box-shadow:0 0 12px #ff8a7a}
+@keyframes luz{50%{opacity:.35}}
+.horario p{color:rgba(255,255,255,.7);max-width:46ch}
+
+/* Dicas */
+.dicas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:d}
+.dicas li{counter-increment:d;border-radius:22px;padding:30px 26px;background:#0b1530;border:1px solid rgba(255,255,255,.08);display:grid;gap:12px;align-content:start;min-width:0}
+.dicas li::before{content:"Dica 0" counter(d);font-family:var(--mono);font-size:.78rem;color:var(--verde);letter-spacing:.08em}
+.dicas h3{margin:0;font-size:1.3rem;font-weight:800;font-style:italic}
+.dicas p{color:rgba(255,255,255,.68);font-size:.95rem}
+
+/* Dúvidas */
+.faq{max-width:860px}
+.faq details{border-bottom:1px solid rgba(255,255,255,.12);padding-block:22px}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;font-weight:600;font-size:1.1rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--mono);font-size:1.5rem;line-height:1;color:#9fb3e0;transition:transform .25s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{margin-top:12px;color:rgba(255,255,255,.7)}
+
+/* Contato */
+.contato{background:radial-gradient(ellipse 70% 80% at 50% 110%,#2f74ef,#0a2a7a 55%,#050a18 90%);overflow:hidden}
+.contato .in{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.contato h2{margin:0;font-size:clamp(2.6rem,6.5vw,5.2rem);line-height:.98;font-weight:500;letter-spacing:-.03em}
+.contato h2 b{font-weight:800;font-style:italic;color:var(--verde)}
+.contato p.lead{color:rgba(255,255,255,.78);margin-top:16px;max-width:40ch}
+.contato .botoes{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.contato .vid{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:.85rem;padding:11px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.06)}
+.cartao{border-radius:24px;padding:28px;background:rgba(5,10,24,.55);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);display:grid;gap:18px}
+.cartao div{display:grid;gap:2px}
+.cartao dt{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9fb3e0}
+.cartao dd{margin:0;font-weight:600;font-size:1.05rem}
+.cartao dl{margin:0;display:grid;gap:18px}
+.cartao a{text-underline-offset:3px}
+
+.pe-site{background:#050a18;border-top:1px solid rgba(255,255,255,.08)}
+.pe-site .in{max-width:1240px;margin:0 auto;padding:26px var(--gr) 26px var(--gl);display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;color:#7f8db0;font-size:.82rem}
+.pe-site nav{display:flex;flex-wrap:wrap;gap:18px}
+.pe-site a{text-decoration:none}
+.pe-site a:hover{color:#fff}
+
+.atalhos{display:flex;gap:18px;margin-right:8px}
+.atalhos a{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;opacity:.8}
+.atalhos a:hover{opacity:1}
+
+@media (max-width:1100px){.atalhos{display:none}}
+@media (max-width:960px){
+  .passos{grid-template-columns:1fr 1fr}
+  .dicas{grid-template-columns:1fr}
+  .contato .in{grid-template-columns:1fr}
+  .colunas{flex-direction:column;height:auto}
+  .col{flex:none;height:76px;transition:height .45s cubic-bezier(.2,.8,.2,1)}
+  .col.aberta{height:300px}
+  .col .vert{writing-mode:horizontal-tb;left:24px;top:50%;transform:translateY(-50%)}
+  .col .num{left:auto;right:24px;bottom:auto;top:50%;transform:translateY(-50%)}
+}
+@media (max-width:560px){
+  .passos{grid-template-columns:1fr}
+  .passos li{min-height:200px}
+  .sec{padding-block:76px}
+}
+@media (prefers-reduced-motion:reduce){.col,.col .conteudo,.col .grande{transition:none}.agora .luz{animation:none}}
+
 @media (max-width:900px){
   .menu{display:none}
   .palco{grid-template-columns:1fr 1fr;grid-template-areas:"prod prod" "esq dir";gap:18px;padding-top:4px}
@@ -238,7 +345,7 @@ p{margin:0}
       Avexada
     </a>
     <div class="menu" role="tablist" aria-label="Escolha o serviço" id="menu"></div>
-    <div class="acoes">
+    <div class="acoes"><nav class="atalhos" aria-label="Seções"><a href="#como">Como usar</a><a href="#duvidas">Dúvidas</a><a href="#onde">Onde fica</a></nav>
       <a class="circ" href="https://www.instagram.com/lavanderiaavexada/" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#insta"/></svg></a>
       <a class="circ js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener" aria-label="WhatsApp"><svg><use href="#zapico"/></svg></a>
     </div>
@@ -287,17 +394,85 @@ p{margin:0}
   </div>
 </section>
 
-<section class="info" aria-label="Informações">
-  <div class="wrap">
-    <dl>
-      <div><dt>Endereço</dt><dd>Av. Raimundo Pires Cardoso, 217, Loja 4 · Centro, Aquiraz (CE)</dd></div>
-      <div><dt>Horário</dt><dd>Das 6h às 23h</dd></div>
-      <div><dt>WhatsApp</dt><dd>(85) 98203-1297</dd></div>
-      <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/lavanderiaavexada/" target="_blank" rel="noopener">@lavanderiaavexada</a></dd></div>
-    </dl>
+<section class="sec" id="como">
+  <div class="in">
+    <div class="cab"><span class="rot">Primeira vez?</span><h2>Como usar a <b>Avexada</b></h2><p>É simples. E se tiver qualquer dúvida, é só chamar no WhatsApp.</p></div>
+    <ol class="passos">
+      <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h7"/></svg></span><h3>Separe</h3><p>Claras de um lado, escuras do outro. Confira as etiquetas.</p></li>
+      <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="3"/><circle cx="12" cy="13" r="5"/></svg></span><h3>Coloque</h3><p>Escolha uma lavadora livre, coloque as roupas e feche a porta.</p></li>
+      <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><h3>Pague e lave</h3><p>Faça o pagamento e o ciclo começa sozinho.</p></li>
+      <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c3 4 5 6.5 5 10a5 5 0 0 1-10 0c0-3.5 2-6 5-10Z"/></svg></span><h3>Seque e vá</h3><p>Passe para a secadora e saia com tudo pronto.</p></li>
+    </ol>
   </div>
 </section>
-<p class="rodape">© 2026 Avexada Lavanderia Inteligente</p>
+
+<section class="sec" id="motivos" style="padding-top:0">
+  <div class="in">
+    <div class="cab"><span class="rot">Por que a Avexada</span><h2>Quatro motivos pra <b>lavar aqui</b></h2><p>Passe o mouse ou toque em cada coluna.</p></div>
+    <div class="colunas">
+      <article class="col aberta" tabindex="0" style="--cc:rgba(47,116,239,.5)"><span class="vert">Rapidez</span><span class="num">01</span><span class="grande">1x</span><div class="conteudo"><h3>Tudo numa visita</h3><p>Lave e seque no mesmo lugar. Nada de deixar a roupa e voltar dias depois.</p></div></article>
+      <article class="col" tabindex="0" style="--cc:rgba(79,191,51,.45)"><span class="vert">Horário estendido</span><span class="num">02</span><span class="grande">17h</span><div class="conteudo"><h3>Das 6h às 23h</h3><p>17 horas por dia de portas abertas. Dá pra ir antes do trabalho ou depois da faculdade.</p></div></article>
+      <article class="col" tabindex="0" style="--cc:rgba(242,133,42,.45)"><span class="vert">Máquinas profissionais</span><span class="num">03</span><span class="grande">PRO</span><div class="conteudo"><h3>Máquinas profissionais</h3><p>Equipamentos de alta capacidade, que dão conta até do edredom de casal.</p></div></article>
+      <article class="col" tabindex="0" style="--cc:rgba(255,255,255,.25)"><span class="vert">No Centro</span><span class="num">04</span><span class="grande">217</span><div class="conteudo"><h3>No Centro de Aquiraz</h3><p>Av. Raimundo Pires Cardoso, 217, Loja 4. Fácil de chegar.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec horario" id="horario-sec">
+  <div class="in">
+    <span class="rot2">Horários que cabem na sua rotina</span>
+    <div class="horas" aria-label="Das 6 às 23 horas">06<i>—</i>23</div>
+    <span class="agora" id="agoraSec"><span class="luz"></span><span>Aberto das 6h às 23h</span></span>
+    <p>A correria do dia a dia não espera. Por isso a Avexada abre cedinho e fecha tarde, todos os dias.</p>
+  </div>
+</section>
+
+<section class="sec" id="dicas">
+  <div class="in">
+    <div class="cab"><span class="rot">Dicas</span><h2>Para cuidar das <b>suas roupas</b></h2></div>
+    <ol class="dicas">
+      <li><h3>Separe claras e escuras</h3><p>Evita que a cor de uma peça passe para a outra durante a lavagem.</p></li>
+      <li><h3>Respeite a etiqueta</h3><p>Ela diz a temperatura certa e se a peça pode ir para a secadora.</p></li>
+      <li><h3>Sem excesso de sabão</h3><p>Sabão e amaciante demais deixam resíduo e endurecem o tecido.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="duvidas" style="padding-top:0">
+  <div class="in">
+    <div class="cab"><span class="rot">Dúvidas</span><h2>Perguntas <b>frequentes</b></h2></div>
+    <div class="faq">
+      <details><summary>Quanto custa lavar e secar?</summary><p>A lavagem custa R$ 14,90 e a secagem R$ 14,90 por ciclo. As duas juntas saem por R$ 29,80.</p></details>
+      <details><summary>Qual o horário de funcionamento?</summary><p>Funcionamos das 6h às 23h.</p></details>
+      <details><summary>Nunca usei lavanderia self-service. É difícil?</summary><p>É bem simples, e o passo a passo fica na loja. Se precisar de ajuda, fale com a gente pelo WhatsApp.</p></details>
+      <details><summary>Cabe edredom na máquina?</summary><p>As máquinas são de alta capacidade. Para peças muito grandes, chame no WhatsApp que a gente confirma.</p></details>
+      <details><summary>Onde fica a lavanderia?</summary><p>Av. Raimundo Pires Cardoso, 217, Loja 4, Centro, Aquiraz (CE).</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="sec contato" id="onde">
+  <div class="in">
+    <div>
+      <span class="rot2">Venha nos conhecer</span>
+      <h2>Estamos te <b>esperando</b></h2>
+      <p class="lead">Para deixar suas roupas prontinhas com praticidade e qualidade.</p>
+      <div class="botoes">
+        <a class="cta js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg><use href="#zapico"/></svg>Chamar no WhatsApp</a>
+        <a class="vid" href="https://www.google.com/maps/search/?api=1&query=Av.+Raimundo+Pires+Cardoso+217+Centro+Aquiraz+CE" target="_blank" rel="noopener"><svg width="16" height="16"><use href="#pino"/></svg>Abrir no mapa</a>
+      </div>
+    </div>
+    <div class="cartao">
+      <dl>
+        <div><dt>Endereço</dt><dd>Av. Raimundo Pires Cardoso, 217, Loja 4<br>Centro, Aquiraz (CE)</dd></div>
+        <div><dt>Horário</dt><dd>Das 6h às 23h</dd></div>
+        <div><dt>WhatsApp</dt><dd>(85) 98203-1297</dd></div>
+        <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/lavanderiaavexada/" target="_blank" rel="noopener">@lavanderiaavexada</a></dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+<footer class="pe-site"><div class="in"><span>© 2026 Avexada Lavanderia Inteligente · Aquiraz, CE</span><nav aria-label="Rodapé"><a href="#vitrine">Início</a><a href="#como">Como usar</a><a href="#motivos">Por que nós</a><a href="#dicas">Dicas</a><a href="#duvidas">Dúvidas</a><a href="#onde">Onde fica</a></nav></div></footer>
 </main>
 <a class="zap js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp"><svg><use href="#zapico"/></svg></a>
 
@@ -390,6 +565,17 @@ const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
 function tocar(){ if (!reduz) timer = setInterval(() => ir(atual+1,1), 6000); }
 function parar(){ clearInterval(timer); timer = null; setTimeout(() => { if (!timer) tocar(); }, 12000); }
 ir(0); tocar();
+document.querySelectorAll(".js-zap").forEach(a => a.href = ZAP);
+const colsSec = document.querySelectorAll(".col");
+function abreCol(c){ colsSec.forEach(x => x.classList.toggle("aberta", x === c)); }
+colsSec.forEach(c => {
+  c.addEventListener("click", () => abreCol(c));
+  c.addEventListener("mouseenter", () => { if (matchMedia("(hover:hover)").matches) abreCol(c); });
+  c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); abreCol(c); } });
+});
+(function(){ const ab = aberto(), el = document.getElementById("agoraSec"); if (ab === null) return;
+  el.lastElementChild.textContent = ab ? "Aberto agora · fecha às 23h" : "Fechado agora · abre às 6h"; el.classList.toggle("fechado", !ab); })();
+
 </script>
 </body>
 </html>
