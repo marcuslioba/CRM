@@ -458,6 +458,28 @@ body{background:var(--preto)}
 .precos-grade .destaque{background:linear-gradient(180deg,rgba(111,224,74,.14),transparent 80%)}
 .precos-grade .destaque b{color:var(--verde)}
 @media (max-width:860px){.precos-grade{grid-template-columns:1fr}.precos-grade article{border-right:0;border-bottom:1px solid var(--linha)}}
+
+/* ===== Ajustes de UX ===== */
+/* roleta: caixa mais alta que o desenho das letras (não corta) */
+.roleta{height:1.16em;line-height:1.16}
+.dig{height:1.16em}
+.dig .col span{height:1.16em;line-height:1.16em}
+/* topo ganha fundo depois do mergulho, para o texto não passar por baixo do logo */
+.topo{transition:background .35s ease,padding .35s ease,box-shadow .35s ease}
+.topo.fundo{background:rgba(6,17,49,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding-bottom:14px;box-shadow:0 1px 0 rgba(255,255,255,.08)}
+/* topo do computador: título acima da máquina */
+@media (min-width:701px){.hero .titulo{top:7%;font-size:clamp(3.6rem,8.2vw,8rem)}.hero .palco{width:min(36vw,410px)}}
+/* áreas de toque de pelo menos 44px */
+.topo nav a{display:inline-block;padding-block:13px}
+.duvidas details{padding-block:8px}
+.duvidas summary{padding-block:14px;align-items:center}
+.final .dados a{display:inline-block;padding-block:11px}
+/* menos vazio entre seções */
+.manifesto{padding-block:110px}
+.precos{padding-bottom:70px}
+.hero-acoes{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+@media (min-width:701px){.hero .info{right:calc(var(--gr) + 80px)}}
+@media (max-width:700px){.hero .info{left:var(--gl);right:auto;bottom:24px}.hero-acoes{align-items:flex-start}.hero-acoes .rolar{display:none}}
 </style>
 </head>
 <body>
@@ -492,7 +514,7 @@ body{background:var(--preto)}
     <div class="frase" id="frase"><h2>A gente lava.<br><b>Você vive.</b></h2></div>
     <div class="info" id="heroInfo">
       <p>Lavanderia self-service no Centro de Aquiraz. Lave e seque no mesmo lugar, das 6h às 23h.</p>
-      <span class="rolar"><i></i>Role</span>
+      <div class="hero-acoes"><a class="btn js-zap magnetico" data-cursor="Zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg><use href="#zapico"/></svg>Chamar no WhatsApp</a><span class="rolar"><i></i>Role</span></div>
     </div>
   </section>
 
@@ -745,6 +767,11 @@ if (!reduz){
   addEventListener("resize", () => desenha(true));
   requestAnimationFrame(quadro);
 })();
+
+/* topo com fundo depois do mergulho */
+(function(){ const topo = document.querySelector(".topo"), fl = document.getElementById("fluxo");
+  const ver = () => topo.classList.toggle("fundo", scrollY > fl.offsetTop - 90);
+  addEventListener("scroll", ver, {passive:true}); addEventListener("resize", ver); ver(); })();
 
 /* rolagem */
 if (temGsap && !reduz){
