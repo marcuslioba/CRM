@@ -6,7 +6,7 @@
 <title>Avexada Vitrine</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@200;300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@200;300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: site-filme. Abertura pela porta da máquina → topo com zoom na porta ao rolar → serviços em rolagem lateral (uma cor por serviço) → manifesto que acende → como usar em colagem → horário em roleta → final com letras gigantes. Tema escuro único, por escolha. */
 :root{
@@ -326,6 +326,93 @@ body{font-weight:300;letter-spacing:.005em}
 .final .dados dd{font-weight:400}
 .zap{width:52px;height:52px;background:#0f1a33;color:#25d366;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 12px 30px rgba(0,0,0,.45)}
 .zap svg{width:24px;height:24px}
+
+/* ================= Identidade Avexada (azul royal + verde-limão + condensada) ================= */
+:root{
+  --azul:#1f5fd6; --azul-esc:#0d2f7a; --navy:#081a4a; --preto:#061131; --verde:#6fe04a; --verde-esc:#0b2a05;
+  --gigante:"Anton", Impact, "Arial Narrow", sans-serif;
+  --fg:#ffffff; --fg2:rgba(255,255,255,.72); --linha:rgba(255,255,255,.16);
+}
+body{background:var(--preto)}
+.tag,.painel .num{display:inline-block;justify-self:start;background:var(--verde);color:var(--verde-esc);font-family:var(--titulo);font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;transform:rotate(-2deg);line-height:1.2}
+.btn{background:var(--verde);color:var(--verde-esc);font-weight:700}
+.btn.claro{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
+
+/* abertura */
+#intro{background:var(--azul)}
+.intro-nome{font-family:var(--gigante);font-style:normal;letter-spacing:.05em;font-size:clamp(2.8rem,9vw,5rem)}
+.portinha{box-shadow:0 20px 60px rgba(0,0,0,.35)}
+
+/* topo */
+.marca span{font-family:var(--gigante);font-weight:400;font-size:1.5rem;letter-spacing:.04em}
+.marca small{font-family:var(--titulo);font-weight:700;letter-spacing:.14em}
+
+/* hero azul royal */
+.hero{background:radial-gradient(ellipse 60% 65% at 50% 60%,#3a80f5,#1f5fd6 42%,#0d2f7a 88%)}
+.hero .titulo{font-family:var(--gigante);font-style:normal;text-transform:uppercase;letter-spacing:.005em;line-height:.9}
+.hero .titulo .l1{font-style:normal}
+.hero .titulo .l2{font-style:normal;color:var(--verde)}
+.hero .titulo::before{content:"Lavanderia inteligente · Aquiraz";display:table;margin:0 auto 22px;background:var(--verde);color:var(--verde-esc);font-family:var(--titulo);font-weight:700;font-size:.74rem;letter-spacing:.14em;padding:6px 12px;transform:rotate(-2deg);line-height:1.2}
+.hero .frase h2{font-family:var(--gigante);text-transform:uppercase;line-height:.9;letter-spacing:.005em}
+.hero .frase h2 b{font-style:normal;color:var(--verde)}
+.hero .info p{color:rgba(255,255,255,.85)}
+
+/* faixa verde reta */
+.faixa{background:var(--verde);color:var(--verde-esc);border:0}
+.faixa span{font-family:var(--gigante);font-style:normal;text-transform:uppercase;font-size:clamp(1.4rem,2.6vw,2rem);padding:16px 0}
+.faixa span::after{content:"•";color:var(--azul-esc);margin:0 30px}
+
+/* serviços: cartões que empilham na vertical */
+.servicos{overflow:visible;padding-block:0}
+.trilho-s{display:block;width:auto;transform:none !important}
+.painel{position:sticky;top:0;width:100%;border-radius:28px 28px 0 0;box-shadow:0 -24px 60px rgba(0,0,0,.35);transform-origin:50% 0}
+.painel:first-child{border-radius:0}
+.p-azul{background:radial-gradient(ellipse 55% 65% at 50% 50%,#3a80f5,#1f5fd6 55%,#1546b8)}
+.p-laranja{background:radial-gradient(ellipse 55% 65% at 50% 50%,#1a4bb5,#0d2f7a 60%,#081f57)}
+.p-verde{background:radial-gradient(ellipse 55% 65% at 50% 50%,#86ea62,#5cc83b 55%,#3d9e24)}
+.p-preto{background:radial-gradient(ellipse 55% 65% at 50% 50%,#12286a,#081a4a 60%,#050f2e)}
+.painel .nome{font-family:var(--gigante);font-weight:400;letter-spacing:.06em;color:rgba(255,255,255,.12)}
+.p-verde .nome{color:rgba(11,42,5,.12)}
+.painel h3{font-family:var(--gigante);font-weight:400;text-transform:uppercase;font-size:clamp(2.4rem,4vw,3.8rem);line-height:.92;letter-spacing:.005em}
+.painel h3 b{font-style:normal;color:var(--verde)}
+.p-verde h3,.p-verde p,.p-verde .preco{color:var(--verde-esc)}
+.p-verde h3 b{color:#fff}
+.p-verde .num{background:var(--azul-esc);color:#fff}
+.painel .preco{font-family:var(--gigante)}
+.relogio-g{color:#fff}
+.progresso{display:none}
+
+/* manifesto */
+.manifesto p.grande{font-family:var(--titulo);font-weight:700;font-size:clamp(1.9rem,4.2vw,3.6rem);line-height:1.12;letter-spacing:-.025em;max-width:21ch}
+.manifesto .pal.verde{color:var(--verde);font-style:normal}
+
+/* como usar */
+.como h2{font-family:var(--gigante);text-transform:uppercase;line-height:.88}
+.como h2 span{font-style:normal;color:var(--verde)}
+.passo::before{font-family:var(--gigante);font-style:normal;color:var(--verde);font-size:3rem}
+.passo h3{font-family:var(--gigante);text-transform:uppercase;font-size:1.9rem;letter-spacing:.01em}
+
+/* horário em verde, como no post */
+.horario{background:radial-gradient(ellipse 60% 80% at 50% 50%,#86ea62,#5cc83b 55%,#3d9e24)}
+.horario .rot,.horario p{color:var(--verde-esc)}
+.roleta{font-family:var(--gigante);font-weight:400;color:var(--azul-esc);letter-spacing:.01em}
+.roleta .tr{color:#fff}
+.agora{background:var(--azul-esc);color:#fff;border:0}
+.agora i{background:var(--verde);box-shadow:0 0 10px var(--verde)}
+
+/* dúvidas */
+.duvidas h2{font-family:var(--gigante);text-transform:uppercase;line-height:.9}
+.duvidas summary::after{color:var(--verde)}
+
+/* final azul */
+.final{background:radial-gradient(ellipse 65% 75% at 50% 110%,#3a80f5,#1f5fd6 45%,#0d2f7a 85%)}
+.final .bora{font-family:var(--gigante);text-transform:uppercase;line-height:.84;letter-spacing:0}
+.final .bora .l2{font-style:normal;color:var(--verde)}
+.final .bora .letra:hover{color:var(--verde)}
+.final .bora .l2 .letra:hover{color:#fff}
+.zap{background:#25d366;color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.zap svg{width:26px;height:26px}
+.topo{mix-blend-mode:normal;text-shadow:0 1px 12px rgba(0,0,0,.25)}
 </style>
 </head>
 <body>
@@ -396,7 +483,7 @@ body{font-weight:300;letter-spacing:.005em}
         <div class="dir"><div class="preco">217<small>Loja 4 · Centro</small></div><a class="btn claro magnetico" data-cursor="Mapa" href="https://www.google.com/maps/search/?api=1&query=Av.+Raimundo+Pires+Cardoso+217+Centro+Aquiraz+CE" target="_blank" rel="noopener">Abrir no mapa</a></div>
       </article>
     </div>
-    <div class="progresso" aria-hidden="true"><i id="progresso"></i></div>
+    
   </section>
 
   <section class="manifesto">
@@ -608,14 +695,12 @@ if (temGsap && !reduz){
   gsap.ticker.add(() => { fx -= vel; const w = faixa.scrollWidth / 2; if (-fx >= w) fx += w; if (fx > 0) fx -= w; faixa.style.transform = `translateX(${fx}px)`; vel += (1 - vel) * .06; });
   ScrollTrigger.create({onUpdate: s => { vel = 1 + Math.min(18, Math.abs(s.getVelocity()) / 120) * (s.direction > 0 ? 1 : -1); }});
 
-  // serviços laterais
-  const trilho = document.getElementById("trilhoS");
-  const dist = () => trilho.scrollWidth - innerWidth;
-  const hz = gsap.to(trilho, {x: () => -dist(), ease:"none", scrollTrigger:{trigger:"#servicos", start:"top top", end: () => "+=" + dist(), scrub:.6, pin:true, invalidateOnRefresh:true,
-    onUpdate: s => document.getElementById("progresso").style.width = (s.progress*100) + "%"}});
-  document.querySelectorAll(".painel").forEach(p => {
-    gsap.from(p.querySelector(".foto, .relogio-g"), {y:80, rotate:4, scale:.9, opacity:0, ease:"power3.out", scrollTrigger:{trigger:p, containerAnimation:hz, start:"left 75%", end:"left 25%", scrub:.6}});
-    gsap.from(p.querySelector(".nome"), {xPercent:-30, opacity:0, ease:"power2.out", scrollTrigger:{trigger:p, containerAnimation:hz, start:"left 85%", end:"left 30%", scrub:.6}});
+  // serviços: cada cartão sobe e o anterior recua um pouco
+  const paineis = gsap.utils.toArray(".painel");
+  paineis.forEach((p, i) => {
+    const prox = paineis[i + 1];
+    if (prox) gsap.fromTo(p, {scale:1, filter:"brightness(1)"}, {scale:.96, filter:"brightness(.88)", ease:"none", scrollTrigger:{trigger:prox, start:"top bottom", end:"top top", scrub:true}});
+    revela(p.querySelectorAll(".foto, .relogio-g"), {y:80, opacity:0}, {para:{duration:1.1}, gatilho: null});
   });
 
   // manifesto acende palavra por palavra
