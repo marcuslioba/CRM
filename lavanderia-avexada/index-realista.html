@@ -6,7 +6,7 @@
 <title>Avexada Vitrine</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@500;600&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@200;300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: site-filme. Abertura pela porta da máquina → topo com zoom na porta ao rolar → serviços em rolagem lateral (uma cor por serviço) → manifesto que acende → como usar em colagem → horário em roleta → final com letras gigantes. Tema escuro único, por escolha. */
 :root{
@@ -215,6 +215,117 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   .portinha .gira,.portinha .espu,.rolar i,.agora i{animation:none}
   .manifesto .pal{opacity:1}
 }
+
+/* ================= Refino elegante ================= */
+:root{
+  --preto:#050a17; --navy:#0a1630; --prata:#c7d0e2; --verde:#7fd65e;
+  --fg:#eef1f8; --fg2:rgba(238,241,248,.6); --linha:rgba(255,255,255,.1);
+  --gigante:"Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --titulo:"Manrope", system-ui, -apple-system, sans-serif;
+}
+body{font-weight:300;letter-spacing:.005em}
+.rot{font-family:var(--titulo);font-size:.68rem;font-weight:500;letter-spacing:.26em;color:var(--fg2)}
+.btn{background:#fff;color:#07102a;font-weight:600;font-size:.86rem;letter-spacing:.02em;padding:15px 26px;gap:10px}
+.btn.claro{background:transparent;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.btn.claro:hover{box-shadow:inset 0 0 0 1px #fff}
+.btn svg{width:18px;height:18px}
+
+/* abertura */
+.intro-nome{font-family:var(--gigante);font-style:italic;font-size:clamp(2.6rem,8vw,4.4rem);letter-spacing:.01em}
+.contador{font-size:.72rem;letter-spacing:.3em}
+.portinha{box-shadow:0 0 60px rgba(70,120,220,.25)}
+
+/* cursor discreto */
+.cursor{width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid rgba(255,255,255,.6);background:transparent;backdrop-filter:none;mix-blend-mode:difference}
+.cursor.grande{width:72px;height:72px;margin:-36px 0 0 -36px;background:#fff;border-color:#fff}
+.cursor span{color:#000;font-family:var(--titulo);font-weight:600;letter-spacing:.14em;font-size:.56rem}
+.cursor-ponto{width:4px;height:4px;margin:-2px 0 0 -2px;mix-blend-mode:difference}
+
+/* topo */
+.marca span{font-family:var(--titulo);font-weight:600;font-size:.95rem;letter-spacing:.32em}
+.marca small{font-weight:400;font-size:.52rem;letter-spacing:.3em;opacity:.8}
+.marca svg{width:28px;height:28px}
+.topo nav a{font-family:var(--titulo);font-weight:500;font-size:.7rem;letter-spacing:.2em}
+
+/* hero */
+.hero{background:radial-gradient(ellipse 50% 55% at 50% 58%,#16336f,#0a1630 52%,var(--preto) 88%)}
+.hero .titulo{font-family:var(--gigante);font-weight:400;text-transform:none;font-size:clamp(4.2rem,14vw,13rem);line-height:.88;letter-spacing:-.01em;top:13%}
+.hero .titulo .l1{font-style:normal}
+.hero .titulo .l2{color:#fff;font-style:italic}
+.hero .maq img{filter:drop-shadow(0 50px 50px rgba(0,0,0,.6))}
+.hero .frase h2{font-family:var(--gigante);font-weight:400;text-transform:none;font-size:clamp(3rem,8vw,7rem);line-height:.95;letter-spacing:-.01em}
+.hero .frase h2 b{color:#fff;font-style:italic}
+.hero .zoom::after{background:linear-gradient(0deg,rgba(5,10,23,.9),rgba(5,10,23,.25) 60%)}
+.rolar{font-family:var(--titulo);font-weight:500;letter-spacing:.26em}
+
+@media (min-width:701px){
+  .hero .titulo{top:9%;font-size:clamp(4rem,10.5vw,10rem)}
+  .hero .palco{width:min(38vw,430px);bottom:-4%}
+}
+.final .acoes{margin-top:56px;position:relative;z-index:2}
+/* faixa discreta */
+.faixa{transform:none;margin:0;background:var(--preto);color:var(--fg2);border-block:1px solid var(--linha)}
+.faixa span{font-family:var(--gigante);font-style:italic;text-transform:none;font-size:clamp(1.3rem,2.4vw,1.9rem);padding:20px 0}
+.faixa span::after{content:"·";margin:0 34px;font-style:normal;color:var(--verde)}
+
+/* serviços: tons profundos */
+.p-azul{background:radial-gradient(ellipse 55% 65% at 50% 50%,#1f4796,#0a1736 82%)}
+.p-laranja{background:radial-gradient(ellipse 55% 65% at 50% 50%,#9a4a1c,#2b1006 82%)}
+.p-verde{background:radial-gradient(ellipse 55% 65% at 50% 50%,#2a6a33,#08200d 82%)}
+.p-preto{background:radial-gradient(ellipse 55% 65% at 50% 50%,#262b38,#06080e 82%)}
+.painel .nome{font-family:var(--titulo);font-weight:200;letter-spacing:.32em;color:rgba(255,255,255,.12)}
+.painel .num{font-family:var(--titulo);font-weight:500;font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.painel h3{font-family:var(--gigante);font-weight:400;font-size:clamp(2.2rem,3.6vw,3.4rem);line-height:1;letter-spacing:-.01em}
+.painel h3 b{font-weight:400;font-style:italic}
+.painel p{font-weight:300;color:rgba(255,255,255,.7)}
+.painel .preco{font-family:var(--gigante);font-size:clamp(3rem,5.4vw,5rem);line-height:.95}
+.painel .preco small{font-family:var(--titulo);font-weight:500;font-size:.64rem;letter-spacing:.26em}
+.painel .foto img{filter:drop-shadow(0 50px 50px rgba(0,0,0,.55))}
+.relogio-g{color:var(--prata);text-shadow:none}
+.progresso{height:1px;background:rgba(255,255,255,.15)}
+
+/* manifesto */
+.manifesto{padding-block:160px}
+.manifesto p.grande{font-family:var(--gigante);font-weight:400;font-size:clamp(2rem,4.6vw,4.2rem);line-height:1.12;letter-spacing:-.01em;max-width:20ch}
+.manifesto .pal.verde{color:inherit;font-style:italic}
+
+/* como usar: grade limpa com linhas finas */
+.como{padding-block:40px 160px}
+.como h2{font-family:var(--gigante);font-weight:400;text-transform:none;font-size:clamp(3.4rem,8vw,7rem);line-height:.9}
+.como h2 span{-webkit-text-stroke:0;color:#fff;font-style:italic}
+.passos{grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--linha)}
+.passo{grid-column:auto !important;margin-top:0 !important;transform:none !important;background:none !important;border:0;border-right:1px solid var(--linha);border-radius:0;min-height:0;padding:34px 28px 10px;align-content:start;gap:14px}
+.passo:last-child{border-right:0}
+.passo::before{content:"0" counter(p);position:static;font-family:var(--gigante);font-size:3.2rem;line-height:1;color:var(--fg2);-webkit-text-stroke:0;font-style:italic}
+.passo img,.passo .selo{display:none}
+.passo h3{font-family:var(--gigante);font-weight:400;font-style:normal;font-size:1.9rem}
+.passo p{color:var(--fg2);font-weight:300}
+@media (max-width:860px){.passos{grid-template-columns:1fr 1fr}.passo:nth-child(2){border-right:0}.passo:nth-child(n+3){border-top:1px solid var(--linha)}}
+@media (max-width:520px){.passos{grid-template-columns:1fr}.passo{border-right:0}.passo+.passo{border-top:1px solid var(--linha)}}
+
+/* horário */
+.horario{background:radial-gradient(ellipse 55% 75% at 50% 50%,#0f1d3d,var(--preto) 78%);padding-block:150px}
+.roleta{font-family:var(--titulo);font-weight:200;letter-spacing:-.02em}
+.roleta .tr{color:var(--prata);font-weight:200}
+.agora{font-weight:500;font-size:.88rem;border-color:var(--linha);background:transparent}
+.agora i{width:7px;height:7px;box-shadow:0 0 10px var(--verde)}
+
+/* dúvidas */
+.duvidas h2{font-family:var(--gigante);font-weight:400;text-transform:none;font-size:clamp(3rem,6vw,5.4rem);line-height:.95}
+.duvidas summary{font-weight:500;font-size:1.06rem}
+.duvidas summary::after{font-family:var(--titulo);font-weight:200;font-size:1.6rem;color:var(--fg)}
+.duvidas details p{font-weight:300}
+
+/* final */
+.final{background:radial-gradient(ellipse 60% 70% at 50% 120%,#1e4596,#0a1630 52%,var(--preto) 86%);padding-block:150px 60px}
+.final .bora{font-family:var(--gigante);font-weight:400;text-transform:none;font-size:clamp(5rem,19vw,18rem);line-height:.86;letter-spacing:-.02em}
+.final .bora .l2{color:#fff;font-style:italic}
+.final .bora .letra:hover{transform:translateY(-4%);color:var(--prata)}
+.final .bora .l2 .letra:hover{color:var(--prata)}
+.final .dados dt{font-family:var(--titulo);font-weight:500;letter-spacing:.24em}
+.final .dados dd{font-weight:400}
+.zap{width:52px;height:52px;background:#0f1a33;color:#25d366;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 12px 30px rgba(0,0,0,.45)}
+.zap svg{width:24px;height:24px}
 </style>
 </head>
 <body>
@@ -254,8 +365,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   </section>
 
   <div class="faixa" aria-hidden="true"><div class="trilho" id="faixa">
-    <span>Lave R$ 14,90</span><span>Seque R$ 14,90</span><span>Aberto das 6h às 23h</span><span>Centro de Aquiraz</span><span>Lavanderia inteligente</span>
-    <span>Lave R$ 14,90</span><span>Seque R$ 14,90</span><span>Aberto das 6h às 23h</span><span>Centro de Aquiraz</span><span>Lavanderia inteligente</span>
+    <span>Lavagem R$ 14,90</span><span>Secagem R$ 14,90</span><span>Das 6h às 23h</span><span>Centro de Aquiraz</span><span>Lavanderia inteligente</span>
+    <span>Lavagem R$ 14,90</span><span>Secagem R$ 14,90</span><span>Das 6h às 23h</span><span>Centro de Aquiraz</span><span>Lavanderia inteligente</span>
   </div></div>
 
   <section class="servicos" id="servicos" aria-label="Serviços">
@@ -445,7 +556,7 @@ if (finoMouse){
     el.addEventListener("pointerleave", () => c.classList.remove("grande"));
   });
   addEventListener("pointerdown", e => {
-    if (reduz) return;
+    return;
     for (let i = 0; i < 6; i++){
       const b = document.createElement("div"); b.className = "bolha-solta"; const s = 8 + Math.random()*22;
       Object.assign(b.style, {width: s+"px", height: s+"px", left: (e.clientX - s/2)+"px", top: (e.clientY - s/2)+"px"});
@@ -464,7 +575,7 @@ if (finoMouse){
 /* máquina inclina com mouse / celular inclina com toque */
 const maq = document.getElementById("maq");
 if (!reduz){
-  const inclina = (px, py) => { maq.style.transform = `rotateY(${px*16}deg) rotateX(${-py*10}deg) translateZ(0)`; };
+  const inclina = (px, py) => { maq.style.transform = `rotateY(${px*10}deg) rotateX(${-py*6}deg) translateZ(0)`; };
   addEventListener("pointermove", e => inclina(e.clientX/innerWidth - .5, e.clientY/innerHeight - .5));
   document.getElementById("hero").addEventListener("touchmove", e => { const t = e.touches[0]; inclina(t.clientX/innerWidth - .5, t.clientY/innerHeight - .5); }, {passive:true});
 }
@@ -472,6 +583,15 @@ if (!reduz){
 /* rolagem */
 if (temGsap && !reduz){
   gsap.registerPlugin(ScrollTrigger);
+  // revela quando aparece na tela (funciona mesmo se a pessoa pular direto pela âncora)
+  function revela(alvos, de, opts = {}){
+    const els = gsap.utils.toArray(alvos); if (!els.length) return;
+    const gatilho = opts.gatilho ? document.querySelector(opts.gatilho) : null;
+    gsap.set(els, de);
+    const tocar = () => gsap.to(els, Object.assign({yPercent:0, y:0, xPercent:0, rotate:0, opacity:1, duration:1, ease:"power3.out"}, opts.para || {}));
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { tocar(); io.disconnect(); } }, {threshold: .15});
+    (gatilho ? [gatilho] : els).forEach(e => io.observe(e));
+  }
 
   // topo: zoom na porta e mergulho
   const tl = gsap.timeline({scrollTrigger:{trigger:"#hero", start:"top top", end:"+=160%", scrub:.8, pin:true, anticipatePin:1}});
@@ -494,7 +614,7 @@ if (temGsap && !reduz){
   const hz = gsap.to(trilho, {x: () => -dist(), ease:"none", scrollTrigger:{trigger:"#servicos", start:"top top", end: () => "+=" + dist(), scrub:.6, pin:true, invalidateOnRefresh:true,
     onUpdate: s => document.getElementById("progresso").style.width = (s.progress*100) + "%"}});
   document.querySelectorAll(".painel").forEach(p => {
-    gsap.from(p.querySelector(".foto, .relogio-g"), {y:120, rotate:12, scale:.8, opacity:0, ease:"power3.out", scrollTrigger:{trigger:p, containerAnimation:hz, start:"left 75%", end:"left 25%", scrub:.6}});
+    gsap.from(p.querySelector(".foto, .relogio-g"), {y:80, rotate:4, scale:.9, opacity:0, ease:"power3.out", scrollTrigger:{trigger:p, containerAnimation:hz, start:"left 75%", end:"left 25%", scrub:.6}});
     gsap.from(p.querySelector(".nome"), {xPercent:-30, opacity:0, ease:"power2.out", scrollTrigger:{trigger:p, containerAnimation:hz, start:"left 85%", end:"left 30%", scrub:.6}});
   });
 
@@ -503,16 +623,16 @@ if (temGsap && !reduz){
   ScrollTrigger.create({trigger:man, start:"top 80%", end:"bottom 45%", scrub:true, onUpdate: s => { const n = Math.round(s.progress * pals.length); pals.forEach((p,i) => p.style.opacity = i < n ? 1 : .14); }});
 
   // como usar: cartões entram
-  gsap.utils.toArray(".passo").forEach((el, i) => gsap.from(el, {y:120, rotate: i%2 ? 6 : -6, opacity:0, duration:1, ease:"power3.out", scrollTrigger:{trigger:el, start:"top 88%"}}));
-  gsap.from(".como h2", {xPercent:-12, opacity:0, duration:1.1, ease:"power3.out", scrollTrigger:{trigger:".como", start:"top 80%"}});
+  revela(".passo", {y:40, opacity:0}, {para:{stagger:.08, duration:1.1}, gatilho:".passos"});
+  revela(".como h2", {xPercent:-8, opacity:0}, {para:{duration:1.1}});
 
   // roleta do horário
-  ScrollTrigger.create({trigger:"#roleta", start:"top 80%", once:true, onEnter: () => {
+  new IntersectionObserver((es, o) => { if (!es[0].isIntersecting) return; o.disconnect(); (() => {
     document.querySelectorAll(".dig").forEach((d,i) => { const n = +d.dataset.n; gsap.fromTo(d.querySelector(".col"), {yPercent:0}, {yPercent: -((20 + n) / 30) * 100, duration: 1.6 + i*.25, ease:"power4.out"}); });
-  }});
+  })(); }, {threshold:.3}).observe(document.getElementById("roleta"));
 
   // final: letras sobem
-  gsap.from(".split-final .letra", {yPercent:100, opacity:0, stagger:.05, duration:1, ease:"power4.out", scrollTrigger:{trigger:".final", start:"top 70%"}});
+  revela(".split-final .letra", {yPercent:100, opacity:0}, {para:{stagger:.05, ease:"power4.out"}, gatilho:".split-final"});
   addEventListener("load", () => ScrollTrigger.refresh());
 } else {
   // sem animação: roleta já no lugar e manifesto aceso
