@@ -1,188 +1,213 @@
 <title>Lavanderia Avexada</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;500;700&display=swap">
 <style>
-/* Layout: hero com tambor de máquina girando + faixas de cor alternadas, tudo empilha em 1 coluna no celular */
+/* Layout: faixas azul/branco como os posts do Instagram, títulos condensados em caixa alta com etiqueta verde; 1 coluna no celular */
 :root{
-  --agua:#0a7fa8;       /* azul-água principal */
-  --agua-esc:#063c52;   /* marinho para textos fortes */
-  --sol:#ffc93c;        /* amarelo-sol (acento) */
-  --espuma:#eaf7fb;     /* fundo claro de faixas */
-  --bg:#fbfeff;
-  --fg:#0d2b38;
-  --muted:#4b6a77;
+  --azul:#1f5fd6;        /* azul da marca */
+  --azul-esc:#0d2f7a;    /* azul profundo */
+  --verde:#5cc83b;       /* verde-limão da marca */
+  --verde-esc:#2f8f1c;
+  --bg:#f7faff;
+  --fg:#0b1f4d;
+  --muted:#4a5b80;
   --card:#ffffff;
-  --linha:#cfe6ee;
-  --on-agua:#ffffff;
-  --display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --linha:#d6e2f7;
+  --suave:#e8f0fd;
+  --display:"Anton", Impact, "Arial Narrow", sans-serif;
   --body:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --gutter-l:max(16px, env(safe-area-inset-left, 0px));
   --gutter-r:max(16px, env(safe-area-inset-right, 0px));
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --agua:#3fb6dc;--agua-esc:#bfe9f7;--sol:#ffd25e;--espuma:#0f2a36;--bg:#081c25;--fg:#e4f4fa;--muted:#9bbcc9;--card:#0f2632;--linha:#1f4252;--on-agua:#04222e;color-scheme:dark}}
+  --azul:#4b86ef;--azul-esc:#0a1d4d;--verde:#6fd84d;--verde-esc:#9be880;--bg:#06112b;--fg:#e6eeff;--muted:#9eb0d6;--card:#0c1c42;--linha:#1c3166;--suave:#0e2150;color-scheme:dark}}
 :root[data-theme="dark"]{
-  --agua:#3fb6dc;--agua-esc:#bfe9f7;--sol:#ffd25e;--espuma:#0f2a36;--bg:#081c25;--fg:#e4f4fa;--muted:#9bbcc9;--card:#0f2632;--linha:#1f4252;--on-agua:#04222e;color-scheme:dark}
+  --azul:#4b86ef;--azul-esc:#0a1d4d;--verde:#6fd84d;--verde-esc:#9be880;--bg:#06112b;--fg:#e6eeff;--muted:#9eb0d6;--card:#0c1c42;--linha:#1c3166;--suave:#0e2150;color-scheme:dark}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
-h1,h2,h3{font-family:var(--display);line-height:1.05;margin:0;text-wrap:balance;color:var(--agua-esc)}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:.95;margin:0;text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
 p{margin:0}
 a{color:inherit}
-:focus-visible{outline:3px solid var(--sol);outline-offset:3px;border-radius:6px}
+:focus-visible{outline:3px solid var(--verde);outline-offset:3px;border-radius:6px}
 .wrap{max-width:1120px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
-.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--agua)}
+.tag{display:inline-block;background:var(--verde);color:#0b2a05;font-family:var(--body);font-weight:700;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;transform:rotate(-2deg);justify-self:start;line-height:1.3}
 
 /* Topo */
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--linha)}
-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:800;font-size:1.25rem;color:var(--agua-esc)}
-.logo-mark{width:36px;height:36px;border-radius:50%;background:var(--agua);display:grid;place-items:center;position:relative;flex:none}
-.logo-mark::after{content:"";width:18px;height:18px;border-radius:50%;border:3px solid var(--on-agua);border-top-color:var(--sol)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--azul)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--azul);color:#fff}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:10px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff}
+.logo svg{width:44px;height:44px;flex:none}
+.logo b{display:block;font-family:var(--display);font-weight:400;font-size:1.6rem;line-height:1;letter-spacing:.02em}
+.logo small{display:block;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.9}
 nav{display:flex;gap:22px;align-items:center}
-nav a.link{text-decoration:none;font-weight:500;color:var(--muted)}
-nav a.link:hover{color:var(--agua)}
-.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;border-radius:999px;padding:14px 24px;border:0;cursor:pointer;font-family:var(--body);font-size:1rem;transition:transform .15s ease, box-shadow .15s ease}
+nav a.link{text-decoration:none;font-weight:500;color:#fff;opacity:.85}
+nav a.link:hover{opacity:1}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;border-radius:12px;padding:14px 22px;border:0;cursor:pointer;font-family:var(--body);font-size:1rem;transition:transform .15s ease}
 .btn:hover{transform:translateY(-2px)}
-.btn-sol{background:var(--sol);color:#2a1d00;box-shadow:0 6px 0 color-mix(in srgb,var(--sol) 55%,#000)}
-.btn-sol:active{transform:translateY(3px);box-shadow:0 2px 0 color-mix(in srgb,var(--sol) 55%,#000)}
-.btn-linha{border:2px solid var(--agua);color:var(--agua);background:transparent}
-.btn-sm{padding:10px 18px;font-size:.92rem}
+.btn-verde{background:var(--verde);color:#0b2a05}
+.btn-branco{background:#fff;color:#0d2f7a}
+.btn-linha{border:2px solid currentColor;background:transparent}
+.btn-sm{padding:9px 16px;font-size:.92rem}
 .btn svg{width:20px;height:20px;flex:none}
-@media (max-width:760px){nav a.link{display:none}}
+@media (max-width:780px){nav a.link{display:none}}
 
 /* Hero */
-.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--espuma),var(--bg))}
+.hero{position:relative;overflow:hidden;background:var(--azul);color:#fff}
 #bolhas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding-block:72px 88px}
-.hero h1{font-size:clamp(2.7rem,7vw,5.4rem);font-weight:800;letter-spacing:-.02em}
-.hero h1 em{font-style:normal;color:var(--agua);white-space:nowrap;background:linear-gradient(transparent 72%,var(--sol) 72%,var(--sol) 92%,transparent 92%)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding-block:64px 80px}
 .hero-txt{display:grid;gap:22px;min-width:0}
-.hero-txt p.lead{font-size:1.2rem;color:var(--muted);max-width:34ch}
-.hero-ctas{display:flex;flex-wrap:wrap;gap:14px}
-.selos{display:flex;flex-wrap:wrap;gap:10px 18px;color:var(--muted);font-size:.95rem}
-.selos span{display:flex;align-items:center;gap:6px}
-.selos span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--agua)}
+.hero h1{font-size:clamp(3.2rem,9vw,6.6rem);color:#fff}
+.hero h1 .verde{color:var(--verde)}
+.hero p.lead{font-size:1.2rem;max-width:36ch;opacity:.92}
+.ctas{display:flex;flex-wrap:wrap;gap:14px}
+.fatos{display:flex;flex-wrap:wrap;gap:12px}
+.fatos span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:8px 14px;border-radius:999px;font-size:.92rem;font-weight:500}
 
 /* Máquina */
-.maquina{justify-self:center;width:min(360px,100%);aspect-ratio:4/5;max-width:100%;background:var(--card);border:3px solid var(--agua-esc);border-radius:28px;padding:22px;display:grid;grid-template-rows:auto 1fr;gap:18px;box-shadow:14px 14px 0 var(--agua)}
-.painel{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:2px dashed var(--linha);padding-bottom:14px}
-.painel .tempo{font-family:var(--display);font-weight:700;font-size:1.5rem;color:var(--agua-esc);font-variant-numeric:tabular-nums}
-.painel .luzes{display:flex;gap:6px}
-.painel .luzes i{width:12px;height:12px;border-radius:50%;background:var(--linha)}
-.painel .luzes i.on{background:var(--sol)}
-.porta{align-self:center;justify-self:center;width:88%;aspect-ratio:1;max-width:100%;border-radius:50%;border:12px solid var(--agua-esc);background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--agua) 25%,var(--card)),var(--agua) 75%);position:relative;overflow:hidden}
-.tambor{position:absolute;inset:0;animation:gira 3.2s linear infinite}
+.maquina{justify-self:center;width:min(340px,100%);aspect-ratio:4/5;max-width:100%;background:#fff;border-radius:26px;padding:22px;display:grid;grid-template-rows:auto 1fr;gap:16px;box-shadow:14px 14px 0 var(--verde);color:#0d2f7a}
+.painel{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:2px dashed #d6e2f7;padding-bottom:12px}
+.painel .tempo{font-family:var(--display);font-size:1.7rem;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.painel .estado{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:#5cc83b;color:#0b2a05;padding:4px 10px;border-radius:6px}
+.porta{align-self:center;justify-self:center;width:88%;aspect-ratio:1;max-width:100%;border-radius:50%;border:12px solid #c9d3e3;outline:4px solid #0d2f7a;background:radial-gradient(circle at 35% 30%,#bcd4ff,#1f5fd6 75%);position:relative;overflow:hidden}
+.tambor{position:absolute;inset:0;animation:gira 3s linear infinite}
 .tambor b{position:absolute;border-radius:40% 60% 50% 50%}
-.tambor b:nth-child(1){width:42%;height:30%;left:12%;top:52%;background:var(--sol)}
-.tambor b:nth-child(2){width:36%;height:26%;left:50%;top:18%;background:#ffffff}
-.tambor b:nth-child(3){width:30%;height:22%;left:22%;top:16%;background:#ff8a5c}
-.agua-nivel{position:absolute;left:-10%;right:-10%;bottom:-8%;height:45%;background:color-mix(in srgb,#ffffff 30%,transparent);border-radius:45%;animation:onda 4s ease-in-out infinite}
+.tambor b:nth-child(1){width:42%;height:30%;left:12%;top:52%;background:#5cc83b}
+.tambor b:nth-child(2){width:36%;height:26%;left:50%;top:18%;background:#fff}
+.tambor b:nth-child(3){width:30%;height:22%;left:22%;top:16%;background:#0d2f7a}
+.agua-nivel{position:absolute;left:-10%;right:-10%;bottom:-8%;height:45%;background:rgba(255,255,255,.3);border-radius:45%;animation:onda 4s ease-in-out infinite}
 @keyframes gira{to{transform:rotate(360deg)}}
 @keyframes onda{50%{transform:translateX(6%) rotate(4deg)}}
 
-/* Faixas */
 section{padding-block:84px}
-.titulo{display:grid;gap:12px;margin-bottom:44px;max-width:640px}
-.titulo h2{font-size:clamp(2rem,4.5vw,3.1rem);font-weight:800}
+.titulo{display:grid;gap:14px;margin-bottom:44px;max-width:680px}
+.titulo h2{font-size:clamp(2.6rem,6vw,4.2rem);color:var(--azul)}
 .titulo p{color:var(--muted)}
 
-/* Serviços */
-.servicos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.serv{background:var(--card);border:2px solid var(--linha);border-radius:20px;padding:26px;display:grid;gap:12px;align-content:start;min-width:0;transition:border-color .2s, transform .2s}
-.serv:hover{border-color:var(--agua);transform:translateY(-4px)}
-.serv .ico{width:52px;height:52px;border-radius:14px;background:var(--espuma);display:grid;place-items:center;color:var(--agua)}
-.serv .ico svg{width:28px;height:28px}
-.serv h3{font-size:1.35rem}
-.serv p{color:var(--muted);font-size:.98rem}
-.preco{margin-top:6px;font-family:var(--display);font-weight:700;color:var(--agua-esc);font-size:1.15rem;font-variant-numeric:tabular-nums}
-.preco small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:.85rem}
+/* Preços */
+.precos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.preco{background:var(--card);border:2px solid var(--linha);border-radius:20px;padding:28px;display:grid;gap:10px;align-content:start;min-width:0}
+.preco.destaque{background:var(--azul);border-color:var(--azul);color:#fff}
+.preco h3{font-size:2rem;color:var(--azul)}
+.preco.destaque h3{color:#fff}
+.valor{font-family:var(--display);font-size:3.4rem;line-height:1;font-variant-numeric:tabular-nums;color:var(--fg)}
+.preco.destaque .valor{color:var(--verde)}
+.valor sup{font-size:.4em;vertical-align:top;margin-right:4px;position:relative;top:.4em}
+.preco p{color:var(--muted);font-size:.98rem}
+.preco.destaque p{color:rgba(255,255,255,.88)}
+.nota{margin-top:18px;color:var(--muted);font-size:.9rem}
 
-/* Como funciona */
-.como{background:var(--agua);color:var(--on-agua)}
-.como h2,.como .eyebrow{color:var(--on-agua)}
-.como .titulo p{color:color-mix(in srgb,var(--on-agua) 82%,transparent)}
-.passos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:p}
-.passos li{counter-increment:p;display:grid;gap:10px;align-content:start;padding-top:18px;border-top:3px solid color-mix(in srgb,var(--on-agua) 35%,transparent);min-width:0}
-.passos li::before{content:counter(p);font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:1;color:var(--sol)}
-.passos h3{color:var(--on-agua);font-size:1.25rem}
-.passos p{color:color-mix(in srgb,var(--on-agua) 82%,transparent);font-size:.98rem}
+/* Passo a passo */
+.passo-faixa{background:var(--azul-esc);color:#fff}
+.passo-faixa .titulo h2{color:#fff}
+.passo-faixa .titulo p{color:rgba(255,255,255,.8)}
+.passos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:22px;counter-reset:p}
+.passos li{counter-increment:p;display:grid;gap:10px;align-content:start;padding-top:18px;border-top:3px solid var(--verde);min-width:0}
+.passos li::before{content:counter(p);font-family:var(--display);font-size:3rem;line-height:1;color:var(--verde)}
+.passos h3{font-size:1.6rem}
+.passos p{color:rgba(255,255,255,.82);font-size:.98rem}
 
-/* Por que */
-.porque .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center}
-.porque .titulo{margin-bottom:0}
-.lista-dif{list-style:none;margin:0;padding:0;display:grid;gap:14px}
-.lista-dif li{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:18px 20px;background:var(--espuma);border-radius:16px}
-.lista-dif li strong{display:block;font-family:var(--display);font-size:1.12rem;color:var(--agua-esc)}
-.lista-dif li span{color:var(--muted);font-size:.97rem}
-.check{width:30px;height:30px;border-radius:50%;background:var(--sol);display:grid;place-items:center;color:#2a1d00;font-weight:800}
+/* Motivos */
+.motivos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.motivo{background:var(--suave);border-radius:18px;padding:24px;display:grid;gap:10px;align-content:start;min-width:0}
+.motivo .ico{width:50px;height:50px;border-radius:14px;background:var(--azul);color:#fff;display:grid;place-items:center}
+.motivo .ico svg{width:26px;height:26px}
+.motivo h3{font-size:1.5rem;color:var(--azul)}
+.motivo p{color:var(--muted);font-size:.96rem}
+
+/* Horário */
+.horario{background:var(--verde);color:#0b2a05}
+.horario .wrap{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center}
+.relogio{font-family:var(--display);font-size:clamp(4rem,13vw,9rem);line-height:.9;color:var(--azul-esc);white-space:nowrap}
+.horario h2{font-size:clamp(2.2rem,5vw,3.4rem);color:var(--azul-esc)}
+.horario p{margin-top:12px;max-width:44ch;font-size:1.08rem}
+.aberto{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:700;background:rgba(255,255,255,.55);padding:6px 14px;border-radius:999px}
+.aberto i{width:10px;height:10px;border-radius:50%;background:#0b2a05}
+
+/* Dicas */
+.dicas{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;list-style:none;margin:0;padding:0;counter-reset:d}
+.dicas li{counter-increment:d;background:var(--card);border:2px solid var(--linha);border-radius:18px;padding:24px;display:grid;gap:8px;align-content:start;min-width:0}
+.dicas li::before{content:"Dica " counter(d);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--verde-esc)}
+.dicas strong{font-size:1.1rem;color:var(--fg)}
+.dicas span{color:var(--muted);font-size:.96rem}
 
 /* Dicionário */
-.dic{background:var(--espuma)}
-.verbete{max-width:760px;margin:0 auto;background:var(--card);border:2px solid var(--agua-esc);border-radius:20px;padding:34px;display:grid;gap:12px;box-shadow:10px 10px 0 var(--sol)}
-.verbete .pal{font-family:var(--display);font-size:clamp(2rem,5vw,2.8rem);font-weight:800;color:var(--agua-esc)}
-.verbete .pal i{font-family:var(--body);font-style:italic;font-weight:400;font-size:1rem;color:var(--muted);margin-left:8px}
+.dic{background:var(--suave)}
+.verbete{max-width:760px;margin:0 auto;background:var(--card);border:3px solid var(--azul);border-radius:20px;padding:34px;display:grid;gap:12px;box-shadow:10px 10px 0 var(--verde)}
+.verbete .pal{font-family:var(--display);font-size:clamp(2.4rem,6vw,3.4rem);color:var(--azul);line-height:1}
+.verbete .pal i{font-family:var(--body);font-style:italic;font-size:1rem;color:var(--muted);margin-left:8px}
 .verbete ol{margin:0;padding-left:22px;display:grid;gap:6px;color:var(--muted)}
-.verbete .ex{border-left:4px solid var(--sol);padding-left:14px;font-style:italic}
+.verbete .ex{border-left:4px solid var(--verde);padding-left:14px;font-style:italic}
 
 /* FAQ */
 .faq{max-width:780px}
 details{border-bottom:2px solid var(--linha);padding-block:18px}
-summary{cursor:pointer;font-family:var(--display);font-weight:700;font-size:1.2rem;color:var(--agua-esc);list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary{cursor:pointer;font-weight:700;font-size:1.15rem;color:var(--fg);list-style:none;display:flex;justify-content:space-between;gap:16px}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";color:var(--agua);font-size:1.5rem;line-height:1;transition:transform .2s}
+summary::after{content:"+";color:var(--azul);font-size:1.6rem;line-height:1;transition:transform .2s}
 details[open] summary::after{transform:rotate(45deg)}
 details p{margin-top:10px;color:var(--muted)}
 
 /* Contato */
-.contato{background:var(--agua-esc);color:var(--bg)}
+.contato{background:var(--azul);color:#fff}
 .contato .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
-.contato h2{color:var(--bg);font-size:clamp(2.2rem,5vw,3.6rem);font-weight:800}
-.contato p{color:color-mix(in srgb,var(--bg) 80%,transparent);margin-top:14px;max-width:40ch}
-.info{display:grid;gap:14px;background:color-mix(in srgb,var(--bg) 8%,transparent);border:1px solid color-mix(in srgb,var(--bg) 20%,transparent);border-radius:20px;padding:26px}
+.contato h2{font-size:clamp(2.8rem,7vw,4.8rem)}
+.contato h2 span{color:var(--verde)}
+.contato p{opacity:.9;margin-top:14px;max-width:40ch}
+.info{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:26px}
+.info dl{margin:0;display:grid;gap:16px}
 .info div{display:grid;gap:2px}
-.info dt{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sol);font-weight:700}
-.info dd{margin:0;font-size:1.05rem;color:var(--bg)}
-.info dl{margin:0;display:grid;gap:14px}
+.info dt{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--verde);font-weight:700}
+.info dd{margin:0;font-size:1.05rem}
+.info a{text-underline-offset:3px}
 
-footer{padding-block:28px;color:var(--muted);font-size:.9rem}
+footer{padding-block:26px;color:var(--muted);font-size:.9rem}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 
-/* WhatsApp flutuante */
 .zap{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:20;width:60px;height:60px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .2s}
 .zap:hover{transform:scale(1.08)}
 .zap svg{width:32px;height:32px}
 
+@media (max-width:960px){
+  .motivos-grid,.passos{grid-template-columns:1fr 1fr}
+}
 @media (max-width:900px){
-  .hero .wrap,.porque .wrap,.contato .wrap{grid-template-columns:1fr}
-  .servicos-grid{grid-template-columns:1fr 1fr}
-  .passos{grid-template-columns:1fr 1fr}
-  .maquina{width:min(300px,100%)}
+  .hero .wrap,.contato .wrap{grid-template-columns:1fr}
+  .precos,.dicas{grid-template-columns:1fr}
+  .horario .wrap{grid-template-columns:1fr;gap:16px}
+  .maquina{width:min(290px,100%)}
 }
 @media (max-width:560px){
-  .servicos-grid,.passos{grid-template-columns:1fr}
+  .motivos-grid,.passos{grid-template-columns:1fr}
   section{padding-block:60px}
-  .hero .wrap{padding-block:44px 64px}
+  .hero .wrap{padding-block:40px 60px}
   .verbete{padding:24px}
 }
 @media (prefers-reduced-motion:reduce){
   .tambor,.agua-nivel{animation:none}
   html{scroll-behavior:auto}
-  .btn,.serv,.zap{transition:none}
+  .btn,.zap{transition:none}
 }
 </style>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="zapico" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></symbol>
+</svg>
+
 <header>
   <div class="wrap">
-    <a class="logo" href="#inicio"><span class="logo-mark" aria-hidden="true"></span>Lavanderia Avexada</a>
+    <a class="logo" href="#inicio">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#fff"/><circle cx="27" cy="27" r="11" fill="none" stroke="#5cc83b" stroke-width="4"/><path d="M27 27V20M27 27l4 3" stroke="#0d2f7a" stroke-width="3" stroke-linecap="round"/><rect x="24" y="10" width="6" height="4" rx="1" fill="#5cc83b"/><path d="M7 22h8M9 27h6M11 32h5" stroke="#5cc83b" stroke-width="3" stroke-linecap="round"/></svg>
+      <span><b>Avexada</b><small>Lavanderia Inteligente</small></span>
+    </a>
     <nav aria-label="Principal">
-      <a class="link" href="#servicos">Serviços</a>
-      <a class="link" href="#como">Como funciona</a>
+      <a class="link" href="#precos">Preços</a>
+      <a class="link" href="#como">Como usar</a>
       <a class="link" href="#duvidas">Dúvidas</a>
-      <a class="btn btn-sol btn-sm js-zap" href="#contato">Pedir coleta</a>
+      <a class="btn btn-verde btn-sm js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener">Fale conosco</a>
     </nav>
   </div>
 </header>
@@ -192,115 +217,115 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
     <canvas id="bolhas" aria-hidden="true"></canvas>
     <div class="wrap">
       <div class="hero-txt">
-        <span class="eyebrow">Lavanderia com coleta e entrega</span>
-        <h1>Roupa limpa pra quem tá <em>avexado.</em></h1>
-        <p class="lead">A gente busca, lava, seca, passa e devolve cheirosinha na sua porta. Você só chama no WhatsApp e vai cuidar da vida.</p>
-        <div class="hero-ctas">
-          <a class="btn btn-sol js-zap" href="#contato">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></svg>
-            Chamar no WhatsApp
-          </a>
-          <a class="btn btn-linha" href="#servicos">Ver serviços</a>
+        <span class="tag">Lavanderia self-service em Aquiraz</span>
+        <h1>Lave e seque <span class="verde">sem perder tempo</span></h1>
+        <p class="lead">Máquinas profissionais, ambiente limpo e climatizado, aberto das 6h às 23h. Você chega, lava, seca e sai com tudo pronto.</p>
+        <div class="ctas">
+          <a class="btn btn-verde js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#zapico"/></svg>Chamar no WhatsApp</a>
+          <a class="btn btn-linha" href="#onde">Como chegar</a>
         </div>
-        <div class="selos"><span>Coleta grátis no bairro</span><span>Entrega em até 48h</span><span>Roupa passada e dobrada</span></div>
+        <div class="fatos"><span>Lavar R$ 14,90</span><span>Secar R$ 14,90</span><span>Todos os dias, 6h às 23h</span></div>
       </div>
       <div class="maquina" aria-hidden="true">
-        <div class="painel"><span class="tempo" id="tempo">00:42</span><span class="luzes"><i class="on"></i><i class="on"></i><i></i></span></div>
+        <div class="painel"><span class="tempo" id="tempo">32:00</span><span class="estado">Lavando</span></div>
         <div class="porta"><div class="tambor"><b></b><b></b><b></b></div><div class="agua-nivel"></div></div>
       </div>
     </div>
   </section>
 
-  <section id="servicos">
+  <section id="precos">
     <div class="wrap">
       <div class="titulo">
-        <span class="eyebrow">Serviços</span>
-        <h2>Do dia a dia ao edredom de casal</h2>
-        <p>Preços de exemplo. Troque pelos valores reais da lavanderia.</p>
+        <span class="tag">Preço justo</span>
+        <h2>Preço por ciclo, sem surpresa</h2>
+        <p>Cada ciclo é uma máquina inteira só para as suas roupas.</p>
       </div>
-      <div class="servicos-grid">
-        <article class="serv">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="3"/><circle cx="12" cy="13" r="5"/><path d="M8 6h.01M11 6h.01"/></svg></div>
-          <h3>Lavar e secar</h3>
-          <p>Roupa do dia a dia lavada com sabão neutro e amaciante, seca e dobrada.</p>
-          <div class="preco">R$ 39,90 <small>/ cesto de 5 kg</small></div>
+      <div class="precos">
+        <article class="preco">
+          <h3>Lavar</h3>
+          <div class="valor"><sup>R$</sup>14,90</div>
+          <p>Ciclo completo de lavagem com sabão e amaciante.</p>
         </article>
-        <article class="serv">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17h15a3 3 0 0 0 3-3V9H9a6 6 0 0 0-6 6v2Z"/><path d="M9 9V6h8"/></svg></div>
-          <h3>Lavar e passar</h3>
-          <p>Camisas, calças e vestidos passados a ferro, no cabide ou dobrados.</p>
-          <div class="preco">R$ 59,90 <small>/ cesto de 5 kg</small></div>
+        <article class="preco destaque">
+          <h3>Lavar + secar</h3>
+          <div class="valor"><sup>R$</sup>29,80</div>
+          <p>O combo completo. Roupa limpa e seca na mesma visita.</p>
         </article>
-        <article class="serv">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v10H3z"/><path d="M3 12h18"/></svg></div>
-          <h3>Edredons e cobertores</h3>
-          <p>Lavagem pesada, secagem completa e embalagem protegida.</p>
-          <div class="preco">a partir de R$ 45 <small>/ peça</small></div>
-        </article>
-        <article class="serv">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8c0-3 3-5 7-5s7 2 7 5v11H5z"/><path d="M5 13h14"/></svg></div>
-          <h3>Tênis</h3>
-          <p>Limpeza por dentro e por fora, cadarço e palmilha inclusos.</p>
-          <div class="preco">R$ 35 <small>/ par</small></div>
-        </article>
-        <article class="serv">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 7l3 2v12h10V9l3-2-4-4c-1 2-2.5 3-4 3S9 5 8 3Z"/></svg></div>
-          <h3>Peças delicadas</h3>
-          <p>Seda, linho, roupa social e de festa, com cuidado separado.</p>
-          <div class="preco">sob consulta</div>
-        </article>
-        <article class="serv">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></div>
-          <h3>Cama, mesa e banho</h3>
-          <p>Lençóis, toalhas e toalhas de mesa. Ideal pra Airbnb e pousadas.</p>
-          <div class="preco">R$ 12 <small>/ jogo</small></div>
+        <article class="preco">
+          <h3>Secar</h3>
+          <div class="valor"><sup>R$</sup>14,90</div>
+          <p>Secadora profissional. Sai quentinha, pronta pra dobrar.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="como" id="como">
+  <section class="passo-faixa" id="como">
     <div class="wrap">
       <div class="titulo">
-        <span class="eyebrow">Como funciona</span>
-        <h2>Quatro passos e pronto</h2>
-        <p>Você não precisa sair de casa nem esperar na fila.</p>
+        <span class="tag">Primeira vez?</span>
+        <h2>Como usar a lavanderia</h2>
+        <p>É simples. E se tiver dúvida, é só chamar no WhatsApp.</p>
       </div>
       <ol class="passos">
-        <li><h3>Chama no Zap</h3><p>Manda mensagem dizendo o que precisa lavar e o melhor horário.</p></li>
-        <li><h3>A gente busca</h3><p>Nosso entregador passa no seu endereço e leva tudo identificado.</p></li>
-        <li><h3>Lava com capricho</h3><p>Separação por cor e tecido, produto certo pra cada peça.</p></li>
-        <li><h3>Devolve cheirosa</h3><p>Entrega dobrada ou no cabide, em até 48 horas.</p></li>
+        <li><h3>Separe as roupas</h3><p>Claras de um lado, escuras do outro. Confira as etiquetas.</p></li>
+        <li><h3>Escolha a máquina</h3><p>Coloque as roupas na lavadora livre e feche a porta.</p></li>
+        <li><h3>Pague e lave</h3><p>Faça o pagamento e a máquina começa o ciclo sozinha.</p></li>
+        <li><h3>Seque e leve</h3><p>Passe para a secadora e saia com tudo pronto.</p></li>
       </ol>
     </div>
   </section>
 
-  <section class="porque">
+  <section>
     <div class="wrap">
       <div class="titulo">
-        <span class="eyebrow">Por que a Avexada</span>
-        <h2>Rapidez sem descuido</h2>
-        <p>O nome diz a pressa. O cuidado vem junto, peça por peça.</p>
+        <span class="tag">Por que a Avexada</span>
+        <h2>Tecnologia que cuida das suas roupas</h2>
       </div>
-      <ul class="lista-dif">
-        <li><span class="check" aria-hidden="true">✓</span><div><strong>Entrega expressa</strong><span>Precisa pra hoje? Temos serviço no mesmo dia, consulte disponibilidade.</span></div></li>
-        <li><span class="check" aria-hidden="true">✓</span><div><strong>Produtos hipoalergênicos</strong><span>Sabão neutro e amaciante suave, bom pra roupa de bebê e pele sensível.</span></div></li>
-        <li><span class="check" aria-hidden="true">✓</span><div><strong>Tudo identificado</strong><span>Cada pedido vai num saco com seu nome. Nada se mistura.</span></div></li>
-        <li><span class="check" aria-hidden="true">✓</span><div><strong>Pagamento fácil</strong><span>Pix, cartão de crédito ou débito na entrega.</span></div></li>
-      </ul>
+      <div class="motivos-grid">
+        <article class="motivo"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></div><h3>Rapidez</h3><p>Lave e seque no mesmo lugar, sem esperar dias pela roupa.</p></article>
+        <article class="motivo"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="3"/><circle cx="12" cy="13" r="5"/><path d="M8 6h.01M11 6h.01"/></svg></div><h3>Máquinas profissionais</h3><p>Equipamentos de alta capacidade que lavam melhor que a de casa.</p></article>
+        <article class="motivo"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 7l14 10M19 7 5 17"/></svg></div><h3>Ambiente climatizado</h3><p>Espaço limpo e confortável enquanto suas roupas ficam prontas.</p></article>
+        <article class="motivo"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></div><h3>No Centro</h3><p>Fácil de chegar, na Av. Raimundo Pires Cardoso.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="horario">
+    <div class="wrap">
+      <div class="relogio">6h–23h</div>
+      <div>
+        <h2>Horários que cabem na sua rotina</h2>
+        <p>A correria do dia a dia não espera. Por isso a Avexada abre cedinho e fecha tarde: dá pra lavar antes do trabalho ou depois da faculdade.</p>
+        <span class="aberto" id="aberto"><i></i>Aberto das 6h às 23h</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="titulo">
+        <span class="tag">Dicas</span>
+        <h2>Para cuidar das suas roupas</h2>
+      </div>
+      <ol class="dicas">
+        <li><strong>Separe claras e escuras</strong><span>Evita que a cor de uma peça passe para a outra.</span></li>
+        <li><strong>Respeite a etiqueta</strong><span>Ela diz a temperatura certa e se a peça pode ir na secadora.</span></li>
+        <li><strong>Sem excesso de sabão</strong><span>Sabão e amaciante demais deixam resíduo e endurecem o tecido.</span></li>
+      </ol>
     </div>
   </section>
 
   <section class="dic">
     <div class="wrap">
       <div class="verbete">
-        <span class="eyebrow">Dicionário nordestino</span>
+        <span class="tag">Dicionário cearense</span>
         <div class="pal">a·ve·xa·do <i>adjetivo</i></div>
         <ol>
           <li>Que está com pressa, apressado.</li>
           <li>Que não tem tempo a perder com roupa suja.</li>
         </ol>
-        <p class="ex">“Tô muito avexada essa semana, vou mandar tudo pra lavanderia.”</p>
+        <p class="ex">“Tô avexada demais essa semana, vou lavar tudo na Avexada.”</p>
       </div>
     </div>
   </section>
@@ -308,34 +333,36 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
   <section id="duvidas">
     <div class="wrap">
       <div class="titulo">
-        <span class="eyebrow">Dúvidas</span>
+        <span class="tag">Dúvidas</span>
         <h2>Perguntas frequentes</h2>
       </div>
       <div class="faq">
-        <details><summary>Quanto tempo demora?</summary><p>O prazo padrão é de até 48 horas depois da coleta. Também fazemos serviço expresso no mesmo dia.</p></details>
-        <details><summary>Vocês buscam em qual região?</summary><p>A coleta é grátis nos bairros próximos. Mande seu endereço no WhatsApp que confirmamos na hora.</p></details>
-        <details><summary>E se minha roupa manchar ou estragar?</summary><p>Fazemos a triagem antes de lavar e avisamos se alguma peça tiver risco. Peças delicadas recebem tratamento separado.</p></details>
-        <details><summary>Como faço o pagamento?</summary><p>Aceitamos Pix, cartão de crédito e débito. O pagamento é feito na entrega.</p></details>
+        <details><summary>Preciso levar sabão e amaciante?</summary><p>Não precisa se preocupar. Na dúvida sobre os produtos usados nas máquinas, chame a gente no WhatsApp.</p></details>
+        <details><summary>Quanto custa lavar e secar?</summary><p>A lavagem custa R$ 14,90 e a secagem também R$ 14,90 por ciclo. Lavar e secar sai por R$ 29,80.</p></details>
+        <details><summary>Qual o horário de funcionamento?</summary><p>Funcionamos das 6h às 23h.</p></details>
+        <details><summary>Onde fica?</summary><p>Av. Raimundo Pires Cardoso, 217, Loja 4, Centro, Aquiraz (CE).</p></details>
+        <details><summary>Nunca usei uma lavanderia self-service. É difícil?</summary><p>É bem simples, e o passo a passo fica na loja. Se precisar de ajuda, fale com a gente pelo WhatsApp.</p></details>
       </div>
     </div>
   </section>
 
-  <section class="contato" id="contato">
+  <section class="contato" id="onde">
     <div class="wrap">
       <div>
-        <span class="eyebrow" style="color:var(--sol)">Fale com a gente</span>
-        <h2>Bora tirar essa roupa suja do caminho?</h2>
-        <p>Chame no WhatsApp, diga o que precisa e combine o horário da coleta.</p>
-        <div class="hero-ctas" style="margin-top:26px">
-          <a class="btn btn-sol js-zap" href="#contato">Pedir coleta no WhatsApp</a>
-          <a class="btn btn-linha" style="border-color:var(--bg);color:var(--bg)" href="https://www.instagram.com/lavanderiaavexada/" target="_blank" rel="noopener">@lavanderiaavexada</a>
+        <span class="tag">Venha nos conhecer</span>
+        <h2>Estamos te <span>esperando</span></h2>
+        <p>Para deixar suas roupas prontinhas com praticidade e qualidade.</p>
+        <div class="ctas" style="margin-top:26px">
+          <a class="btn btn-verde js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#zapico"/></svg>WhatsApp</a>
+          <a class="btn btn-branco" href="https://www.google.com/maps/search/?api=1&query=Av.+Raimundo+Pires+Cardoso+217+Centro+Aquiraz+CE" target="_blank" rel="noopener">Abrir no mapa</a>
         </div>
       </div>
       <div class="info">
         <dl>
-          <div><dt>WhatsApp</dt><dd id="zapTexto">(00) 00000-0000</dd></div>
-          <div><dt>Endereço</dt><dd>Rua Exemplo, 123 – Bairro, Cidade</dd></div>
-          <div><dt>Horário</dt><dd>Seg a sex, 8h às 18h · Sáb, 8h às 13h</dd></div>
+          <div><dt>Endereço</dt><dd>Av. Raimundo Pires Cardoso, 217, Loja 4<br>Centro, Aquiraz (CE)</dd></div>
+          <div><dt>Horário</dt><dd>Das 6h às 23h</dd></div>
+          <div><dt>WhatsApp</dt><dd>(85) 98203-1297</dd></div>
+          <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/lavanderiaavexada/" target="_blank" rel="noopener">@lavanderiaavexada</a></dd></div>
         </dl>
       </div>
     </div>
@@ -343,29 +370,29 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 </main>
 
 <footer>
-  <div class="wrap"><span>© 2026 Lavanderia Avexada</span><span>Roupa limpa, vida leve.</span></div>
+  <div class="wrap"><span>© 2026 Avexada Lavanderia Inteligente</span><span>Aquiraz, Ceará</span></div>
 </footer>
 
-<a class="zap js-zap" href="#contato" aria-label="Chamar no WhatsApp">
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></svg>
-</a>
+<a class="zap js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp"><svg aria-hidden="true"><use href="#zapico"/></svg></a>
 
 <script>
-/* === TROQUE AQUI: número do WhatsApp com DDI 55 + DDD, só números === */
-const WHATSAPP = "5500000000000";
-const MENSAGEM = "Oi! Vim pelo site e quero agendar uma coleta.";
+/* Mensagem que já aparece escrita quando o cliente abre o WhatsApp */
+const WHATSAPP = "5585982031297";
+const MENSAGEM = "Oi! Vim pelo site da Avexada e queria tirar uma dúvida.";
+const url = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(MENSAGEM);
+document.querySelectorAll(".js-zap").forEach(a => a.href = url);
 
-if (WHATSAPP !== "5500000000000") {
-  const url = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(MENSAGEM);
-  document.querySelectorAll(".js-zap").forEach(a => { a.href = url; a.target = "_blank"; a.rel = "noopener"; });
-  const n = WHATSAPP.slice(2);
-  document.getElementById("zapTexto").textContent = "(" + n.slice(0,2) + ") " + n.slice(2,-4) + "-" + n.slice(-4);
-}
+/* Aberto agora? (horário de Fortaleza) */
+try {
+  const h = Number(new Intl.DateTimeFormat("pt-BR",{hour:"numeric",hourCycle:"h23",timeZone:"America/Fortaleza"}).format(new Date()));
+  const el = document.getElementById("aberto");
+  el.lastChild.textContent = (h >= 6 && h < 23) ? "Aberto agora · fecha às 23h" : "Fechado agora · abre às 6h";
+} catch(e) {}
 
 /* Cronômetro da máquina */
-let s = 42 * 60;
+let s = 32 * 60;
 const tEl = document.getElementById("tempo");
-setInterval(() => { s = s > 0 ? s - 1 : 42 * 60; tEl.textContent = String(Math.floor(s/60)).padStart(2,"0") + ":" + String(s%60).padStart(2,"0"); }, 1000);
+setInterval(() => { s = s > 0 ? s - 1 : 32 * 60; tEl.textContent = String(Math.floor(s/60)).padStart(2,"0") + ":" + String(s%60).padStart(2,"0"); }, 1000);
 
 /* Bolhas de sabão */
 (function(){
@@ -376,15 +403,14 @@ setInterval(() => { s = s > 0 ? s - 1 : 42 * 60; tEl.textContent = String(Math.f
   function nova(y){ return { x: Math.random()*W, y: y ?? H + 40, r: 6 + Math.random()*26, v: .25 + Math.random()*.7, f: Math.random()*6.28 }; }
   tam(); for (let i = 0; i < 26; i++) bs.push(nova(Math.random()*H));
   addEventListener("resize", tam);
-  function cor(){ return getComputedStyle(document.documentElement).getPropertyValue("--agua").trim() || "#0a7fa8"; }
   function desenha(){
-    ctx.clearRect(0,0,W,H); const a = cor();
+    ctx.clearRect(0,0,W,H);
     for (const b of bs){
       if (!reduz){ b.y -= b.v; b.f += .02; b.x += Math.sin(b.f)*.35; if (b.y < -40) Object.assign(b, nova()); }
       ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 6.283);
-      ctx.strokeStyle = a; ctx.globalAlpha = .22; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.strokeStyle = "#ffffff"; ctx.globalAlpha = .28; ctx.lineWidth = 1.5; ctx.stroke();
       ctx.beginPath(); ctx.arc(b.x - b.r*.35, b.y - b.r*.35, b.r*.22, 0, 6.283);
-      ctx.fillStyle = a; ctx.globalAlpha = .18; ctx.fill(); ctx.globalAlpha = 1;
+      ctx.fillStyle = "#ffffff"; ctx.globalAlpha = .25; ctx.fill(); ctx.globalAlpha = 1;
     }
     if (!reduz) requestAnimationFrame(desenha);
   }
