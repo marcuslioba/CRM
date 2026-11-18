@@ -417,12 +417,12 @@ body{background:var(--preto)}
 /* ===== Fluxo real (vídeo que anda com a rolagem) ===== */
 .fluxo{position:relative;height:420vh;background:var(--preto)}
 .fluxo-cena{position:sticky;top:0;height:100svh;overflow:hidden;background:radial-gradient(ellipse 60% 65% at 60% 55%,#3a80f5,#1f5fd6 45%,#0d2f7a 90%)}
-.fluxo video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fluxo video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 50%}
 .fluxo-reserva{position:absolute;inset:0;display:none;place-items:center}
 .fluxo-reserva img{width:min(38vw,420px);height:auto;margin-left:22vw;filter:drop-shadow(0 50px 50px rgba(0,0,0,.5));transition:transform .6s cubic-bezier(.2,.8,.2,1)}
 .fluxo.sem-video .fluxo-reserva{display:grid}
 .fluxo.sem-video video{display:none}
-.fluxo-veu{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,17,49,.9) 0%,rgba(6,17,49,.6) 36%,rgba(13,47,122,.12) 70%)}
+.fluxo-veu{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,17,49,.82) 0%,rgba(6,17,49,.35) 32%,rgba(13,47,122,0) 55%)}
 .fluxo-texto{position:absolute;left:var(--gl);top:50%;transform:translateY(-50%);width:min(440px,88vw);display:grid;gap:22px;z-index:2}
 .fluxo-passos{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .fluxo-passos li{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start;padding:14px 0;border-top:1px solid var(--linha);opacity:.32;transition:opacity .4s}
@@ -437,6 +437,7 @@ body{background:var(--preto)}
 @media (max-width:760px){
   .fluxo-veu{background:linear-gradient(0deg,rgba(6,17,49,.92) 0%,rgba(6,17,49,.6) 45%,rgba(6,17,49,.1) 75%)}
   .fluxo-texto{top:auto;bottom:56px;transform:none}
+  .fluxo video{height:62%;object-position:74% 50%}
   .fluxo-reserva{place-items:start center}
   .fluxo-reserva img{margin:12vh 0 0;width:min(62vw,300px)}
 }
@@ -511,7 +512,7 @@ body{background:var(--preto)}
       <div class="fluxo-texto">
         <span class="tag">Na prática</span>
         <ol class="fluxo-passos" id="fluxoPassos">
-          <li class="on"><b>01</b><div><h3>Chegou</h3><p>Entre e escolha uma máquina livre. Sem fila, sem agendamento.</p></div></li>
+          <li class="on"><b>01</b><div><h3>Chegou</h3><p>Traga sua roupa e escolha uma máquina livre. Sem fila, sem agendamento.</p></div></li>
           <li><b>02</b><div><h3>Coloque a roupa</h3><p>Separe claras e escuras e coloque tudo na lavadora.</p></div></li>
           <li><b>03</b><div><h3>Pague e lave</h3><p>R$ 14,90 por ciclo. A máquina começa sozinha.</p></div></li>
           <li><b>04</b><div><h3>Enquanto isso, viva</h3><p>Resolva sua vida enquanto a máquina trabalha. Depois é só secar e levar.</p></div></li>
@@ -721,7 +722,9 @@ if (!reduz){
   }
   function quadro(){
     const p = progresso();
-    const i = Math.min(3, Math.floor(p * 4));
+    // passos acendem junto com as cenas do vídeo: chega (0–12%), coloca (12–57%), liga (57–81%), sai (81–100%)
+    const CORTES = [0, .119, .573, .813];
+    let i = 0; CORTES.forEach((c, k) => { if (p >= c) i = k; });
     passos.forEach((li, k) => li.classList.toggle("on", k === i));
     barra.style.width = (p * 100) + "%";
     if (temVideo){ alvo = p * (v.duration - .05); atualT += (alvo - atualT) * .18; if (Math.abs(v.currentTime - atualT) > .01) v.currentTime = atualT; }
