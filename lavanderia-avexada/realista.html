@@ -417,7 +417,7 @@ body{background:var(--preto)}
 .fluxo-reserva img{width:min(38vw,420px);height:auto;margin-left:22vw;filter:drop-shadow(0 50px 50px rgba(0,0,0,.5));transition:transform .6s cubic-bezier(.2,.8,.2,1)}
 .fluxo.sem-video .fluxo-reserva{display:grid}
 .fluxo.sem-video video{display:none}
-.fluxo-veu{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,17,49,.88) 0%,rgba(6,17,49,.55) 38%,rgba(6,17,49,0) 65%)}
+.fluxo-veu{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,17,49,.9) 0%,rgba(6,17,49,.6) 36%,rgba(13,47,122,.12) 70%)}
 .fluxo-texto{position:absolute;left:var(--gl);top:50%;transform:translateY(-50%);width:min(440px,88vw);display:grid;gap:22px;z-index:2}
 .fluxo-passos{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .fluxo-passos li{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start;padding:14px 0;border-top:1px solid var(--linha);opacity:.32;transition:opacity .4s}
@@ -496,6 +496,7 @@ body{background:var(--preto)}
   <section class="fluxo" id="fluxo" aria-label="Como funciona na prática">
     <div class="fluxo-cena">
       <video id="fluxoVideo" muted playsinline preload="auto" aria-hidden="true">
+        <source src="img/fluxo.webm" type="video/webm">
         <source src="img/fluxo.mp4" type="video/mp4">
       </video>
       <div class="fluxo-reserva" aria-hidden="true"><img src="img/lavadora.webp" alt="" width="788" height="866" loading="lazy"></div>
@@ -506,7 +507,7 @@ body{background:var(--preto)}
           <li class="on"><b>01</b><div><h3>Chegou</h3><p>Entre e escolha uma máquina livre. Sem fila, sem agendamento.</p></div></li>
           <li><b>02</b><div><h3>Coloque a roupa</h3><p>Separe claras e escuras e coloque tudo na lavadora.</p></div></li>
           <li><b>03</b><div><h3>Pague e lave</h3><p>R$ 14,90 por ciclo. A máquina começa sozinha.</p></div></li>
-          <li><b>04</b><div><h3>Seque e vá</h3><p>Passe pra secadora e saia com tudo pronto.</p></div></li>
+          <li><b>04</b><div><h3>Enquanto isso, viva</h3><p>Resolva sua vida enquanto a máquina trabalha. Depois é só secar e levar.</p></div></li>
         </ol>
       </div>
       <div class="fluxo-barra" aria-hidden="true"><i id="fluxoBarra"></i><span style="left:0%"></span><span style="left:25%"></span><span style="left:50%"></span><span style="left:75%"></span></div>
@@ -705,7 +706,7 @@ if (!reduz){
   const semVideo = () => { sec.classList.add("sem-video"); temVideo = false; };
   v.addEventListener("loadedmetadata", () => { temVideo = v.duration > 0; if (!temVideo) semVideo(); });
   v.addEventListener("error", semVideo, true);
-  v.querySelector("source").addEventListener("error", semVideo);
+  const fontes = [...v.querySelectorAll("source")]; let falhas = 0; fontes.forEach(f => f.addEventListener("error", () => { if (++falhas === fontes.length) semVideo(); }));
   setTimeout(() => { if (!temVideo) semVideo(); }, 4000);
   function progresso(){
     const r = sec.getBoundingClientRect(), total = r.height - innerHeight;
