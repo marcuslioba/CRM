@@ -410,7 +410,7 @@ body{background:var(--preto)}
 .topo{mix-blend-mode:normal;text-shadow:0 1px 12px rgba(0,0,0,.25)}
 
 /* ===== Fluxo real (vídeo que anda com a rolagem) ===== */
-.fluxo{position:relative;height:420vh;background:var(--preto)}
+.fluxo{position:relative;height:300vh;background:var(--preto)}
 .fluxo-cena{position:sticky;top:0;height:100svh;overflow:hidden;background:radial-gradient(ellipse 60% 65% at 60% 55%,#3a80f5,#1f5fd6 45%,#0d2f7a 90%)}
 .fluxo canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .fluxo-reserva{position:absolute;inset:0;display:none;place-items:center}
@@ -475,27 +475,58 @@ body{background:var(--preto)}
 .hero-acoes{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
 @media (min-width:701px){.hero .info{right:calc(var(--gr) + 80px)}}
 @media (max-width:700px){.hero .info{left:var(--gl);right:auto;bottom:24px}.hero-acoes{align-items:flex-start}.hero-acoes .rolar{display:none}}
+
+/* ===== Horário + por quê ===== */
+.horario .in{gap:18px}
+.porque{font-family:var(--gigante);font-weight:400;text-transform:uppercase;font-size:clamp(2.4rem,6vw,4.6rem);line-height:.92;color:var(--azul-esc);max-width:14ch}
+.porque span{color:#fff}
+.porque-txt{color:var(--verde-esc) !important;font-weight:500;max-width:46ch;font-size:1.05rem}
+.horario{padding-block:110px}
+
+/* ===== Menu do celular ===== */
+.menu-btn{display:none;pointer-events:auto;align-items:center;gap:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font:600 .78rem/1 var(--titulo);letter-spacing:.14em;text-transform:uppercase;padding:13px 16px;border-radius:999px;cursor:pointer;min-height:44px}
+.menu-btn i{position:relative;width:16px;height:2px;background:#fff;transition:background .2s}
+.menu-btn i::before,.menu-btn i::after{content:"";position:absolute;left:0;width:16px;height:2px;background:#fff;transition:transform .25s}
+.menu-btn i::before{top:-5px}.menu-btn i::after{top:5px}
+.menu-btn[aria-expanded="true"] i{background:transparent}
+.menu-btn[aria-expanded="true"] i::before{transform:translateY(5px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] i::after{transform:translateY(-5px) rotate(-45deg)}
+.menu-cel{position:fixed;inset:0;z-index:45;background:radial-gradient(ellipse 80% 60% at 50% 100%,#2f74ef,#1546b8 45%,#0a2266);padding:calc(96px + env(safe-area-inset-top,0px)) var(--gr) calc(32px + env(safe-area-inset-bottom,0px)) var(--gl);display:flex;flex-direction:column;gap:28px;overflow-y:auto}
+.menu-cel nav{display:grid}
+.menu-cel nav a{display:flex;align-items:baseline;gap:14px;text-decoration:none;font-family:var(--gigante);text-transform:uppercase;font-size:2.4rem;line-height:1;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.18)}
+.menu-cel nav b{font-family:var(--titulo);font-weight:700;font-size:.8rem;color:var(--verde);letter-spacing:.1em}
+.menu-cel .btn{align-self:flex-start}
+.menu-cel p{color:rgba(255,255,255,.75);font-size:.9rem}
+@media (max-width:760px){.menu-btn{display:inline-flex}.topo nav{display:none}}
+body.menu-aberto{overflow:hidden}
+.menu-cel[hidden],[hidden]{display:none !important}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="zapico" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></symbol>
 </svg>
 
-<div id="intro" aria-hidden="true">
-  <div class="centro">
-    <div class="portinha"><div class="vid"><div class="gira"><i></i><i></i><i></i></div><div class="espu"></div></div></div>
-    <div class="intro-nome" id="introNome">AVEXADA</div>
-    <div class="contador" id="contador">000%</div>
-  </div>
-</div>
 
 <div class="cursor" id="cursor"><span id="cursorTxt">Ver</span></div>
 <div class="cursor-ponto" id="cursorPonto"></div>
 
 <header class="topo">
   <a class="marca" href="#inicio" aria-label="Avexada Lavanderia Inteligente"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="27" cy="27" r="12" fill="none" stroke="currentColor" stroke-width="3.5"/><path d="M27 27v-7M27 27l4.5 3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="23.5" y="9" width="7" height="4" rx="1.2" fill="currentColor"/><path d="M4 22h9M6 27h7M8 32h6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>AVEXADA<small>Lavanderia Inteligente</small></span></a>
-  <nav aria-label="Seções"><a href="#fluxo">Como funciona</a><a href="#precos">Preços</a><a href="#duvidas">Dúvidas</a><a class="sempre" href="#onde">Onde fica</a></nav>
+  <nav aria-label="Seções"><a href="#fluxo">Como funciona</a><a href="#precos">Preços</a><a href="#duvidas">Dúvidas</a><a href="#onde">Onde fica</a></nav>
+  <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuCel"><span>Menu</span><i aria-hidden="true"></i></button>
 </header>
+
+<div class="menu-cel" id="menuCel" hidden>
+  <nav aria-label="Menu">
+    <a href="#fluxo"><b>01</b>Como funciona</a>
+    <a href="#precos"><b>02</b>Preços</a>
+    <a href="#horario"><b>03</b>Horário</a>
+    <a href="#duvidas"><b>04</b>Dúvidas</a>
+    <a href="#onde"><b>05</b>Onde fica</a>
+  </nav>
+  <a class="btn js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg><use href="#zapico"/></svg>Chamar no WhatsApp</a>
+  <p>Av. Raimundo Pires Cardoso, 217, Loja 4 · Centro, Aquiraz<br>Das 6h às 23h</p>
+</div>
 
 <main id="inicio">
   <section class="hero" id="hero">
@@ -545,21 +576,17 @@ body{background:var(--preto)}
     </div>
   </section>
 
-  <section class="manifesto">
-    <div class="in">
-      <span class="rot">Por que Avexada</span>
-      <p class="grande" id="manifesto">Avexado é quem tem pressa. A correria do dia a dia não espera, e a sua roupa também não precisa esperar. Na Avexada você lava e seca no mesmo lugar, com máquinas profissionais, das seis da manhã às onze da noite.</p>
-    </div>
-  </section>
-
+  
   
 
   <section class="horario" id="horario">
     <div class="in">
-      <span class="rot">Aberto todos os dias</span>
+      <span class="tag" style="justify-self:center;background:var(--azul-esc);color:#fff">Por que Avexada</span>
+      <h2 class="porque">Avexado é quem tem <span>pressa</span></h2>
+      <p class="porque-txt">A correria do dia a dia não espera. Por isso a Avexada lava e seca no mesmo lugar, com máquinas profissionais, aberta todos os dias:</p>
       <div class="roleta" id="roleta" aria-label="Das 6 às 23 horas"><span class="dig" data-n="0"></span><span class="dig" data-n="6"></span><span class="tr">—</span><span class="dig" data-n="2"></span><span class="dig" data-n="3"></span></div>
       <span class="agora" id="agora"><i></i><span>Das 6h às 23h</span></span>
-      <p>Abre cedinho e fecha tarde, pra caber na sua rotina.</p>
+      
     </div>
   </section>
 
@@ -638,7 +665,7 @@ const temGsap = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefin
 /* separa letras */
 function separa(el){ el.querySelectorAll(".l1,.l2").forEach(l => { l.innerHTML = [...l.textContent].map(c => `<span class="letra">${c}</span>`).join(""); }); }
 separa(document.getElementById("titulo")); separa(document.querySelector(".split-final"));
-const nomeIntro = document.getElementById("introNome"); nomeIntro.innerHTML = [...nomeIntro.textContent].map((c,i) => `<span class="letra" style="transition-delay:${i*60}ms">${c}</span>`).join("");
+
 
 /* horário de Aquiraz */
 function aberto(){ try { const h = Number(new Intl.DateTimeFormat("pt-BR",{hour:"numeric",hourCycle:"h23",timeZone:"America/Fortaleza"}).format(new Date())); return h >= 6 && h < 23; } catch(e){ return null; } }
@@ -647,38 +674,12 @@ function aberto(){ try { const h = Number(new Intl.DateTimeFormat("pt-BR",{hour:
 /* roleta: monta colunas */
 document.querySelectorAll(".dig").forEach(d => { let h = ""; for (let r = 0; r < 3; r++) for (let n = 0; n < 10; n++) h += `<span>${n}</span>`; d.innerHTML = `<div class="col">${h}</div>`; });
 
-/* manifesto: separa palavras */
-const man = document.getElementById("manifesto");
-const verdes = ["Avexado","pressa.","Avexada","seis","onze"];
-man.innerHTML = man.textContent.split(" ").map(w => `<span class="pal${verdes.some(v => w.startsWith(v)) ? " verde" : ""}">${w}</span>`).join(" ");
 
-/* abertura */
-const intro = document.getElementById("intro"), cont = document.getElementById("contador");
-function abrir(){
-  if (!intro || intro.dataset.feito) return; intro.dataset.feito = 1;
-  if (temGsap && !reduz){
-    gsap.to(".portinha", {scale: 14, duration: .8, ease: "power3.in"});
-    gsap.to(intro, {opacity: 0, duration: .35, delay: .5, onComplete: () => intro.remove()});
-    gsap.from("#titulo .letra", {yPercent: 110, rotate: 8, opacity: 0, stagger: .035, duration: .9, ease: "power4.out", delay: .55});
-    gsap.from("#palco", {y: 160, opacity: 0, duration: 1.1, ease: "power3.out", delay: .6});
-    gsap.from("#heroInfo", {opacity: 0, y: 20, duration: .7, delay: 1});
-  } else intro.remove();
-}
-let jaViu = false;
-try { jaViu = localStorage.getItem("avexada-intro") === "1"; localStorage.setItem("avexada-intro", "1"); } catch(e) {}
-if (reduz) intro.remove();
-else if (jaViu) {
-  // visita repetida: sem tela de abertura, só a entrada do topo
-  intro.remove();
-  if (temGsap){
-    gsap.from("#titulo .letra", {yPercent: 110, rotate: 8, opacity: 0, stagger: .035, duration: .9, ease: "power4.out"});
-    gsap.from("#palco", {y: 120, opacity: 0, duration: 1, ease: "power3.out", delay: .1});
-  }
-} else {
-  requestAnimationFrame(() => intro.classList.add("pronto"));
-  let n = 0; const t0 = performance.now();
-  (function conta(){ n = Math.min(100, Math.round((performance.now() - t0) / 8)); cont.textContent = String(n).padStart(3,"0") + "%"; if (n < 100) requestAnimationFrame(conta); else setTimeout(abrir, 80); })();
-  intro.addEventListener("click", abrir);
+/* entrada do topo (sem tela de abertura) */
+if (temGsap && !reduz){
+  gsap.from("#titulo .letra", {yPercent: 110, rotate: 8, opacity: 0, stagger: .035, duration: .9, ease: "power4.out", delay: .1});
+  gsap.from("#palco", {y: 140, opacity: 0, duration: 1.1, ease: "power3.out", delay: .15});
+  gsap.from("#heroInfo", {opacity: 0, y: 20, duration: .7, delay: .5});
 }
 
 /* cursor bolha */
@@ -761,6 +762,14 @@ if (!reduz){
   requestAnimationFrame(quadro);
 })();
 
+/* menu do celular */
+(function(){ const b = document.getElementById("menuBtn"), m = document.getElementById("menuCel");
+  const abre = v => { m.hidden = !v; b.setAttribute("aria-expanded", v); b.firstElementChild.textContent = v ? "Fechar" : "Menu"; document.body.classList.toggle("menu-aberto", v); if (v) m.querySelector("a").focus(); };
+  b.addEventListener("click", () => abre(m.hidden));
+  m.querySelectorAll("a").forEach(a => a.addEventListener("click", () => abre(false)));
+  addEventListener("keydown", e => { if (e.key === "Escape" && !m.hidden) { abre(false); b.focus(); } });
+})();
+
 /* topo com fundo depois do mergulho */
 (function(){ const topo = document.querySelector(".topo"), fl = document.getElementById("fluxo");
   const ver = () => topo.classList.toggle("fundo", scrollY > fl.offsetTop - 90);
@@ -807,9 +816,6 @@ if (temGsap && !reduz){
   gsap.ticker.add(() => { fx -= vel; const w = faixa.scrollWidth / 2; if (-fx >= w) fx += w; if (fx > 0) fx -= w; faixa.style.transform = `translateX(${fx}px)`; vel += (1 - vel) * .06; });
   ScrollTrigger.create({onUpdate: s => { vel = 1 + Math.min(18, Math.abs(s.getVelocity()) / 120) * (s.direction > 0 ? 1 : -1); }});
 
-  // manifesto acende palavra por palavra
-  const pals = man.querySelectorAll(".pal");
-  ScrollTrigger.create({trigger:man, start:"top 80%", end:"bottom 45%", scrub:true, onUpdate: s => { const n = Math.round(s.progress * pals.length); pals.forEach((p,i) => p.style.opacity = i < n ? 1 : .14); }});
 
   // (como usar agora é o fluxo)
   
@@ -828,7 +834,6 @@ if (temGsap && !reduz){
 } else {
   // sem animação: roleta já no lugar e manifesto aceso
   document.querySelectorAll(".dig").forEach(d => d.querySelector(".col").style.transform = `translateY(-${((20 + +d.dataset.n) / 30) * 100}%)`);
-  man.querySelectorAll(".pal").forEach(p => p.style.opacity = 1);
   document.getElementById("frase").style.opacity = 0;
 }
 </script>
