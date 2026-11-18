@@ -1,572 +1,474 @@
 <title>Avexada Vitrine</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@500;600&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,800&display=swap">
 <style>
-/* Layout: vitrine de produto em tela cheia (como os pins da jaqueta, do tênis e da moto). Cada serviço é um slide com cor de fundo própria; o produto flutua no centro, nome gigante espaçado atrás, texto à esquerda, preço à direita, miniatura do próximo no canto. Tema único por escolha: a cor vem de cada slide. */
+/* Layout: site-filme. Abertura pela porta da máquina → topo com zoom na porta ao rolar → serviços em rolagem lateral (uma cor por serviço) → manifesto que acende → como usar em colagem → horário em roleta → final com letras gigantes. Tema escuro único, por escolha. */
 :root{
-  --c1:#1f5fd6; --c2:#0b2a78;           /* cores do slide atual (trocadas via JS) */
-  --fg:#ffffff; --fg2:rgba(255,255,255,.72); --linha:rgba(255,255,255,.22); --vidro:rgba(255,255,255,.12);
-  --verde:#6fe04a;
+  --preto:#04081a; --azul:#2f74ef; --azul-esc:#0a2a7a; --verde:#6fe04a; --laranja:#f2852a; --branco:#ffffff;
+  --fg:#f1f5ff; --fg2:rgba(241,245,255,.66); --linha:rgba(255,255,255,.14);
+  --gigante:"Anton", Impact, "Arial Narrow", sans-serif;
   --titulo:"Montserrat", system-ui, sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, "Courier New", monospace;
   --gl:max(16px, env(safe-area-inset-left, 0px)); --gr:max(16px, env(safe-area-inset-right, 0px));
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:#050a18;color:var(--fg);font-family:var(--titulo);font-size:15px;line-height:1.55;overflow-x:hidden}
+body{margin:0;background:var(--preto);color:var(--fg);font-family:var(--titulo);font-size:16px;line-height:1.55;overflow-x:hidden}
+main{overflow-x:clip}
+h1,h2,h3,p{margin:0}
 a{color:inherit}
-:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:8px}
-p{margin:0}
+img{display:block}
+:focus-visible{outline:2px solid var(--verde);outline-offset:4px;border-radius:8px}
+.in{max-width:1280px;margin:0 auto;padding-left:var(--gl);padding-right:var(--gr)}
+.rot{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fg2)}
+.letra{display:inline-block;will-change:transform}
 
-/* Palco */
-.vitrine{position:relative;min-height:100svh;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;isolation:isolate}
-.fundo{position:absolute;inset:0;z-index:-2;background:radial-gradient(ellipse 60% 70% at 52% 48%,var(--c1),var(--c2) 78%);transition:background 0s}
-.fundo-novo{position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .9s ease}
-.fundo-novo.on{opacity:1}
-.vitrine::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 120% 90% at 50% 50%,transparent 55%,rgba(0,0,0,.35));}
-
-/* Topo */
-.topo{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px var(--gr) 0 var(--gl);position:relative;z-index:5}
-.marca{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.06em;font-size:.82rem;text-decoration:none;text-transform:uppercase}
-.marca svg{width:30px;height:30px}
-.menu{display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(0,0,0,.18);border:1px solid var(--linha);backdrop-filter:blur(8px)}
-.menu button{all:unset;cursor:pointer;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:999px;color:var(--fg2);transition:background .3s,color .3s}
-.menu button[aria-selected="true"]{background:#fff;color:#0b1530}
-.menu button:focus-visible{outline:2px solid #fff}
-.acoes{display:flex;gap:8px}
-.circ{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.18);border:1px solid var(--linha);text-decoration:none}
-.circ svg{width:17px;height:17px}
-
-/* Grade principal */
-.palco{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,1.25fr) minmax(0,1fr);align-items:center;gap:24px;padding:10px var(--gr) 10px var(--gl);z-index:2}
-.nome{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-weight:600;font-size:clamp(3.4rem,11vw,10.5rem);letter-spacing:.18em;line-height:1;white-space:nowrap;color:rgba(255,255,255,.92);z-index:1;pointer-events:none;text-shadow:0 10px 40px rgba(0,0,0,.25)}
-.nome span{display:inline-block;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .4s}
-.esq{display:grid;gap:16px;align-content:center;max-width:340px;position:relative;z-index:3}
-.setas{display:flex;gap:6px}
-.setas button{all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.2);border:1px solid var(--linha)}
-.setas button:hover{background:rgba(255,255,255,.2)}
-.setas svg{width:14px;height:14px}
-.esq h1{margin:0;font-size:clamp(2rem,3.4vw,3rem);line-height:1.04;font-weight:500;letter-spacing:-.02em}
-.esq h1 b{font-weight:800;font-style:italic}
-.esq p{color:var(--fg2);font-size:.92rem;max-width:34ch}
-.cta{justify-self:start;display:inline-flex;align-items:center;gap:8px;background:#fff;color:#0b1530;text-decoration:none;font-weight:700;font-size:.82rem;padding:10px 16px;border-radius:999px;transition:transform .2s, box-shadow .2s}
-.cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.3)}
-.cta svg{width:16px;height:16px}
-
-.dir{display:grid;gap:16px;justify-items:end;text-align:right;align-content:center;position:relative;z-index:3}
-.preco{font-weight:700;font-size:clamp(2.2rem,3.4vw,3rem);line-height:1;font-variant-numeric:tabular-nums}
-.preco small{display:block;font-size:.8rem;font-weight:500;color:var(--fg2);margin-top:6px}
-.ficha{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.ficha li{display:grid;gap:0}
-.ficha b{font-weight:800;font-style:italic;font-size:1.25rem}
-.ficha span{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fg2)}
-.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.chips span{font-size:.7rem;font-weight:600;padding:7px 11px;border-radius:999px;background:rgba(0,0,0,.2);border:1px solid var(--linha)}
-.chips span.on{background:#fff;color:#0b1530}
-
-/* Produto */
-.produto{position:relative;justify-self:center;width:min(100%,400px);aspect-ratio:1;z-index:2}
-.objeto{position:absolute;inset:0;display:grid;place-items:center;transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .5s}
-.objeto.sai{transform:translateX(-60%) rotate(-12deg) scale(.8);opacity:0}
-.objeto.entra{transform:translateX(60%) rotate(12deg) scale(.8);opacity:0}
-.flutua{animation:flutua 4.5s ease-in-out infinite;position:relative;width:62%;height:78%}
-@keyframes flutua{50%{transform:translateY(-14px) rotate(-1.2deg)}}
-.sombra{position:absolute;left:22%;right:22%;bottom:3%;height:7%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);animation:sombra 4.5s ease-in-out infinite;filter:blur(2px)}
-@keyframes sombra{50%{transform:scaleX(.82);opacity:.7}}
-
-/* Lavadora / secadora fotorrealista em CSS */
-.maq{position:absolute;inset:0;border-radius:7% / 5.5%;
-  background:linear-gradient(98deg,#8d97ab 0%,#e9edf4 9%,#ffffff 30%,#f3f5f9 55%,#d5dbe6 78%,#7b869b 100%);
-  box-shadow:inset 0 2px 1px rgba(255,255,255,.95),inset 0 -6px 14px rgba(0,0,0,.18),0 30px 60px rgba(0,0,0,.35)}
-.maq .tampo{position:absolute;left:0;right:0;top:0;height:17%;border-radius:inherit;border-bottom-left-radius:0;border-bottom-right-radius:0;background:linear-gradient(180deg,#f7f9fc,#dfe4ed);border-bottom:2px solid #b6bfcf}
-.maq .visor{position:absolute;left:8%;top:5%;width:34%;height:7.5%;border-radius:4px;background:linear-gradient(#050b1c,#0d1835);box-shadow:inset 0 0 6px #000,0 1px 0 #fff;display:grid;place-items:center;font-family:var(--mono);font-size:clamp(.55rem,1.6vw,.8rem);color:var(--verde);text-shadow:0 0 6px currentColor;font-variant-numeric:tabular-nums}
-.maq .knob{position:absolute;right:9%;top:3.6%;width:11%;aspect-ratio:1;border-radius:50%;background:conic-gradient(from 30deg,#c6cdd9,#fff,#9aa5b8,#eef1f6,#c6cdd9);box-shadow:0 2px 4px rgba(0,0,0,.35),inset 0 0 0 3px rgba(255,255,255,.6)}
-.maq .gaveta{position:absolute;left:47%;top:5.2%;width:22%;height:7%;border-radius:3px;background:linear-gradient(#e7ebf2,#c9d0dc);box-shadow:inset 0 -2px 0 #aab3c4}
-.maq .aro{position:absolute;left:12%;right:12%;top:27%;aspect-ratio:1;border-radius:50%;padding:7.5%;
-  background:conic-gradient(from 210deg,#5d687e,#fdfefe 12%,#9aa5ba 25%,#eef2f7 40%,#56617a 55%,#e4e9f1 72%,#7c879c 88%,#5d687e);
-  box-shadow:0 12px 24px rgba(0,0,0,.4),inset 0 0 0 2px rgba(255,255,255,.4)}
-.maq .vidro{width:100%;height:100%;border-radius:50%;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 62%,var(--agua1,#3a7af0),var(--agua2,#081f5c) 72%);box-shadow:inset 0 0 22px rgba(0,0,0,.85),inset 0 0 0 5px #1d2433}
-.maq .tambor{position:absolute;inset:0;animation:gira var(--vel,2.6s) linear infinite}
-.maq .tambor i{position:absolute;border-radius:44% 56% 40% 60%;filter:blur(1.2px)}
-.maq .tambor i:nth-child(1){width:48%;height:32%;left:10%;top:54%;background:var(--r1,#6fe04a)}
-.maq .tambor i:nth-child(2){width:40%;height:28%;left:50%;top:14%;background:var(--r2,#f4f6ff)}
-.maq .tambor i:nth-child(3){width:30%;height:22%;left:15%;top:14%;background:var(--r3,#ff7c5c)}
-.maq .agua{position:absolute;left:-12%;right:-12%;bottom:-8%;height:var(--nivel,46%);border-radius:44%;background:radial-gradient(circle at 25% 22%,rgba(255,255,255,.9) 0 5%,transparent 6%),radial-gradient(circle at 58% 30%,rgba(255,255,255,.8) 0 4%,transparent 5%),radial-gradient(circle at 42% 50%,rgba(255,255,255,.7) 0 7%,transparent 8%),radial-gradient(circle at 75% 45%,rgba(255,255,255,.6) 0 5%,transparent 6%),var(--espuma,rgba(190,215,255,.4));animation:onda 3.4s ease-in-out infinite}
-.maq .brilho{position:absolute;inset:0;border-radius:50%;background:linear-gradient(140deg,rgba(255,255,255,.6),rgba(255,255,255,0) 32%,rgba(255,255,255,0) 72%,rgba(255,255,255,.18))}
-.maq .pe{position:absolute;bottom:-2.5%;width:10%;height:3%;background:#2a3140;border-radius:0 0 4px 4px}
-.maq .pe.a{left:8%}.maq .pe.b{right:8%}
-.maq.secadora{--agua1:#ffb35c;--agua2:#7a2a05;--nivel:0%;--vel:1.8s;--r1:#ffffff;--r2:#ffd0a1;--r3:#2c3550}
-.maq.secadora .vidro::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,190,90,.55),transparent 65%);animation:pisca 2s ease-in-out infinite}
+/* ===== Abertura ===== */
+#intro{position:fixed;inset:0;z-index:100;background:var(--preto);display:grid;place-items:center;animation:introSai .6s ease 5s forwards}
+@keyframes introSai{to{opacity:0;visibility:hidden}}
+#intro .centro{display:grid;justify-items:center;gap:26px}
+.portinha{width:min(46vw,220px);aspect-ratio:1;border-radius:50%;padding:7%;background:conic-gradient(from 210deg,#5d687e,#fdfefe 12%,#9aa5ba 25%,#eef2f7 40%,#56617a 55%,#e4e9f1 72%,#7c879c 88%,#5d687e);box-shadow:0 0 80px rgba(47,116,239,.45)}
+.portinha .vid{width:100%;height:100%;border-radius:50%;overflow:hidden;position:relative;background:radial-gradient(circle at 50% 62%,#3a7af0,#081f5c 72%);box-shadow:inset 0 0 22px #000}
+.portinha .gira{position:absolute;inset:0;animation:gira 1.4s linear infinite}
+.portinha .gira i{position:absolute;border-radius:44% 56% 40% 60%;filter:blur(1.5px)}
+.portinha .gira i:nth-child(1){width:48%;height:32%;left:10%;top:54%;background:var(--verde)}
+.portinha .gira i:nth-child(2){width:40%;height:28%;left:50%;top:14%;background:#f4f6ff}
+.portinha .gira i:nth-child(3){width:30%;height:22%;left:15%;top:14%;background:var(--laranja)}
+.portinha .espu{position:absolute;left:-12%;right:-12%;bottom:-8%;height:44%;border-radius:44%;background:radial-gradient(circle at 25% 22%,#fff 0 5%,transparent 6%),radial-gradient(circle at 60% 32%,#fff 0 4%,transparent 5%),rgba(190,215,255,.4);animation:onda 2s ease-in-out infinite}
 @keyframes gira{to{transform:rotate(360deg)}}
 @keyframes onda{50%{transform:translateX(5%) rotate(3deg)}}
-@keyframes pisca{50%{opacity:.5}}
+.contador{font-family:var(--mono);font-weight:600;font-size:.9rem;letter-spacing:.2em;color:var(--fg2)}
+.intro-nome{font-family:var(--gigante);font-size:clamp(2.6rem,9vw,5rem);letter-spacing:.08em;line-height:1;overflow:hidden}
+.intro-nome .letra{transform:translateY(110%)}
+#intro.pronto .intro-nome .letra{transform:none;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
 
-/* Fotos recortadas */
-.flutua.foto{width:82%;height:auto;display:grid;place-items:center}
-.flutua.foto img{width:100%;height:auto;display:block;filter:drop-shadow(0 34px 34px rgba(0,0,0,.45)) drop-shadow(0 6px 10px rgba(0,0,0,.25))}
-.flutua.foto.pilha-foto{width:47%;display:grid;gap:0}
-.flutua.foto.pilha-foto img+img{margin-top:-3%}
-.proximo .mini .flutua.foto{width:70%;left:15%;top:10%;height:auto}
+/* ===== Cursor ===== */
+.cursor,.cursor-ponto{position:fixed;left:0;top:0;z-index:90;pointer-events:none;border-radius:50%;display:none}
+.cursor{width:46px;height:46px;margin:-23px 0 0 -23px;border:1.5px solid rgba(255,255,255,.7);background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.55) 0 8%,transparent 9%),rgba(255,255,255,.04);backdrop-filter:blur(2px);display:none;place-items:center;transition:width .3s,height .3s,margin .3s,background .3s}
+.cursor span{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#04081a;opacity:0;transition:opacity .2s}
+.cursor.grande{width:96px;height:96px;margin:-48px 0 0 -48px;background:var(--verde);border-color:var(--verde)}
+.cursor.grande span{opacity:1}
+.cursor-ponto{width:6px;height:6px;margin:-3px 0 0 -3px;background:#fff}
+@media (hover:hover) and (pointer:fine){.cursor{display:grid}.cursor-ponto{display:block}body,a,button{cursor:none}}
+.bolha-solta{position:fixed;z-index:89;pointer-events:none;border-radius:50%;border:1.5px solid rgba(255,255,255,.7);background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.6) 0 10%,transparent 11%)}
 
-/* Close-up */
-.detalhe{position:relative;min-height:78svh;display:grid;align-items:end;overflow:hidden;background:#050a18}
-.detalhe img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 50%;transform:scale(1.08);transition:transform 1.2s ease}
-.detalhe.visto img{transform:scale(1)}
-.detalhe::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(5,10,24,.92) 0%,rgba(5,10,24,.55) 45%,rgba(5,10,24,0) 75%),linear-gradient(0deg,rgba(5,10,24,.8),transparent 40%)}
-.detalhe .txt{position:relative;z-index:2;max-width:1240px;width:100%;margin:0 auto;padding:0 var(--gr) 64px var(--gl);display:grid;gap:14px}
-.detalhe .rot{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#9fb3e0}
-.detalhe h2{margin:0;font-size:clamp(2rem,4.6vw,3.6rem);line-height:1.02;font-weight:500;letter-spacing:-.02em;max-width:14ch}
-.detalhe h2 b{font-weight:800;font-style:italic}
-.detalhe p{color:rgba(255,255,255,.75);max-width:42ch}
-.detalhe ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:28px}
-.detalhe li{display:grid}
-.detalhe li b{font-weight:800;font-style:italic;font-size:1.3rem}
-.detalhe li span{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#9fb3e0}
+/* ===== Topo fixo ===== */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--preto)}
+.topo{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px var(--gr) 0 var(--gl);mix-blend-mode:difference;pointer-events:none}
+.topo a{pointer-events:auto;text-decoration:none}
+.marca{font-family:var(--gigante);font-size:1.5rem;letter-spacing:.06em;color:#fff}
+.topo nav{display:flex;gap:22px}
+.topo nav a{font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:#fff}
+@media (max-width:760px){.topo nav a:not(.sempre){display:none}}
 
-/* Combo empilhado */
-.pilha{position:absolute;inset:0;display:grid;grid-template-rows:1fr 1fr;gap:2%}
-.pilha .maq{position:relative;inset:auto}
-.pilha .maq .aro{top:auto;bottom:10%;left:26%;right:26%}
-.pilha .maq .tampo{height:22%}
-.pilha .maq .visor{top:6%;height:10%}
-.pilha .maq .knob{top:4%;width:8%}
-.pilha .maq .gaveta{top:6%;height:9%}
-.pilha .maq:first-child .pe{display:none}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:.95rem;padding:16px 26px;border-radius:999px;background:var(--verde);color:#062102;will-change:transform}
+.btn svg{width:20px;height:20px}
+.btn.claro{background:#fff;color:#04081a}
 
-/* Despertador */
-.relogio{position:absolute;inset:6% 4% 4%}
-.relogio .corpo{position:absolute;left:8%;right:8%;top:16%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 30% 25%,#b6ff8e,#5cc83b 40%,#2b7a14 85%);box-shadow:inset -10px -14px 30px rgba(0,0,0,.35),inset 8px 8px 18px rgba(255,255,255,.4),0 30px 60px rgba(0,0,0,.45)}
-.relogio .face{position:absolute;inset:11%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffffff,#e9edf2 70%,#c9d0da);box-shadow:inset 0 4px 12px rgba(0,0,0,.25)}
-.relogio .face b{position:absolute;left:50%;top:50%;font-family:var(--titulo);font-weight:600;font-size:clamp(.6rem,1.8vw,.95rem);color:#1d2433;transform:translate(-50%,-50%) rotate(var(--a)) translateY(-310%) rotate(calc(var(--a) * -1))}
-.relogio .ponteiro{position:absolute;left:50%;bottom:50%;transform-origin:50% 100%;border-radius:4px;background:#111827}
-.relogio .h{width:4%;height:24%;margin-left:-2%;transform:rotate(var(--h,0deg))}
-.relogio .m{width:2.6%;height:34%;margin-left:-1.3%;transform:rotate(var(--m,0deg))}
-.relogio .s{width:1%;height:38%;margin-left:-.5%;background:#e53935;transform:rotate(var(--s,0deg))}
-.relogio .pino{position:absolute;left:50%;top:50%;width:6%;aspect-ratio:1;margin:-3% 0 0 -3%;border-radius:50%;background:#111827}
-.relogio .sino{position:absolute;top:4%;width:30%;aspect-ratio:1;border-radius:50% 50% 10% 10%;background:radial-gradient(circle at 35% 30%,#b6ff8e,#4fae31 50%,#24660f);box-shadow:inset -4px -6px 10px rgba(0,0,0,.3)}
-.relogio .sino.a{left:6%;transform:rotate(-30deg)}.relogio .sino.b{right:6%;transform:rotate(30deg)}
-.relogio .martelo{position:absolute;left:47%;top:2%;width:6%;height:10%;background:#2b7a14;border-radius:3px}
-.relogio .perna{position:absolute;bottom:0;width:7%;height:14%;background:linear-gradient(90deg,#24660f,#5cc83b);border-radius:4px}
-.relogio .perna.a{left:24%;transform:rotate(22deg)}.relogio .perna.b{right:24%;transform:rotate(-22deg)}
+/* ===== Hero ===== */
+.hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:radial-gradient(ellipse 55% 60% at 50% 55%,#1c4fc4,#0a1d55 55%,var(--preto) 90%)}
+.hero .titulo{position:absolute;left:0;right:0;top:12%;text-align:center;font-family:var(--gigante);font-weight:400;font-size:clamp(4.4rem,17vw,16rem);line-height:.86;letter-spacing:.01em;z-index:1;text-transform:uppercase;padding-inline:var(--gl)}
+.hero .titulo .l2{display:block;color:var(--verde)}
+.hero .palco{position:absolute;left:50%;bottom:-2%;width:min(54vw,520px);aspect-ratio:788/866;transform:translateX(-50%);z-index:2;perspective:1200px}
+.hero .maq{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.hero .maq img{width:100%;height:auto;filter:drop-shadow(0 40px 40px rgba(0,0,0,.55))}
+.hero .zoom{position:absolute;inset:0;z-index:3;clip-path:circle(0% at 50% 60%);will-change:clip-path}
+.hero .zoom img{width:100%;height:100%;object-fit:cover;object-position:60% 50%}
+.hero .zoom::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,8,26,.85),rgba(4,8,26,.1) 55%)}
+.hero .frase{position:absolute;left:0;right:0;bottom:12%;z-index:4;text-align:center;opacity:0;padding-inline:var(--gl)}
+.hero .frase h2{font-family:var(--gigante);font-weight:400;font-size:clamp(3rem,9vw,8rem);line-height:.9;text-transform:uppercase}
+.hero .frase h2 b{font-weight:400;color:var(--verde)}
+.hero .info{position:absolute;left:var(--gl);right:var(--gr);bottom:26px;z-index:3;display:flex;justify-content:space-between;align-items:end;gap:16px}
+.hero .info p{max-width:30ch;font-size:.92rem;color:var(--fg2)}
+.rolar{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.rolar i{width:1px;height:40px;background:linear-gradient(#fff,transparent);animation:desce 1.8s ease-in-out infinite}
+@keyframes desce{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@media (max-width:700px){.hero .palco{width:84vw}.hero .titulo{top:15%}.hero .info p{display:none}}
 
-/* Rodapé do palco */
-.base{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:16px;padding:0 var(--gr) 22px var(--gl);position:relative;z-index:4}
-.sociais{display:flex;gap:14px;align-items:center}
-.sociais a{display:grid;place-items:center;opacity:.8}
-.sociais a:hover{opacity:1}
-.sociais svg{width:16px;height:16px}
-.lema{text-align:center;font-size:.82rem;font-weight:500;line-height:1.3}
-.proximo{justify-self:end;all:unset;cursor:pointer;justify-self:end;display:grid;justify-items:end;gap:6px}
-.proximo .mini{width:74px;height:74px;border-radius:16px;background:rgba(0,0,0,.2);border:1px solid var(--linha);position:relative;overflow:hidden;transition:transform .25s}
-.proximo:hover .mini{transform:translateY(-3px)}
-.proximo .mini .flutua{width:60%;height:74%;animation:none;position:absolute;left:20%;top:13%}
-.proximo span{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fg2)}
-.pontos{display:flex;gap:6px;justify-content:center;margin-top:10px}
-.pontos i{width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.4);transition:width .3s,background .3s}
-.pontos i.on{width:20px;background:#fff}
+/* ===== Faixa ===== */
+.faixa{background:var(--verde);color:#062102;overflow:hidden;transform:rotate(-2deg);margin:-20px -10px;position:relative;z-index:5;border-block:2px solid #04081a}
+.faixa .trilho{display:flex;width:max-content;will-change:transform}
+.faixa span{font-family:var(--gigante);font-size:clamp(1.8rem,4vw,3rem);text-transform:uppercase;padding:12px 0;white-space:nowrap}
+.faixa span::after{content:"✺";margin:0 28px;font-size:.7em;vertical-align:middle}
 
-/* Glitch na troca */
-.glitch{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 2px,transparent 2px 5px)}
-.glitch.on{animation:glitch .45s steps(5) 1}
-@keyframes glitch{0%{opacity:1;transform:translateX(-8px)}40%{opacity:.7;transform:translateX(6px)}80%{opacity:.4;transform:translateX(-3px)}100%{opacity:0;transform:none}}
+/* ===== Serviços laterais ===== */
+.servicos{position:relative;overflow:hidden}
+.trilho-s{display:flex;width:max-content;will-change:transform}
+.painel{position:relative;width:100vw;height:100svh;min-height:560px;overflow:hidden;display:grid;grid-template-columns:1fr 1.1fr 1fr;align-items:center;gap:24px;padding:90px var(--gr) 60px var(--gl)}
+.painel .nome{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-weight:600;font-size:clamp(4rem,15vw,15rem);letter-spacing:.14em;white-space:nowrap;color:rgba(255,255,255,.2);line-height:1;pointer-events:none;z-index:1}
+.painel .foto{position:relative;z-index:2;justify-self:center;width:min(100%,400px)}
+.painel .foto img{width:100%;height:auto;filter:drop-shadow(0 40px 40px rgba(0,0,0,.45))}
+.painel .foto.duas{width:min(100%,280px);display:grid}
+.painel .foto.duas img+img{margin-top:-3%}
+.painel .esq,.painel .dir{position:relative;z-index:3;display:grid;gap:14px;min-width:0}
+.painel .dir{justify-items:end;text-align:right}
+.painel .num{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em}
+.painel h3{font-size:clamp(1.8rem,3.2vw,2.8rem);line-height:1.05;font-weight:500;letter-spacing:-.02em}
+.painel h3 b{font-weight:800;font-style:italic}
+.painel p{color:rgba(255,255,255,.78);max-width:32ch;font-size:.95rem}
+.painel .preco{font-family:var(--gigante);font-size:clamp(3rem,6vw,5.5rem);line-height:.9}
+.painel .preco small{display:block;font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin-top:8px}
+.p-azul{background:radial-gradient(ellipse 60% 70% at 50% 50%,#3a80ff,#0a2a7a 80%)}
+.p-laranja{background:radial-gradient(ellipse 60% 70% at 50% 50%,#ff9a3c,#7a2406 80%)}
+.p-verde{background:radial-gradient(ellipse 60% 70% at 50% 50%,#5fd43f,#0f4a12 80%)}
+.p-preto{background:radial-gradient(ellipse 60% 70% at 50% 50%,#2c3242,#05070d 80%)}
+.relogio-g{position:relative;z-index:2;justify-self:center;font-family:var(--gigante);font-size:clamp(5rem,12vw,11rem);line-height:.85;text-align:center;color:var(--verde);text-shadow:0 0 60px rgba(111,224,74,.4)}
+.progresso{position:absolute;left:var(--gl);right:var(--gr);bottom:24px;height:2px;background:rgba(255,255,255,.2);z-index:5}
+.progresso i{position:absolute;left:0;top:0;bottom:0;width:0;background:#fff}
+@media (max-width:860px){
+  .painel{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;align-content:center;padding-top:80px;gap:14px;text-align:left}
+  .painel .foto{width:min(70vw,300px);grid-row:2}
+  .painel .foto.duas{width:min(46vw,200px)}
+  .painel .esq{grid-row:1}.painel .dir{grid-row:3;justify-items:start;text-align:left}
+  .painel .nome{top:44%;font-size:15vw}
+  .relogio-g{grid-row:2}
+}
 
-/* Faixa de informações abaixo */
-.info{background:#050a18;border-top:1px solid rgba(255,255,255,.08)}
-.info .wrap{max-width:1240px;margin:0 auto;padding:44px var(--gr) 40px var(--gl);display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.info div{display:grid;gap:4px;min-width:0}
-.info dt{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#7f8db0}
-.info dd{margin:0;font-weight:600}
-.info dl{display:contents}
-.info a{text-underline-offset:3px}
-.rodape{background:#050a18;color:#7f8db0;font-size:.8rem;text-align:center;padding:0 16px 26px}
+/* ===== Manifesto ===== */
+.manifesto{padding-block:140px}
+.manifesto p.grande{font-size:clamp(1.8rem,4.4vw,3.8rem);line-height:1.18;font-weight:600;letter-spacing:-.02em;max-width:22ch}
+.manifesto .pal{opacity:.14;transition:opacity .2s}
+.manifesto .pal.verde{color:var(--verde)}
+.manifesto .rot{display:block;margin-bottom:26px}
 
-.zap{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:20;width:54px;height:54px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+/* ===== Como usar (colagem) ===== */
+.como{padding-block:60px 140px;position:relative}
+.como .cab{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:60px}
+.como h2{font-family:var(--gigante);font-weight:400;font-size:clamp(3.4rem,10vw,9rem);line-height:.86;text-transform:uppercase}
+.como h2 span{-webkit-text-stroke:1.5px #fff;color:transparent}
+.passos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(12,1fr);gap:18px;counter-reset:p}
+.passo{counter-increment:p;position:relative;border-radius:26px;padding:30px;min-height:300px;display:grid;align-content:end;gap:10px;overflow:hidden;min-width:0;border:1px solid var(--linha)}
+.passo::before{content:counter(p);position:absolute;right:14px;top:-26px;font-family:var(--gigante);font-size:13rem;line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.22)}
+.passo h3{font-size:1.7rem;font-weight:800;font-style:italic;position:relative}
+.passo p{color:rgba(255,255,255,.75);max-width:30ch;position:relative}
+.passo:nth-child(1){grid-column:1 / span 5;background:linear-gradient(160deg,#173a9c,#0a1a4a)}
+.passo:nth-child(2){grid-column:6 / span 7;margin-top:80px;background:#0b132b}
+.passo:nth-child(2) img{position:absolute;right:-6%;top:-8%;width:52%;transform:rotate(8deg);filter:drop-shadow(0 30px 30px rgba(0,0,0,.5))}
+.passo:nth-child(3){grid-column:2 / span 6;margin-top:-40px;background:linear-gradient(160deg,#c45a12,#5a1a04);transform:rotate(-1.5deg)}
+.passo:nth-child(4){grid-column:8 / span 5;margin-top:20px;background:linear-gradient(160deg,#3fae27,#0f3d10)}
+.passo .selo{position:absolute;left:24px;top:24px;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;background:#fff;color:#04081a;padding:5px 10px;border-radius:999px;transform:rotate(-4deg)}
+@media (max-width:860px){
+  .passo{grid-column:1 / -1 !important;margin-top:0 !important;transform:none !important;min-height:240px}
+  .passo:nth-child(2) img{width:40%;right:-4%;top:-4%}
+}
+
+/* ===== Horário roleta ===== */
+.horario{position:relative;padding-block:130px;text-align:center;background:radial-gradient(ellipse 60% 80% at 50% 50%,#13204a,var(--preto) 75%);overflow:hidden}
+.horario .in{display:grid;justify-items:center;gap:22px}
+.roleta{display:flex;align-items:center;gap:.04em;font-family:var(--mono);font-weight:600;font-size:clamp(4rem,16vw,13rem);line-height:1;height:1em;overflow:hidden}
+.dig{height:1em;overflow:hidden;display:inline-block}
+.dig .col{display:flex;flex-direction:column;will-change:transform}
+.dig .col span{height:1em;display:block}
+.roleta .tr{color:var(--verde);padding-inline:.06em}
+.agora{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;border:1px solid var(--linha);background:rgba(255,255,255,.05);font-weight:600}
+.agora i{width:10px;height:10px;border-radius:50%;background:var(--verde);box-shadow:0 0 14px var(--verde);animation:luz 1.6s ease-in-out infinite}
+.agora.fechado i{background:#ff8a7a;box-shadow:0 0 14px #ff8a7a}
+@keyframes luz{50%{opacity:.3}}
+.horario p{color:var(--fg2);max-width:44ch}
+
+/* ===== Dúvidas ===== */
+.duvidas{padding-block:120px}
+.duvidas .grade{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px;align-items:start}
+.duvidas h2{font-family:var(--gigante);font-weight:400;font-size:clamp(3rem,7vw,6rem);line-height:.88;text-transform:uppercase;position:sticky;top:90px}
+.duvidas details{border-top:1px solid var(--linha);padding-block:22px}
+.duvidas details:last-child{border-bottom:1px solid var(--linha)}
+.duvidas summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;font-weight:600;font-size:1.12rem}
+.duvidas summary::-webkit-details-marker{display:none}
+.duvidas summary::after{content:"+";font-family:var(--mono);font-size:1.5rem;line-height:1;color:var(--verde);transition:transform .25s}
+.duvidas details[open] summary::after{transform:rotate(45deg)}
+.duvidas details p{margin-top:12px;color:var(--fg2)}
+@media (max-width:860px){.duvidas .grade{grid-template-columns:1fr;gap:26px}.duvidas h2{position:static}}
+
+/* ===== Final ===== */
+.final{position:relative;padding-block:120px 60px;overflow:hidden;background:radial-gradient(ellipse 70% 70% at 50% 120%,#2f74ef,#0a2a7a 50%,var(--preto) 85%)}
+.final .bora{font-family:var(--gigante);font-weight:400;text-transform:uppercase;font-size:clamp(5rem,22vw,22rem);line-height:.82;text-align:center;letter-spacing:-.005em;user-select:none}
+.final .bora .letra{transition:transform .35s cubic-bezier(.2,.8,.2,1),color .35s}
+.final .bora .letra:hover{transform:translateY(-8%) rotate(-4deg);color:var(--verde)}
+.final .bora .l2{display:block;color:var(--verde)}
+.final .bora .l2 .letra:hover{color:#fff}
+.final .acoes{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:40px}
+.final .dados{margin-top:60px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;border-top:1px solid var(--linha);padding-top:28px}
+.final .dados div{display:grid;gap:4px;min-width:0}
+.final .dados dt{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fg2)}
+.final .dados dd{margin:0;font-weight:600}
+.final dl{display:contents}
+.final .dados a{text-underline-offset:3px}
+.rodape{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:40px;color:var(--fg2);font-size:.8rem}
+@media (max-width:860px){.final .dados{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.final .dados{grid-template-columns:1fr}}
+
+.zap{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;width:56px;height:56px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.45)}
 .zap svg{width:28px;height:28px}
-@media (min-width:901px){.zap{display:none}}
 
-
-/* ===== Seções de baixo ===== */
-.sec{background:#050a18;padding-block:110px;position:relative}
-.sec .in{max-width:1240px;margin:0 auto;padding-left:var(--gl);padding-right:var(--gr)}
-.cab{display:grid;gap:12px;max-width:640px;margin-bottom:46px}
-.cab .rot,.rot2{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#9fb3e0;font-weight:600}
-.cab h2{margin:0;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.02;font-weight:500;letter-spacing:-.02em;text-wrap:balance}
-.cab h2 b{font-weight:800;font-style:italic}
-.cab p{color:rgba(255,255,255,.68)}
-
-/* Como usar */
-.passos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:p}
-.passos li{counter-increment:p;position:relative;overflow:hidden;border-radius:22px;padding:28px 24px 26px;min-height:260px;display:grid;align-content:end;gap:10px;min-width:0;
-  background:radial-gradient(circle at 80% 0%,rgba(47,116,239,.35),transparent 60%),linear-gradient(180deg,#0d1a3d,#081127);border:1px solid rgba(255,255,255,.08)}
-.passos li::before{content:"0" counter(p);position:absolute;right:16px;top:6px;font-family:var(--mono);font-weight:600;font-size:5.5rem;line-height:1;color:rgba(255,255,255,.07)}
-.passos li:nth-child(2){background:radial-gradient(circle at 80% 0%,rgba(79,191,51,.32),transparent 60%),linear-gradient(180deg,#0d1a3d,#081127)}
-.passos li:nth-child(3){background:radial-gradient(circle at 80% 0%,rgba(242,133,42,.32),transparent 60%),linear-gradient(180deg,#0d1a3d,#081127)}
-.passos li:nth-child(4){background:radial-gradient(circle at 80% 0%,rgba(255,255,255,.18),transparent 60%),linear-gradient(180deg,#0d1a3d,#081127)}
-.passos .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
-.passos .ico svg{width:22px;height:22px}
-.passos h3{margin:0;font-size:1.4rem;font-weight:800;font-style:italic}
-.passos p{color:rgba(255,255,255,.68);font-size:.92rem}
-
-/* Por que */
-.colunas{display:flex;gap:10px;height:440px}
-.col{flex:1;min-width:0;border-radius:22px;border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;cursor:pointer;transition:flex .55s cubic-bezier(.2,.8,.2,1);
-  background:radial-gradient(circle at 50% 25%,var(--cc,rgba(47,116,239,.45)),transparent 62%),linear-gradient(180deg,#0d1a3d,#060c1e)}
-.col .vert{position:absolute;left:50%;top:26px;transform:translateX(-50%);writing-mode:vertical-rl;font-weight:600;font-size:.86rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.75);white-space:nowrap;transition:opacity .3s}
-.col .num{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-family:var(--mono);color:rgba(255,255,255,.5);font-size:.8rem;transition:opacity .3s}
-.col .conteudo{position:absolute;left:30px;right:30px;bottom:30px;display:grid;gap:10px;opacity:0;transform:translateY(14px);transition:opacity .35s .12s,transform .35s .12s}
-.col .conteudo h3{margin:0;font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:800;font-style:italic;line-height:1.05}
-.col .conteudo p{color:rgba(255,255,255,.75);max-width:40ch}
-.col .grande{position:absolute;right:26px;top:22px;font-family:var(--mono);font-weight:600;font-size:clamp(3rem,6vw,5rem);line-height:1;color:rgba(255,255,255,.9);opacity:0;transition:opacity .35s .1s}
-.col.aberta{flex:4}
-.col.aberta .vert,.col.aberta .num{opacity:0}
-.col.aberta .conteudo,.col.aberta .grande{opacity:1;transform:none}
-
-/* Horário */
-.horario{background:radial-gradient(ellipse 70% 90% at 50% 50%,#2a2f3d,#07090f 75%);text-align:center;overflow:hidden}
-.horario .in{display:grid;justify-items:center;gap:18px}
-.horas{font-family:var(--mono);font-weight:600;font-size:clamp(4.2rem,17vw,14rem);letter-spacing:.06em;line-height:.95;white-space:nowrap}
-.horas i{font-style:normal;color:var(--verde)}
-.agora{display:inline-flex;align-items:center;gap:10px;padding:9px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);font-weight:600}
-.agora .luz{width:10px;height:10px;border-radius:50%;background:var(--verde);box-shadow:0 0 12px var(--verde);animation:luz 1.6s ease-in-out infinite}
-.agora.fechado .luz{background:#ff8a7a;box-shadow:0 0 12px #ff8a7a}
-@keyframes luz{50%{opacity:.35}}
-.horario p{color:rgba(255,255,255,.7);max-width:46ch}
-
-/* Dicas */
-.dicas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:d}
-.dicas li{counter-increment:d;border-radius:22px;padding:30px 26px;background:#0b1530;border:1px solid rgba(255,255,255,.08);display:grid;gap:12px;align-content:start;min-width:0}
-.dicas li::before{content:"Dica 0" counter(d);font-family:var(--mono);font-size:.78rem;color:var(--verde);letter-spacing:.08em}
-.dicas h3{margin:0;font-size:1.3rem;font-weight:800;font-style:italic}
-.dicas p{color:rgba(255,255,255,.68);font-size:.95rem}
-
-/* Dúvidas */
-.faq{max-width:860px}
-.faq details{border-bottom:1px solid rgba(255,255,255,.12);padding-block:22px}
-.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;font-weight:600;font-size:1.1rem}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font-family:var(--mono);font-size:1.5rem;line-height:1;color:#9fb3e0;transition:transform .25s}
-.faq details[open] summary::after{transform:rotate(45deg)}
-.faq details p{margin-top:12px;color:rgba(255,255,255,.7)}
-
-/* Contato */
-.contato{background:radial-gradient(ellipse 70% 80% at 50% 110%,#2f74ef,#0a2a7a 55%,#050a18 90%);overflow:hidden}
-.contato .in{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
-.contato h2{margin:0;font-size:clamp(2.6rem,6.5vw,5.2rem);line-height:.98;font-weight:500;letter-spacing:-.03em}
-.contato h2 b{font-weight:800;font-style:italic;color:var(--verde)}
-.contato p.lead{color:rgba(255,255,255,.78);margin-top:16px;max-width:40ch}
-.contato .botoes{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-.contato .vid{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:.85rem;padding:11px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.06)}
-.cartao{border-radius:24px;padding:28px;background:rgba(5,10,24,.55);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);display:grid;gap:18px}
-.cartao div{display:grid;gap:2px}
-.cartao dt{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9fb3e0}
-.cartao dd{margin:0;font-weight:600;font-size:1.05rem}
-.cartao dl{margin:0;display:grid;gap:18px}
-.cartao a{text-underline-offset:3px}
-
-.pe-site{background:#050a18;border-top:1px solid rgba(255,255,255,.08)}
-.pe-site .in{max-width:1240px;margin:0 auto;padding:26px var(--gr) 26px var(--gl);display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;color:#7f8db0;font-size:.82rem}
-.pe-site nav{display:flex;flex-wrap:wrap;gap:18px}
-.pe-site a{text-decoration:none}
-.pe-site a:hover{color:#fff}
-
-.atalhos{display:flex;gap:18px;margin-right:8px}
-.atalhos a{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;opacity:.8}
-.atalhos a:hover{opacity:1}
-
-@media (max-width:1100px){.atalhos{display:none}}
-@media (max-width:960px){
-  .passos{grid-template-columns:1fr 1fr}
-  .dicas{grid-template-columns:1fr}
-  .contato .in{grid-template-columns:1fr}
-  .colunas{flex-direction:column;height:auto}
-  .col{flex:none;height:76px;transition:height .45s cubic-bezier(.2,.8,.2,1)}
-  .col.aberta{height:300px}
-  .col .vert{writing-mode:horizontal-tb;left:24px;top:50%;transform:translateY(-50%)}
-  .col .num{left:auto;right:24px;bottom:auto;top:50%;transform:translateY(-50%)}
-}
-@media (max-width:560px){
-  .passos{grid-template-columns:1fr}
-  .passos li{min-height:200px}
-  .sec{padding-block:76px}
-}
-@media (prefers-reduced-motion:reduce){.col,.col .conteudo,.col .grande{transition:none}.agora .luz{animation:none}}
-
-@media (max-width:900px){
-  .menu{display:none}
-  .palco{grid-template-columns:1fr 1fr;grid-template-areas:"prod prod" "esq dir";gap:18px;padding-top:4px}
-  .produto{grid-area:prod;width:min(78vw,340px)}
-  .esq{grid-area:esq}.dir{grid-area:dir}
-  .nome{top:calc(min(78vw,340px) * .74);font-size:clamp(2.6rem,13vw,6rem);letter-spacing:.12em;z-index:3;text-shadow:0 2px 6px rgba(0,0,0,.45),0 8px 40px rgba(0,0,0,.55)}
-  .lema{display:none}
-  .base{grid-template-columns:1fr auto}
-  .info .wrap{grid-template-columns:1fr 1fr}
-}
-@media (max-width:560px){
-  .palco{grid-template-columns:1fr;grid-template-areas:"prod" "esq" "dir"}
-  .dir{justify-items:start;text-align:left}
-  .chips{justify-content:flex-start}
-  .ficha{grid-template-columns:repeat(3,auto);gap:16px}
-  .esq h1{font-size:1.9rem}
-  .base{padding-bottom:90px}
-  .info .wrap{grid-template-columns:1fr}
-}
 @media (prefers-reduced-motion:reduce){
-  .flutua,.sombra,.maq .tambor,.maq .agua,.maq.secadora .vidro::after{animation:none}
-  .objeto,.nome span{transition:opacity .3s}
-  .glitch.on{animation:none}
+  #intro{display:none}
+  .portinha .gira,.portinha .espu,.rolar i,.agora i{animation:none}
+  .manifesto .pal{opacity:1}
 }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="zapico" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></symbol>
-  <symbol id="seta" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="insta" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></symbol>
-  <symbol id="pino" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></symbol>
 </svg>
 
-<main>
-<section class="vitrine" id="vitrine" aria-roledescription="carrossel" aria-label="Serviços da Avexada">
-  <div class="fundo" id="fundo"></div>
-  <div class="fundo-novo" id="fundoNovo"></div>
-  <div class="glitch" id="glitch"></div>
+<div id="intro" aria-hidden="true">
+  <div class="centro">
+    <div class="portinha"><div class="vid"><div class="gira"><i></i><i></i><i></i></div><div class="espu"></div></div></div>
+    <div class="intro-nome" id="introNome">AVEXADA</div>
+    <div class="contador" id="contador">000%</div>
+  </div>
+</div>
 
-  <header class="topo">
-    <a class="marca" href="#vitrine">
-      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#fff"/><circle cx="27" cy="27" r="11" fill="none" stroke="#5cc83b" stroke-width="4"/><path d="M27 27V20M27 27l4 3" stroke="#0d2f7a" stroke-width="3" stroke-linecap="round"/><rect x="24" y="10" width="6" height="4" rx="1" fill="#5cc83b"/><path d="M7 22h8M9 27h6M11 32h5" stroke="#5cc83b" stroke-width="3" stroke-linecap="round"/></svg>
-      Avexada
-    </a>
-    <div class="menu" role="tablist" aria-label="Escolha o serviço" id="menu"></div>
-    <div class="acoes"><nav class="atalhos" aria-label="Seções"><a href="#como">Como usar</a><a href="#duvidas">Dúvidas</a><a href="#onde">Onde fica</a></nav>
-      <a class="circ" href="https://www.instagram.com/lavanderiaavexada/" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#insta"/></svg></a>
-      <a class="circ js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener" aria-label="WhatsApp"><svg><use href="#zapico"/></svg></a>
+<div class="cursor" id="cursor"><span id="cursorTxt">Ver</span></div>
+<div class="cursor-ponto" id="cursorPonto"></div>
+
+<header class="topo">
+  <a class="marca" href="#inicio">AVEXADA</a>
+  <nav aria-label="Seções"><a href="#servicos">Serviços</a><a href="#como">Como usar</a><a href="#duvidas">Dúvidas</a><a class="sempre" href="#onde">Onde fica</a></nav>
+</header>
+
+<main id="inicio">
+  <section class="hero" id="hero">
+    <h1 class="titulo split" id="titulo"><span class="l1">Tá</span><span class="l2">avexado?</span></h1>
+    <div class="palco" id="palco">
+      <div class="maq" id="maq"><img src="img/lavadora.webp" alt="Lavadora profissional da Avexada" width="788" height="866"></div>
     </div>
-  </header>
-
-  <div class="palco">
-    <div class="nome" id="nome" aria-hidden="true"></div>
-
-    <div class="esq">
-      <div class="setas"><button id="ant" aria-label="Serviço anterior"><svg><use href="#seta"/></svg></button><button id="prox" aria-label="Próximo serviço"><svg style="transform:scaleX(-1)"><use href="#seta"/></svg></button></div>
-      <h1 id="titulo"></h1>
-      <p id="texto"></p>
-      <a class="cta js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg><use href="#zapico"/></svg><span id="ctaTexto">Chamar no WhatsApp</span></a>
+    <div class="zoom" id="zoom" aria-hidden="true"><img src="img/porta.webp" alt="" width="1600" height="900"></div>
+    <div class="frase" id="frase"><h2>A gente lava.<br><b>Você vive.</b></h2></div>
+    <div class="info" id="heroInfo">
+      <p>Lavanderia self-service no Centro de Aquiraz. Lave e seque no mesmo lugar, das 6h às 23h.</p>
+      <span class="rolar"><i></i>Role</span>
     </div>
+  </section>
 
-    <div class="produto" aria-hidden="true"><div class="objeto" id="objeto"></div></div>
+  <div class="faixa" aria-hidden="true"><div class="trilho" id="faixa">
+    <span>Lave R$ 14,90</span><span>Seque R$ 14,90</span><span>Aberto das 6h às 23h</span><span>Centro de Aquiraz</span><span>Lavanderia inteligente</span>
+    <span>Lave R$ 14,90</span><span>Seque R$ 14,90</span><span>Aberto das 6h às 23h</span><span>Centro de Aquiraz</span><span>Lavanderia inteligente</span>
+  </div></div>
 
-    <div class="dir">
-      <div class="preco" id="preco"></div>
-      <ul class="ficha" id="ficha"></ul>
-      <div class="chips" id="chips"></div>
+  <section class="servicos" id="servicos" aria-label="Serviços">
+    <div class="trilho-s" id="trilhoS">
+      <article class="painel p-azul">
+        <div class="nome" aria-hidden="true">LAVAR</div>
+        <div class="esq"><span class="num">01 / 04 — Lavagem</span><h3>Lave sem<br><b>perder tempo</b></h3><p>Máquinas profissionais de alta capacidade. Coloque a roupa, pague e o ciclo começa sozinho.</p></div>
+        <div class="foto"><img src="img/lavadora.webp" alt="Lavadora" width="788" height="866" loading="lazy"></div>
+        <div class="dir"><div class="preco">R$ 14,90<small>por ciclo</small></div></div>
+      </article>
+      <article class="painel p-laranja">
+        <div class="nome" aria-hidden="true">SECAR</div>
+        <div class="esq"><span class="num">02 / 04 — Secagem</span><h3>Seque e saia<br><b>com tudo pronto</b></h3><p>Secadora profissional. A roupa sai quentinha e pronta pra dobrar.</p></div>
+        <div class="foto"><img src="img/secadora.webp" alt="Secadora" width="788" height="866" loading="lazy"></div>
+        <div class="dir"><div class="preco">R$ 14,90<small>por ciclo</small></div></div>
+      </article>
+      <article class="painel p-verde">
+        <div class="nome" aria-hidden="true">COMBO</div>
+        <div class="esq"><span class="num">03 / 04 — Lavar + secar</span><h3>Lave e seque<br><b>no mesmo lugar</b></h3><p>Chegue com a roupa suja e saia com ela pronta, numa visita só.</p></div>
+        <div class="foto duas"><img src="img/secadora.webp" alt="" width="788" height="866" loading="lazy"><img src="img/lavadora.webp" alt="" width="788" height="866" loading="lazy"></div>
+        <div class="dir"><div class="preco">R$ 29,80<small>lavar + secar</small></div></div>
+      </article>
+      <article class="painel p-preto">
+        <div class="nome" aria-hidden="true" style="color:rgba(255,255,255,.07)">06—23</div>
+        <div class="esq"><span class="num">04 / 04 — Horário</span><h3>Horários que<br><b>cabem na rotina</b></h3><p>Abre cedinho e fecha tarde. Dá pra lavar antes do trabalho ou depois da faculdade.</p></div>
+        <div class="relogio-g">06h<br>23h</div>
+        <div class="dir"><a class="btn magnetico js-zap" data-cursor="Zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg><use href="#zapico"/></svg>Chamar no WhatsApp</a></div>
+      </article>
     </div>
-  </div>
+    <div class="progresso" aria-hidden="true"><i id="progresso"></i></div>
+  </section>
 
-  <div class="base">
-    <div>
-      <div class="sociais">
-        <a href="https://www.instagram.com/lavanderiaavexada/" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#insta"/></svg></a>
-        <a class="js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener" aria-label="WhatsApp"><svg><use href="#zapico"/></svg></a>
-        <a href="https://www.google.com/maps/search/?api=1&query=Av.+Raimundo+Pires+Cardoso+217+Centro+Aquiraz+CE" target="_blank" rel="noopener" aria-label="Mapa"><svg><use href="#pino"/></svg></a>
-      </div>
-      <div class="pontos" id="pontos" style="justify-content:flex-start"></div>
+  <section class="manifesto">
+    <div class="in">
+      <span class="rot">Por que Avexada</span>
+      <p class="grande" id="manifesto">Avexado é quem tem pressa. A correria do dia a dia não espera, e a sua roupa também não precisa esperar. Na Avexada você lava e seca no mesmo lugar, com máquinas profissionais, das seis da manhã às onze da noite.</p>
     </div>
-    <p class="lema">Roupa limpa,<br>sem perder tempo</p>
-    <button class="proximo" id="proximo" aria-label="Ver próximo serviço"><div class="mini" id="mini"></div><span id="miniNome"></span></button>
-  </div>
-</section>
+  </section>
 
-<section class="detalhe" id="detalhe">
-  <img src="img/porta.webp" alt="Roupas girando com espuma dentro da lavadora" loading="lazy" width="1600" height="900">
-  <div class="txt">
-    <span class="rot">Tecnologia que cuida das suas roupas</span>
-    <h2>Lavagem <b>profissional</b>, do jeito certo</h2>
-    <p>Máquinas de alta capacidade que dão conta do dia a dia e do edredom de casal. Você só coloca a roupa e acompanha o ciclo.</p>
-    <ul><li><b>R$ 14,90</b><span>lavar</span></li><li><b>R$ 14,90</b><span>secar</span></li><li><b>06h–23h</b><span>todos os dias</span></li></ul>
-  </div>
-</section>
-
-<section class="sec" id="como">
-  <div class="in">
-    <div class="cab"><span class="rot">Primeira vez?</span><h2>Como usar a <b>Avexada</b></h2><p>É simples. E se tiver qualquer dúvida, é só chamar no WhatsApp.</p></div>
-    <ol class="passos">
-      <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h7"/></svg></span><h3>Separe</h3><p>Claras de um lado, escuras do outro. Confira as etiquetas.</p></li>
-      <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="3"/><circle cx="12" cy="13" r="5"/></svg></span><h3>Coloque</h3><p>Escolha uma lavadora livre, coloque as roupas e feche a porta.</p></li>
-      <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><h3>Pague e lave</h3><p>Faça o pagamento e o ciclo começa sozinho.</p></li>
-      <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c3 4 5 6.5 5 10a5 5 0 0 1-10 0c0-3.5 2-6 5-10Z"/></svg></span><h3>Seque e vá</h3><p>Passe para a secadora e saia com tudo pronto.</p></li>
-    </ol>
-  </div>
-</section>
-
-<section class="sec" id="motivos" style="padding-top:0">
-  <div class="in">
-    <div class="cab"><span class="rot">Por que a Avexada</span><h2>Quatro motivos pra <b>lavar aqui</b></h2><p>Passe o mouse ou toque em cada coluna.</p></div>
-    <div class="colunas">
-      <article class="col aberta" tabindex="0" style="--cc:rgba(47,116,239,.5)"><span class="vert">Rapidez</span><span class="num">01</span><span class="grande">1x</span><div class="conteudo"><h3>Tudo numa visita</h3><p>Lave e seque no mesmo lugar. Nada de deixar a roupa e voltar dias depois.</p></div></article>
-      <article class="col" tabindex="0" style="--cc:rgba(79,191,51,.45)"><span class="vert">Horário estendido</span><span class="num">02</span><span class="grande">17h</span><div class="conteudo"><h3>Das 6h às 23h</h3><p>17 horas por dia de portas abertas. Dá pra ir antes do trabalho ou depois da faculdade.</p></div></article>
-      <article class="col" tabindex="0" style="--cc:rgba(242,133,42,.45)"><span class="vert">Máquinas profissionais</span><span class="num">03</span><span class="grande">PRO</span><div class="conteudo"><h3>Máquinas profissionais</h3><p>Equipamentos de alta capacidade, que dão conta até do edredom de casal.</p></div></article>
-      <article class="col" tabindex="0" style="--cc:rgba(255,255,255,.25)"><span class="vert">No Centro</span><span class="num">04</span><span class="grande">217</span><div class="conteudo"><h3>No Centro de Aquiraz</h3><p>Av. Raimundo Pires Cardoso, 217, Loja 4. Fácil de chegar.</p></div></article>
+  <section class="como" id="como">
+    <div class="in">
+      <div class="cab"><h2>Como<br><span>usar</span></h2><span class="rot">4 passos · menos de 1 visita</span></div>
+      <ol class="passos">
+        <li class="passo"><span class="selo">Comece aqui</span><h3>Separe</h3><p>Claras de um lado, escuras do outro. Confira as etiquetas.</p></li>
+        <li class="passo"><img src="img/lavadora.webp" alt="" width="788" height="866" loading="lazy"><h3>Coloque</h3><p>Escolha uma lavadora livre, coloque as roupas e feche a porta.</p></li>
+        <li class="passo"><h3>Pague e lave</h3><p>Faça o pagamento e o ciclo começa sozinho.</p></li>
+        <li class="passo"><h3>Seque e vá</h3><p>Passe para a secadora e saia com tudo pronto.</p></li>
+      </ol>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="sec horario" id="horario-sec">
-  <div class="in">
-    <span class="rot2">Horários que cabem na sua rotina</span>
-    <div class="horas" aria-label="Das 6 às 23 horas">06<i>—</i>23</div>
-    <span class="agora" id="agoraSec"><span class="luz"></span><span>Aberto das 6h às 23h</span></span>
-    <p>A correria do dia a dia não espera. Por isso a Avexada abre cedinho e fecha tarde, todos os dias.</p>
-  </div>
-</section>
-
-<section class="sec" id="dicas">
-  <div class="in">
-    <div class="cab"><span class="rot">Dicas</span><h2>Para cuidar das <b>suas roupas</b></h2></div>
-    <ol class="dicas">
-      <li><h3>Separe claras e escuras</h3><p>Evita que a cor de uma peça passe para a outra durante a lavagem.</p></li>
-      <li><h3>Respeite a etiqueta</h3><p>Ela diz a temperatura certa e se a peça pode ir para a secadora.</p></li>
-      <li><h3>Sem excesso de sabão</h3><p>Sabão e amaciante demais deixam resíduo e endurecem o tecido.</p></li>
-    </ol>
-  </div>
-</section>
-
-<section class="sec" id="duvidas" style="padding-top:0">
-  <div class="in">
-    <div class="cab"><span class="rot">Dúvidas</span><h2>Perguntas <b>frequentes</b></h2></div>
-    <div class="faq">
-      <details><summary>Quanto custa lavar e secar?</summary><p>A lavagem custa R$ 14,90 e a secagem R$ 14,90 por ciclo. As duas juntas saem por R$ 29,80.</p></details>
-      <details><summary>Qual o horário de funcionamento?</summary><p>Funcionamos das 6h às 23h.</p></details>
-      <details><summary>Nunca usei lavanderia self-service. É difícil?</summary><p>É bem simples, e o passo a passo fica na loja. Se precisar de ajuda, fale com a gente pelo WhatsApp.</p></details>
-      <details><summary>Cabe edredom na máquina?</summary><p>As máquinas são de alta capacidade. Para peças muito grandes, chame no WhatsApp que a gente confirma.</p></details>
-      <details><summary>Onde fica a lavanderia?</summary><p>Av. Raimundo Pires Cardoso, 217, Loja 4, Centro, Aquiraz (CE).</p></details>
+  <section class="horario" id="horario">
+    <div class="in">
+      <span class="rot">Aberto todos os dias</span>
+      <div class="roleta" id="roleta" aria-label="Das 6 às 23 horas"><span class="dig" data-n="0"></span><span class="dig" data-n="6"></span><span class="tr">—</span><span class="dig" data-n="2"></span><span class="dig" data-n="3"></span></div>
+      <span class="agora" id="agora"><i></i><span>Das 6h às 23h</span></span>
+      <p>Abre cedinho e fecha tarde, pra caber na sua rotina.</p>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="sec contato" id="onde">
-  <div class="in">
-    <div>
-      <span class="rot2">Venha nos conhecer</span>
-      <h2>Estamos te <b>esperando</b></h2>
-      <p class="lead">Para deixar suas roupas prontinhas com praticidade e qualidade.</p>
-      <div class="botoes">
-        <a class="cta js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg><use href="#zapico"/></svg>Chamar no WhatsApp</a>
-        <a class="vid" href="https://www.google.com/maps/search/?api=1&query=Av.+Raimundo+Pires+Cardoso+217+Centro+Aquiraz+CE" target="_blank" rel="noopener"><svg width="16" height="16"><use href="#pino"/></svg>Abrir no mapa</a>
+  <section class="duvidas" id="duvidas">
+    <div class="in grade">
+      <h2>Ficou<br>alguma<br>dúvida?</h2>
+      <div>
+        <details><summary>Quanto custa lavar e secar?</summary><p>A lavagem custa R$ 14,90 e a secagem R$ 14,90 por ciclo. As duas juntas saem por R$ 29,80.</p></details>
+        <details><summary>Qual o horário de funcionamento?</summary><p>Funcionamos das 6h às 23h.</p></details>
+        <details><summary>Nunca usei lavanderia self-service. É difícil?</summary><p>É bem simples, e o passo a passo fica na loja. Se precisar de ajuda, fale com a gente pelo WhatsApp.</p></details>
+        <details><summary>Onde fica a lavanderia?</summary><p>Av. Raimundo Pires Cardoso, 217, Loja 4, Centro, Aquiraz (CE).</p></details>
       </div>
     </div>
-    <div class="cartao">
-      <dl>
-        <div><dt>Endereço</dt><dd>Av. Raimundo Pires Cardoso, 217, Loja 4<br>Centro, Aquiraz (CE)</dd></div>
-        <div><dt>Horário</dt><dd>Das 6h às 23h</dd></div>
-        <div><dt>WhatsApp</dt><dd>(85) 98203-1297</dd></div>
-        <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/lavanderiaavexada/" target="_blank" rel="noopener">@lavanderiaavexada</a></dd></div>
-      </dl>
+  </section>
+
+  <section class="final" id="onde">
+    <div class="in">
+      <h2 class="bora split-final"><span class="l1">Bora</span><span class="l2">lavar?</span></h2>
+      <div class="acoes">
+        <a class="btn magnetico js-zap" data-cursor="Zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg><use href="#zapico"/></svg>Chamar no WhatsApp</a>
+        <a class="btn claro magnetico" data-cursor="Mapa" href="https://www.google.com/maps/search/?api=1&query=Av.+Raimundo+Pires+Cardoso+217+Centro+Aquiraz+CE" target="_blank" rel="noopener">Abrir no mapa</a>
+      </div>
+      <div class="dados">
+        <dl>
+          <div><dt>Endereço</dt><dd>Av. Raimundo Pires Cardoso, 217, Loja 4 · Centro, Aquiraz (CE)</dd></div>
+          <div><dt>Horário</dt><dd>Das 6h às 23h</dd></div>
+          <div><dt>WhatsApp</dt><dd>(85) 98203-1297</dd></div>
+          <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/lavanderiaavexada/" target="_blank" rel="noopener" data-cursor="Insta">@lavanderiaavexada</a></dd></div>
+        </dl>
+      </div>
+      <div class="rodape"><span>© 2026 Avexada Lavanderia Inteligente</span><span>Aquiraz, Ceará</span></div>
     </div>
-  </div>
-</section>
-<footer class="pe-site"><div class="in"><span>© 2026 Avexada Lavanderia Inteligente · Aquiraz, CE</span><nav aria-label="Rodapé"><a href="#vitrine">Início</a><a href="#como">Como usar</a><a href="#motivos">Por que nós</a><a href="#dicas">Dicas</a><a href="#duvidas">Dúvidas</a><a href="#onde">Onde fica</a></nav></div></footer>
+  </section>
 </main>
-<a class="zap js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp"><svg><use href="#zapico"/></svg></a>
+<a class="zap js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp" data-cursor="Zap"><svg><use href="#zapico"/></svg></a>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 const ZAP = "https://wa.me/5585982031297?text=" + encodeURIComponent("Oi! Vim pelo site da Avexada e queria tirar uma dúvida.");
 document.querySelectorAll(".js-zap").forEach(a => a.href = ZAP);
 
-const foto = (n) => `<img src="img/${n}.webp" alt="" width="788" height="866" decoding="async">`;
-const maquina = (tipo) => `<div class="flutua foto">${foto(tipo === "secadora" ? "secadora" : "lavadora")}</div>`;
-const pilha = () => `<div class="flutua foto pilha-foto">${foto("secadora")}${foto("lavadora")}</div>`;
-const relogio = () => { let n=""; for(let i=1;i<=12;i++) n+=`<b style="--a:${i*30}deg">${i}</b>`;
-  return `<div class="flutua" style="width:70%;height:80%"><div class="relogio"><div class="sino a"></div><div class="sino b"></div><div class="martelo"></div><div class="perna a"></div><div class="perna b"></div><div class="corpo"><div class="face">${n}<div class="ponteiro h"></div><div class="ponteiro m"></div><div class="ponteiro s"></div><div class="pino"></div></div></div></div></div>`; };
+const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finoMouse = matchMedia("(hover:hover) and (pointer:fine)").matches;
+const temGsap = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
 
-const SLIDES = [
-  { id:"lavar", aba:"Lavar", nome:"LAVAR", c1:"#2f74ef", c2:"#0a2a7a",
-    titulo:"Lave sem<br><b>perder tempo</b>", texto:"Máquinas profissionais de alta capacidade. Você coloca a roupa, paga e o ciclo começa sozinho.",
-    preco:"R$ 14,90", sub:"por ciclo de lavagem", ficha:[["Lavagem","ciclo completo"],["06h–23h","todos os dias"],["Centro","Aquiraz"]], chips:["Lavar","Secar","Combo"], on:0, objeto:()=>maquina("") },
-  { id:"secar", aba:"Secar", nome:"SECAR", c1:"#f2852a", c2:"#7a2406",
-    titulo:"Seque e saia<br><b>com tudo pronto</b>", texto:"Secadora profissional. A roupa sai quentinha, sem cheiro de guardado e pronta pra dobrar.",
-    preco:"R$ 14,90", sub:"por ciclo de secagem", ficha:[["Secagem","profissional"],["Quentinha","pronta pra dobrar"],["Mesma visita","sem esperar"]], chips:["Lavar","Secar","Combo"], on:1, objeto:()=>maquina("secadora") },
-  { id:"combo", aba:"Combo", nome:"COMBO", c1:"#4fbf33", c2:"#0f4a12",
-    titulo:"Lave e seque<br><b>no mesmo lugar</b>", texto:"O combo completo: lavagem e secagem na mesma visita. Você chega com a roupa suja e sai com ela pronta.",
-    preco:"R$ 29,80", sub:"lavar + secar", ficha:[["Lavar","R$ 14,90"],["Secar","R$ 14,90"],["1 visita","tudo pronto"]], chips:["Lavar","Secar","Combo"], on:2, objeto:()=>pilha() },
-  { id:"horario", aba:"Horário", nome:"06—23", c1:"#2a2f3d", c2:"#07090f",
-    titulo:"Horários que<br><b>cabem na rotina</b>", texto:"A correria do dia a dia não espera. Por isso a Avexada abre cedinho e fecha tarde.",
-    preco:"06h–23h", sub:"todos os dias", ficha:[["Antes","do trabalho"],["Depois","da faculdade"],["Centro","Aquiraz"]], chips:[], on:-1, objeto:()=>relogio(), status:true }
-];
+/* separa letras */
+function separa(el){ el.querySelectorAll(".l1,.l2").forEach(l => { l.innerHTML = [...l.textContent].map(c => `<span class="letra">${c}</span>`).join(""); }); }
+separa(document.getElementById("titulo")); separa(document.querySelector(".split-final"));
+const nomeIntro = document.getElementById("introNome"); nomeIntro.innerHTML = [...nomeIntro.textContent].map((c,i) => `<span class="letra" style="transition-delay:${i*60}ms">${c}</span>`).join("");
 
-const $ = id => document.getElementById(id);
-const menu = $("menu"), pontos = $("pontos");
-SLIDES.forEach((s,i) => {
-  const b = document.createElement("button"); b.role = "tab"; b.textContent = s.aba; b.onclick = () => { ir(i); parar(); }; menu.appendChild(b);
-  pontos.appendChild(document.createElement("i"));
-});
-
+/* horário de Aquiraz */
 function aberto(){ try { const h = Number(new Intl.DateTimeFormat("pt-BR",{hour:"numeric",hourCycle:"h23",timeZone:"America/Fortaleza"}).format(new Date())); return h >= 6 && h < 23; } catch(e){ return null; } }
+(function(){ const ab = aberto(), el = document.getElementById("agora"); if (ab === null) return; el.lastElementChild.textContent = ab ? "Aberto agora · fecha às 23h" : "Fechado agora · abre às 6h"; el.classList.toggle("fechado", !ab); })();
 
-let atual = -1;
-function ir(i, dir){
-  i = (i + SLIDES.length) % SLIDES.length; if (i === atual) return;
-  const s = SLIDES[i], ida = dir ?? (i > atual ? 1 : -1), primeira = atual < 0; atual = i;
-  // fundo com fade
-  const fn = $("fundoNovo"); fn.style.background = `radial-gradient(ellipse 60% 70% at 52% 48%, ${s.c1}, ${s.c2} 78%)`; fn.classList.add("on");
-  setTimeout(() => { $("fundo").style.background = fn.style.background; fn.classList.remove("on"); }, primeira ? 0 : 900);
-  if (!primeira) { const g = $("glitch"); g.classList.remove("on"); void g.offsetWidth; g.classList.add("on"); }
-  // nome gigante
-  $("nome").innerHTML = [...s.nome].map(c => `<span>${c}</span>`).join("");
-  // textos
-  $("titulo").innerHTML = s.titulo; $("texto").textContent = s.texto;
-  $("preco").innerHTML = `${s.preco}<small>${s.sub}</small>`;
-  let ficha = s.ficha.map(([a,b]) => `<li><b>${a}</b><span>${b}</span></li>`).join("");
-  if (s.status) { const ab = aberto(); if (ab !== null) ficha = `<li><b style="color:${ab?"#6fe04a":"#ff8a7a"}">${ab?"Aberto agora":"Fechado agora"}</b><span>${ab?"fecha às 23h":"abre às 6h"}</span></li>` + ficha.split("</li>").slice(0,2).join("</li>") + "</li>"; }
-  $("ficha").innerHTML = ficha;
-  $("chips").innerHTML = s.chips.map((c,k) => `<span class="${k===s.on?"on":""}">${c}</span>`).join("");
-  // produto
-  const obj = $("objeto");
-  if (primeira) { obj.innerHTML = s.objeto(); }
-  else {
-    obj.className = "objeto"; obj.style.transform = `translateX(${-60*ida}%) rotate(${-12*ida}deg) scale(.8)`; obj.style.opacity = 0;
-    setTimeout(() => { obj.style.transition = "none"; obj.innerHTML = s.objeto(); obj.style.transform = `translateX(${60*ida}%) rotate(${12*ida}deg) scale(.8)`; void obj.offsetWidth; obj.style.transition = ""; obj.style.transform = ""; obj.style.opacity = 1; relogioHora(); }, 420);
-  }
-  // próximo
-  const p = SLIDES[(i+1) % SLIDES.length]; $("mini").innerHTML = p.objeto(); $("miniNome").textContent = "Próximo: " + p.aba;
-  [...menu.children].forEach((b,k) => b.setAttribute("aria-selected", k===i));
-  [...pontos.children].forEach((d,k) => d.classList.toggle("on", k===i));
-  relogioHora();
+/* roleta: monta colunas */
+document.querySelectorAll(".dig").forEach(d => { let h = ""; for (let r = 0; r < 3; r++) for (let n = 0; n < 10; n++) h += `<span>${n}</span>`; d.innerHTML = `<div class="col">${h}</div>`; });
+
+/* manifesto: separa palavras */
+const man = document.getElementById("manifesto");
+const verdes = ["Avexado","pressa.","Avexada","seis","onze"];
+man.innerHTML = man.textContent.split(" ").map(w => `<span class="pal${verdes.some(v => w.startsWith(v)) ? " verde" : ""}">${w}</span>`).join(" ");
+
+/* abertura */
+const intro = document.getElementById("intro"), cont = document.getElementById("contador");
+function abrir(){
+  if (!intro || intro.dataset.feito) return; intro.dataset.feito = 1;
+  if (temGsap && !reduz){
+    gsap.to(".portinha", {scale: 14, duration: 1.1, ease: "power3.in"});
+    gsap.to(intro, {opacity: 0, duration: .5, delay: .75, onComplete: () => intro.remove()});
+    gsap.from("#titulo .letra", {yPercent: 110, rotate: 8, opacity: 0, stagger: .045, duration: 1, ease: "power4.out", delay: .9});
+    gsap.from("#palco", {y: 160, opacity: 0, duration: 1.3, ease: "power3.out", delay: 1});
+    gsap.from("#heroInfo", {opacity: 0, y: 20, duration: .8, delay: 1.5});
+  } else intro.remove();
+}
+if (reduz) intro.remove();
+else {
+  requestAnimationFrame(() => intro.classList.add("pronto"));
+  let n = 0; const t0 = performance.now();
+  (function conta(){ n = Math.min(100, Math.round((performance.now() - t0) / 18)); cont.textContent = String(n).padStart(3,"0") + "%"; if (n < 100) requestAnimationFrame(conta); else setTimeout(abrir, 250); })();
+  intro.addEventListener("click", abrir);
 }
 
-function relogioHora(){
-  let d; try { d = new Date(new Date().toLocaleString("en-US",{timeZone:"America/Fortaleza"})); } catch(e){ d = new Date(); }
-  document.querySelectorAll(".relogio").forEach(r => {
-    r.style.setProperty("--h", (d.getHours()%12*30 + d.getMinutes()/2) + "deg");
-    r.style.setProperty("--m", (d.getMinutes()*6) + "deg");
-    r.style.setProperty("--s", (d.getSeconds()*6) + "deg");
+/* cursor bolha */
+if (finoMouse){
+  const c = document.getElementById("cursor"), p = document.getElementById("cursorPonto"), txt = document.getElementById("cursorTxt");
+  let x = innerWidth/2, y = innerHeight/2, cx = x, cy = y;
+  addEventListener("pointermove", e => { x = e.clientX; y = e.clientY; p.style.transform = `translate(${x}px,${y}px)`; });
+  (function loop(){ cx += (x - cx) * .16; cy += (y - cy) * .16; c.style.transform = `translate(${cx}px,${cy}px)`; requestAnimationFrame(loop); })();
+  document.querySelectorAll("a, button, summary, [data-cursor]").forEach(el => {
+    el.addEventListener("pointerenter", () => { txt.textContent = el.dataset.cursor || "Ver"; c.classList.add("grande"); });
+    el.addEventListener("pointerleave", () => c.classList.remove("grande"));
+  });
+  addEventListener("pointerdown", e => {
+    if (reduz) return;
+    for (let i = 0; i < 6; i++){
+      const b = document.createElement("div"); b.className = "bolha-solta"; const s = 8 + Math.random()*22;
+      Object.assign(b.style, {width: s+"px", height: s+"px", left: (e.clientX - s/2)+"px", top: (e.clientY - s/2)+"px"});
+      document.body.appendChild(b);
+      const dx = (Math.random()-.5)*160, dy = -60 - Math.random()*160;
+      b.animate([{transform:"translate(0,0) scale(.4)", opacity:1},{transform:`translate(${dx}px,${dy}px) scale(1)`, opacity:0}], {duration: 900 + Math.random()*500, easing:"cubic-bezier(.2,.8,.2,1)"}).onfinish = () => b.remove();
+    }
+  });
+  /* botões magnéticos */
+  document.querySelectorAll(".magnetico").forEach(b => {
+    b.addEventListener("pointermove", e => { const r = b.getBoundingClientRect(); const mx = e.clientX - r.left - r.width/2, my = e.clientY - r.top - r.height/2; b.style.transform = `translate(${mx*.35}px,${my*.45}px)`; });
+    b.addEventListener("pointerleave", () => { b.style.transition = "transform .5s cubic-bezier(.2,.8,.2,1)"; b.style.transform = ""; setTimeout(() => b.style.transition = "", 500); });
   });
 }
-setInterval(relogioHora, 1000);
-try { new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visto"); o.disconnect(); } }), {threshold:.3}).observe(document.getElementById("detalhe")); } catch(e) { document.getElementById("detalhe").classList.add("visto"); }
 
-$("ant").onclick = () => { ir(atual-1,-1); parar(); };
-$("prox").onclick = () => { ir(atual+1,1); parar(); };
-$("proximo").onclick = () => { ir(atual+1,1); parar(); };
-addEventListener("keydown", e => { if (e.key === "ArrowRight") { ir(atual+1,1); parar(); } if (e.key === "ArrowLeft") { ir(atual-1,-1); parar(); } });
-let x0 = null; const v = $("vitrine");
-v.addEventListener("touchstart", e => x0 = e.touches[0].clientX, {passive:true});
-v.addEventListener("touchend", e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) { ir(atual + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); parar(); } x0 = null; });
+/* máquina inclina com mouse / celular inclina com toque */
+const maq = document.getElementById("maq");
+if (!reduz){
+  const inclina = (px, py) => { maq.style.transform = `rotateY(${px*16}deg) rotateX(${-py*10}deg) translateZ(0)`; };
+  addEventListener("pointermove", e => inclina(e.clientX/innerWidth - .5, e.clientY/innerHeight - .5));
+  document.getElementById("hero").addEventListener("touchmove", e => { const t = e.touches[0]; inclina(t.clientX/innerWidth - .5, t.clientY/innerHeight - .5); }, {passive:true});
+}
 
-let timer = null;
-const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
-function tocar(){ if (!reduz) timer = setInterval(() => ir(atual+1,1), 6000); }
-function parar(){ clearInterval(timer); timer = null; setTimeout(() => { if (!timer) tocar(); }, 12000); }
-ir(0); tocar();
-document.querySelectorAll(".js-zap").forEach(a => a.href = ZAP);
-const colsSec = document.querySelectorAll(".col");
-function abreCol(c){ colsSec.forEach(x => x.classList.toggle("aberta", x === c)); }
-colsSec.forEach(c => {
-  c.addEventListener("click", () => abreCol(c));
-  c.addEventListener("mouseenter", () => { if (matchMedia("(hover:hover)").matches) abreCol(c); });
-  c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); abreCol(c); } });
-});
-(function(){ const ab = aberto(), el = document.getElementById("agoraSec"); if (ab === null) return;
-  el.lastElementChild.textContent = ab ? "Aberto agora · fecha às 23h" : "Fechado agora · abre às 6h"; el.classList.toggle("fechado", !ab); })();
+/* rolagem */
+if (temGsap && !reduz){
+  gsap.registerPlugin(ScrollTrigger);
 
+  // topo: zoom na porta e mergulho
+  const tl = gsap.timeline({scrollTrigger:{trigger:"#hero", start:"top top", end:"+=160%", scrub:.8, pin:true, anticipatePin:1}});
+  tl.to("#titulo .l1 .letra", {yPercent:-120, opacity:0, stagger:.02, ease:"power2.in"}, 0)
+    .to("#titulo .l2 .letra", {yPercent:-120, opacity:0, stagger:.02, ease:"power2.in"}, .05)
+    .to("#heroInfo", {opacity:0}, 0)
+    .to("#palco", {scale:3.4, yPercent:-18, transformOrigin:"69% 51%", ease:"power2.in", duration:1}, 0)
+    .to("#zoom", {clipPath:"circle(150% at 50% 60%)", ease:"power2.in", duration:.7}, .45)
+    .to("#frase", {opacity:1, y:0, duration:.3}, .9)
+    .from("#frase h2", {scale:1.3, duration:.3}, .9);
+
+  // faixa: acelera com a rolagem
+  const faixa = document.getElementById("faixa"); let fx = 0, vel = 1;
+  gsap.ticker.add(() => { fx -= vel; const w = faixa.scrollWidth / 2; if (-fx >= w) fx += w; if (fx > 0) fx -= w; faixa.style.transform = `translateX(${fx}px)`; vel += (1 - vel) * .06; });
+  ScrollTrigger.create({onUpdate: s => { vel = 1 + Math.min(18, Math.abs(s.getVelocity()) / 120) * (s.direction > 0 ? 1 : -1); }});
+
+  // serviços laterais
+  const trilho = document.getElementById("trilhoS");
+  const dist = () => trilho.scrollWidth - innerWidth;
+  const hz = gsap.to(trilho, {x: () => -dist(), ease:"none", scrollTrigger:{trigger:"#servicos", start:"top top", end: () => "+=" + dist(), scrub:.6, pin:true, invalidateOnRefresh:true,
+    onUpdate: s => document.getElementById("progresso").style.width = (s.progress*100) + "%"}});
+  document.querySelectorAll(".painel").forEach(p => {
+    gsap.from(p.querySelector(".foto, .relogio-g"), {y:120, rotate:12, scale:.8, opacity:0, ease:"power3.out", scrollTrigger:{trigger:p, containerAnimation:hz, start:"left 75%", end:"left 25%", scrub:.6}});
+    gsap.from(p.querySelector(".nome"), {xPercent:-30, opacity:0, ease:"power2.out", scrollTrigger:{trigger:p, containerAnimation:hz, start:"left 85%", end:"left 30%", scrub:.6}});
+  });
+
+  // manifesto acende palavra por palavra
+  const pals = man.querySelectorAll(".pal");
+  ScrollTrigger.create({trigger:man, start:"top 80%", end:"bottom 45%", scrub:true, onUpdate: s => { const n = Math.round(s.progress * pals.length); pals.forEach((p,i) => p.style.opacity = i < n ? 1 : .14); }});
+
+  // como usar: cartões entram
+  gsap.utils.toArray(".passo").forEach((el, i) => gsap.from(el, {y:120, rotate: i%2 ? 6 : -6, opacity:0, duration:1, ease:"power3.out", scrollTrigger:{trigger:el, start:"top 88%"}}));
+  gsap.from(".como h2", {xPercent:-12, opacity:0, duration:1.1, ease:"power3.out", scrollTrigger:{trigger:".como", start:"top 80%"}});
+
+  // roleta do horário
+  ScrollTrigger.create({trigger:"#roleta", start:"top 80%", once:true, onEnter: () => {
+    document.querySelectorAll(".dig").forEach((d,i) => { const n = +d.dataset.n; gsap.fromTo(d.querySelector(".col"), {yPercent:0}, {yPercent: -((20 + n) / 30) * 100, duration: 1.6 + i*.25, ease:"power4.out"}); });
+  }});
+
+  // final: letras sobem
+  gsap.from(".split-final .letra", {yPercent:100, opacity:0, stagger:.05, duration:1, ease:"power4.out", scrollTrigger:{trigger:".final", start:"top 70%"}});
+  addEventListener("load", () => ScrollTrigger.refresh());
+} else {
+  // sem animação: roleta já no lugar e manifesto aceso
+  document.querySelectorAll(".dig").forEach(d => d.querySelector(".col").style.transform = `translateY(-${((20 + +d.dataset.n) / 30) * 100}%)`);
+  man.querySelectorAll(".pal").forEach(p => p.style.opacity = 1);
+  document.getElementById("frase").style.opacity = 0;
+}
 </script>
