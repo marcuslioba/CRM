@@ -523,6 +523,41 @@ body.menu-aberto{overflow:hidden}
   .fluxo video{position:relative;inset:auto;height:auto;aspect-ratio:4/3;object-position:74% 50%;margin-top:70px}
   .fluxo-texto{position:relative;left:auto;top:auto;bottom:auto;transform:none;width:auto;padding-inline:var(--gl) var(--gr);margin-top:8px}
 }
+
+/* ===== Fluxo: zoom na máquina conforme a rolagem ===== */
+.fluxo{height:230vh !important}
+.fluxo-cena{position:sticky !important;top:0;height:100svh !important;min-height:0 !important;padding:0 !important;display:block !important;background:radial-gradient(ellipse 55% 65% at 64% 52%,#3a80f5,#1f5fd6 45%,#0d2f7a 92%) !important}
+.zm{position:absolute;inset:0;overflow:hidden}
+.zm-maq{position:absolute;width:min(34vw,400px);aspect-ratio:788/866;left:64%;top:52%;margin-left:calc(min(34vw,400px) / -2);margin-top:calc(min(34vw,400px) * 866 / 788 / -2);transform-origin:0 0;will-change:transform}
+.zm-maq>img{width:100%;height:auto;display:block;filter:drop-shadow(0 40px 40px rgba(0,0,0,.45))}
+.zm-vidro{position:absolute;inset:0;opacity:0;transition:opacity .4s;pointer-events:none}
+.zm-vidro img{position:absolute;left:0;top:0;width:100%;height:auto;max-width:none;clip-path:circle(14.35% at 69.2% 50.8%);transform-origin:69.2% 50.8%;animation:gira 1.6s linear infinite;animation-play-state:paused}
+.zm.lavando .zm-vidro{opacity:1}
+.zm.lavando .zm-vidro img{animation-play-state:running}
+.zm-vidro::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 69.2% 50.8%,rgba(140,190,255,.32) 0,rgba(140,190,255,0) 16%)}
+.zm-dica{position:absolute;transform:translate(-50%,-50%) scale(var(--inv,1));transform-origin:50% 50%;background:var(--verde);color:var(--verde-esc);font:700 .78rem/1.2 var(--titulo);letter-spacing:.06em;text-transform:uppercase;padding:8px 12px;border-radius:6px;white-space:nowrap;opacity:0;transition:opacity .35s;box-shadow:0 10px 30px rgba(0,0,0,.25);display:flex;align-items:center;gap:8px}
+.zm-dica.on{opacity:1}
+.zm-dica i{width:8px;height:8px;border-radius:50%;background:var(--verde-esc);animation:luz 1s ease-in-out infinite}
+.fluxo-veu{display:block !important;background:linear-gradient(90deg,rgba(6,17,49,.75) 0%,rgba(6,17,49,.35) 30%,rgba(6,17,49,0) 50%) !important}
+.fluxo-texto .tag{background:var(--verde);color:var(--verde-esc)}
+.fluxo-passos li{border-top-color:rgba(255,255,255,.18)}
+.fluxo-passos b{color:var(--verde)}
+.fluxo-passos h3{color:#fff}
+.fluxo-passos p{color:rgba(255,255,255,.75)}
+.fluxo-passos button:focus-visible{outline-color:#fff}
+.fluxo-barra{background:rgba(255,255,255,.2)}
+.fluxo-barra i,.fluxo-barra span{background:var(--verde)}
+@media (max-width:760px){
+  .fluxo{height:220vh !important}
+  .zm{bottom:44%}
+  .zm-maq{width:min(56vw,280px);left:50%;top:52%;margin-left:calc(min(56vw,280px) / -2);margin-top:calc(min(56vw,280px) * 866 / 788 / -2)}
+  .fluxo-veu{background:linear-gradient(0deg,rgba(6,17,49,.95) 0%,rgba(6,17,49,.85) 44%,rgba(6,17,49,0) 60%) !important}
+  .fluxo-texto{position:absolute !important;left:var(--gl) !important;right:var(--gr);bottom:54px !important;top:auto !important;transform:none !important;width:auto !important;padding:0 !important;margin:0 !important}
+  .fluxo-passos button{padding:9px 0}
+  .fluxo-passos h3{font-size:1.5rem}
+  .zm-dica{font-size:.66rem;padding:6px 9px}
+}
+@media (prefers-reduced-motion:reduce){.zm-vidro img{animation:none}}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -572,11 +607,16 @@ body.menu-aberto{overflow:hidden}
 
   <section class="fluxo" id="fluxo" aria-label="Como funciona na prática">
     <div class="fluxo-cena">
-      <video id="fluxoVideo" muted playsinline loop preload="auto" poster="img/fluxo-capa.jpg" aria-label="Animação: uma pessoa chega com o cesto, coloca a roupa na máquina, liga e vai embora enquanto a máquina lava">
-        <source src="img/fluxo.webm" type="video/webm">
-        <source src="img/fluxo.mp4" type="video/mp4">
-      </video>
-      <div class="fluxo-reserva" aria-hidden="true"><img src="img/lavadora.webp" alt="" width="788" height="866" loading="lazy"></div>
+      <div class="zm" aria-hidden="true">
+        <div class="zm-maq" id="zmMaq">
+          <img src="img/lavadora.webp" alt="" width="788" height="866">
+          <div class="zm-vidro" id="zmVidro"><img src="img/lavadora.webp" alt="" width="788" height="866"></div>
+          <span class="zm-dica" data-passo="1" style="left:69%;top:74%">Coloque a roupa aqui</span>
+          <span class="zm-dica" data-passo="2" style="left:80%;top:20%">R$ 14,90 por ciclo</span>
+          <span class="zm-dica" data-passo="3" style="left:69%;top:74%"><i></i>Lavando…</span>
+        </div>
+      </div>
+      
       <div class="fluxo-veu"></div>
       <div class="fluxo-texto">
         <span class="tag">Na prática</span>
@@ -744,25 +784,53 @@ if (!reduz){
 }
 
 
-/* ===== Fluxo: toca sozinho quando aparece; passos acompanham ===== */
+/* ===== Fluxo: a câmera passeia pela máquina conforme a rolagem ===== */
 (function(){
-  const sec = document.getElementById("fluxo"), v = document.getElementById("fluxoVideo");
-  const itens = [...document.querySelectorAll("#fluxoPassos li")], barra = document.getElementById("fluxoBarra");
-  const CORTES = [0, .130, .534, .796];   // chega · coloca · liga · sai
-  let visivel = false;
-  const tenta = () => { if (visivel && !reduz) { const pr = v.play(); if (pr) pr.catch(() => {}); } };
-  new IntersectionObserver(es => { visivel = es[0].isIntersecting; visivel ? tenta() : v.pause(); }, {threshold: .35}).observe(sec);
-  v.addEventListener("canplay", tenta);
-  itens.forEach(li => li.querySelector("button").addEventListener("click", e => {
-    const k = +e.currentTarget.dataset.passo; if (v.duration) { v.currentTime = CORTES[k] * v.duration + .05; } tenta();
-  }));
-  (function quadro(){
-    if (v.duration){
-      const p = v.currentTime / v.duration; let k = 0; CORTES.forEach((c, j) => { if (p >= c) k = j; });
-      itens.forEach((li, j) => li.classList.toggle("on", j === k)); barra.style.width = (p * 100) + "%";
+  const sec = document.getElementById("fluxo"), cena = sec.querySelector(".fluxo-cena"), zm = sec.querySelector(".zm"), maq = document.getElementById("zmMaq");
+  const itens = [...document.querySelectorAll("#fluxoPassos li")], barra = document.getElementById("fluxoBarra"), dicas = [...maq.querySelectorAll(".zm-dica")];
+  // pontos da foto (fração da largura/altura): inteira, porta, painel, vidro
+  const ALVOS = [{x:.5, y:.5, s:1}, {x:.66, y:.55, s:1.75}, {x:.80, y:.12, s:2.1}, {x:.692, y:.508, s:2.35}];
+  // trechos da rolagem: [início do movimento, chegada] em cada passo (o resto é pausa para ler)
+  const TRECHOS = [[0, 0], [.10, .30], [.40, .60], [.68, .86]];
+  const LIMITES = [0, .22, .52, .78];
+  const suave = t => t * t * (3 - 2 * t);
+  const mix = (a, b, t) => a + (b - a) * t;
+  function estado(p){
+    let a = ALVOS[0];
+    for (let k = 1; k < ALVOS.length; k++){
+      const [i0, i1] = TRECHOS[k];
+      if (p <= i0) break;
+      const t = suave(Math.min(1, (p - i0) / (i1 - i0)));
+      a = {x: mix(a.x, ALVOS[k].x, t), y: mix(a.y, ALVOS[k].y, t), s: mix(a.s, ALVOS[k].s, t)};
+      if (p < i1) break;
+    }
+    return a;
+  }
+  function progresso(){ const r = sec.getBoundingClientRect(), total = r.height - innerHeight; return Math.min(1, Math.max(0, -r.top / total)); }
+  let ultimo = -1;
+  function quadro(){
+    const p = reduz ? 0 : progresso();
+    if (p !== ultimo){
+      ultimo = p;
+      const e = estado(p), W = maq.offsetWidth, H = maq.offsetHeight;
+      // mantém o ponto escolhido da foto no centro da máquina na tela
+      const tx = W/2 - e.x * W * e.s, ty = H/2 - e.y * H * e.s;
+      maq.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px) scale(${e.s.toFixed(4)})`;
+      maq.style.setProperty("--inv", (1 / e.s).toFixed(4));
+      let k = 0; LIMITES.forEach((c, j) => { if (p >= c) k = j; });
+      itens.forEach((li, j) => li.classList.toggle("on", j === k));
+      dicas.forEach(d => d.classList.toggle("on", +d.dataset.passo === k && p >= TRECHOS[k][1] - .02));
+      zm.classList.toggle("lavando", k === 3 && p >= TRECHOS[3][1] - .04);
+      barra.style.width = (p * 100) + "%";
     }
     requestAnimationFrame(quadro);
-  })();
+  }
+  // tocar num passo rola até ele
+  itens.forEach(li => li.querySelector("button").addEventListener("click", e => {
+    const k = +e.currentTarget.dataset.passo, alvo = k ? TRECHOS[k][1] + .02 : 0;
+    const total = sec.offsetHeight - innerHeight; scrollTo({top: sec.offsetTop + alvo * total, behavior: reduz ? "auto" : "smooth"});
+  }));
+  requestAnimationFrame(quadro);
 })();
 
 /* menu do celular */
