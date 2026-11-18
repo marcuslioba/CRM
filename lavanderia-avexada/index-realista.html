@@ -505,6 +505,29 @@ body{background:var(--preto)}
 @media (max-width:760px){.menu-btn{display:inline-flex}.topo nav{display:none}}
 body.menu-aberto{overflow:hidden}
 .menu-cel[hidden],[hidden]{display:none !important}
+
+/* ===== Fluxo em silhueta: toca sozinho, uma tela só ===== */
+.fluxo{height:auto !important}
+.fluxo-cena{position:relative !important;height:min(100svh,820px);min-height:560px;background:radial-gradient(ellipse 60% 70% at 62% 50%,#86ea62,#5cc83b 55%,#3d9e24)}
+.fluxo video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 50%;display:block}
+.fluxo-veu{display:none}
+.fluxo-texto .tag{background:var(--azul-esc);color:#fff}
+.fluxo-passos li{display:block;opacity:1;border-top-color:rgba(10,34,102,.2);padding:0}
+.fluxo-passos button{all:unset;cursor:pointer;display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start;padding:14px 0;width:100%;opacity:.42;transition:opacity .35s}
+.fluxo-passos button:hover{opacity:.75}
+.fluxo-passos button:focus-visible{outline:2px solid var(--azul-esc);outline-offset:4px;border-radius:6px}
+.fluxo-passos li.on button{opacity:1}
+.fluxo-passos b{color:#fff}
+.fluxo-passos h3{color:var(--azul-esc)}
+.fluxo-passos p{color:rgba(10,34,102,.82)}
+.fluxo-barra{background:rgba(10,34,102,.2)}
+.fluxo-barra i{background:var(--azul-esc)}
+.fluxo-barra span{background:var(--azul-esc)}
+@media (max-width:760px){
+  .fluxo-cena{height:auto;min-height:0;padding-bottom:70px;display:flex;flex-direction:column}
+  .fluxo video{position:relative;inset:auto;height:auto;aspect-ratio:4/3;object-position:74% 50%;margin-top:70px}
+  .fluxo-texto{position:relative;left:auto;top:auto;bottom:auto;transform:none;width:auto;padding-inline:var(--gl) var(--gr);margin-top:8px}
+}
 </style>
 </head>
 <body>
@@ -556,16 +579,19 @@ body.menu-aberto{overflow:hidden}
 
   <section class="fluxo" id="fluxo" aria-label="Como funciona na prática">
     <div class="fluxo-cena">
-      <canvas id="fluxoCanvas" aria-hidden="true"></canvas>
+      <video id="fluxoVideo" muted playsinline loop preload="auto" poster="img/fluxo-capa.jpg" aria-label="Animação: uma pessoa chega com o cesto, coloca a roupa na máquina, liga e vai embora enquanto a máquina lava">
+        <source src="img/fluxo.webm" type="video/webm">
+        <source src="img/fluxo.mp4" type="video/mp4">
+      </video>
       <div class="fluxo-reserva" aria-hidden="true"><img src="img/lavadora.webp" alt="" width="788" height="866" loading="lazy"></div>
       <div class="fluxo-veu"></div>
       <div class="fluxo-texto">
         <span class="tag">Na prática</span>
         <ol class="fluxo-passos" id="fluxoPassos">
-          <li class="on"><b>01</b><div><h3>Chegou</h3><p>Traga sua roupa e escolha uma máquina livre. Sem fila, sem agendamento.</p></div></li>
-          <li><b>02</b><div><h3>Coloque a roupa</h3><p>Separe claras e escuras e coloque tudo na lavadora.</p></div></li>
-          <li><b>03</b><div><h3>Pague e lave</h3><p>R$ 14,90 por ciclo. A máquina começa sozinha.</p></div></li>
-          <li><b>04</b><div><h3>Enquanto isso, viva</h3><p>Resolva sua vida enquanto a máquina trabalha. Depois é só secar e levar.</p></div></li>
+          <li class="on"><button type="button" data-passo="0"><b>01</b><div><h3>Chegou</h3><p>Traga sua roupa e escolha uma máquina livre. Sem fila, sem agendamento.</p></div></button></li>
+          <li><button type="button" data-passo="1"><b>02</b><div><h3>Coloque a roupa</h3><p>Separe claras e escuras e coloque tudo na lavadora.</p></div></button></li>
+          <li><button type="button" data-passo="2"><b>03</b><div><h3>Pague e lave</h3><p>R$ 14,90 por ciclo. A máquina começa sozinha.</p></div></button></li>
+          <li><button type="button" data-passo="3"><b>04</b><div><h3>Enquanto isso, viva</h3><p>Resolva sua vida enquanto a máquina trabalha. Depois é só secar e levar.</p></div></button></li>
         </ol>
       </div>
       <div class="fluxo-barra" aria-hidden="true"><i id="fluxoBarra"></i><span style="left:0%"></span><span style="left:25%"></span><span style="left:50%"></span><span style="left:75%"></span></div>
@@ -725,48 +751,25 @@ if (!reduz){
 }
 
 
-/* ===== Fluxo real: sequência de quadros controlada pela rolagem ===== */
+/* ===== Fluxo: toca sozinho quando aparece; passos acompanham ===== */
 (function(){
-  const sec = document.getElementById("fluxo"), cv = document.getElementById("fluxoCanvas"), ctx = cv.getContext("2d");
-  const passos = [...document.querySelectorAll("#fluxoPassos li")], barra = document.getElementById("fluxoBarra");
-  const N = 120, quadros = new Array(N), prontos = new Array(N).fill(false);
-  const CORTES = [0, .119, .573, .813];   // chega · coloca · liga · sai
-  let desenhado = -1, falhas = 0;
-  function carrega(i){
-    const im = new Image(); im.decoding = "async";
-    im.onload = () => { prontos[i] = true; if (i === 0 || i === alvoIdx()) desenha(true); };
-    im.onerror = () => { if (++falhas > 10) sec.classList.add("sem-video"); };
-    im.src = "img/fluxo/f" + String(i + 1).padStart(3, "0") + ".webp"; quadros[i] = im;
-  }
-  // primeiro quadro, depois de 8 em 8, depois o resto (aparece rápido e vai refinando)
-  carrega(0); for (let i = 8; i < N; i += 8) carrega(i); for (let i = 1; i < N; i++) if (!quadros[i]) carrega(i);
-  function progresso(){ const r = sec.getBoundingClientRect(), total = r.height - innerHeight; return Math.min(1, Math.max(0, -r.top / total)); }
-  function alvoIdx(){ return Math.round(progresso() * (N - 1)); }
-  function ajusta(){
-    const d = Math.min(innerWidth < 761 ? 1.5 : 2, devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight;
-    if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)){ cv.width = Math.round(w * d); cv.height = Math.round(h * d); desenhado = -1; }
-  }
-  function desenha(forca){
-    ajusta();
-    let i = alvoIdx();
-    if (!prontos[i]){ for (let k = 1; k < N; k++){ if (prontos[i - k]) { i = i - k; break; } if (prontos[i + k]) { i = i + k; break; } } }
-    if (!prontos[i] || (i === desenhado && !forca)) return;
-    const im = quadros[i], W = cv.width, H = cv.height, ar = im.naturalWidth / im.naturalHeight;
-    let dw = W, dh = W / ar; if (dh < H){ dh = H; dw = H * ar; }
-    const foco = innerWidth < 761 ? .74 : .62;                // enquadra pessoa + máquina
-    const dx = (W - dw) * foco, dy = (H - dh) / 2;
-    ctx.drawImage(im, dx, dy, dw, dh); desenhado = i;
-  }
-  function quadro(){
-    const p = progresso();
-    let k = 0; CORTES.forEach((c, j) => { if (p >= c) k = j; });
-    passos.forEach((li, j) => li.classList.toggle("on", j === k));
-    barra.style.width = (p * 100) + "%";
-    desenha(false);
+  const sec = document.getElementById("fluxo"), v = document.getElementById("fluxoVideo");
+  const itens = [...document.querySelectorAll("#fluxoPassos li")], barra = document.getElementById("fluxoBarra");
+  const CORTES = [0, .130, .534, .796];   // chega · coloca · liga · sai
+  let visivel = false;
+  const tenta = () => { if (visivel && !reduz) { const pr = v.play(); if (pr) pr.catch(() => {}); } };
+  new IntersectionObserver(es => { visivel = es[0].isIntersecting; visivel ? tenta() : v.pause(); }, {threshold: .35}).observe(sec);
+  v.addEventListener("canplay", tenta);
+  itens.forEach(li => li.querySelector("button").addEventListener("click", e => {
+    const k = +e.currentTarget.dataset.passo; if (v.duration) { v.currentTime = CORTES[k] * v.duration + .05; } tenta();
+  }));
+  (function quadro(){
+    if (v.duration){
+      const p = v.currentTime / v.duration; let k = 0; CORTES.forEach((c, j) => { if (p >= c) k = j; });
+      itens.forEach((li, j) => li.classList.toggle("on", j === k)); barra.style.width = (p * 100) + "%";
+    }
     requestAnimationFrame(quadro);
-  }
-  addEventListener("resize", () => desenha(true));
-  requestAnimationFrame(quadro);
+  })();
 })();
 
 /* menu do celular */
