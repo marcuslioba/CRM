@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LanLan Coxinhas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="LanLan – Muito mais que uma coxinha. Desde 1994 em Fortaleza. Peça a sua.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,900&display=swap">
+<style>
+/* Layout: vitrine de sabores em tela cheia (estilo dos pins da jaqueta e do tênis): cada sabor tem sua cor, o produto flutua no centro, nome gigante atrás.
+   Depois: faixa amarela → pedido em 3 passos → slogan → história → unidades → franquia → rodapé. Identidade LanLan: laranja #FF500A + amarelo #FFD600, Montserrat pesada. */
+:root{
+  --laranja:#ff500a; --laranja-esc:#d93d00; --amarelo:#ffd600; --creme:#fff7ea; --marrom:#2a1408;
+  --fg:#ffffff; --tinta:#2a1408; --tinta2:#6b4a35;
+  --c1:#1fb5d6; --c2:#0b5f86;
+  --fonte:"Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --gl:max(16px, env(safe-area-inset-left, 0px)); --gr:max(16px, env(safe-area-inset-right, 0px));
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--creme);color:var(--tinta);font-family:var(--fonte);font-size:16px;line-height:1.55;overflow-x:hidden}
+main{overflow-x:clip}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+img{display:block;max-width:100%}
+[hidden]{display:none !important}
+:focus-visible{outline:3px solid var(--amarelo);outline-offset:3px;border-radius:8px}
+.in{max-width:1200px;margin:0 auto;padding-left:var(--gl);padding-right:var(--gr)}
+.selo{display:inline-block;background:var(--amarelo);color:var(--marrom);font-weight:800;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;border-radius:999px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:14px 26px;border-radius:999px;background:var(--amarelo);color:var(--marrom);font-weight:800;font-size:.95rem;text-decoration:none;box-shadow:0 6px 0 rgba(0,0,0,.18);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 rgba(0,0,0,.18)}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn.laranja{background:var(--laranja);color:#fff}
+.btn.vazado{background:transparent;color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.75)}
+.btn svg{width:20px;height:20px}
+
+/* ===== Topo ===== */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--laranja)}
+.topo{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;transition:background .3s,box-shadow .3s}
+.topo.fundo{background:var(--laranja);box-shadow:0 2px 20px rgba(0,0,0,.15)}
+.topo .in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px;max-width:none}
+.marca{display:block;width:96px;flex:none}
+.marca img{width:100%;height:auto}
+.topo nav{display:flex;align-items:center;gap:24px}
+.topo nav a{color:#fff;text-decoration:none;font-weight:700;font-size:.88rem;padding-block:12px}
+.topo nav a:hover{color:var(--amarelo)}
+.topo .btn{min-height:44px;padding:10px 20px;font-size:.88rem}
+.menu-btn{display:none;align-items:center;gap:10px;min-height:44px;padding:10px 16px;border-radius:999px;border:2px solid rgba(255,255,255,.7);background:transparent;color:#fff;font:800 .8rem/1 var(--fonte);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.menu-btn i{position:relative;width:16px;height:2px;background:#fff}
+.menu-btn i::before,.menu-btn i::after{content:"";position:absolute;left:0;width:16px;height:2px;background:#fff;transition:transform .25s}
+.menu-btn i::before{top:-5px}.menu-btn i::after{top:5px}
+.menu-btn[aria-expanded="true"] i{background:transparent}
+.menu-btn[aria-expanded="true"] i::before{transform:translateY(5px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] i::after{transform:translateY(-5px) rotate(-45deg)}
+.menu-cel{position:fixed;inset:0;z-index:45;background:var(--laranja);padding:calc(96px + env(safe-area-inset-top,0px)) var(--gr) 32px var(--gl);display:flex;flex-direction:column;gap:26px;overflow-y:auto}
+.menu-cel nav{display:grid}
+.menu-cel nav a{color:#fff;text-decoration:none;font-weight:900;font-size:2rem;line-height:1.1;padding:14px 0;border-bottom:2px solid rgba(255,255,255,.25)}
+.menu-cel .btn{align-self:flex-start}
+body.menu-aberto{overflow:hidden}
+@media (max-width:900px){.topo nav{display:none}.menu-btn{display:inline-flex}.topo .btn.so-pc{display:none}}
+
+/* ===== Vitrine ===== */
+.vitrine{position:relative;min-height:100svh;display:grid;grid-template-rows:1fr auto;overflow:hidden;color:#fff;isolation:isolate}
+.vit-fundo,.vit-fundo-novo{position:absolute;inset:0;z-index:-2}
+.vit-fundo-novo{opacity:0;transition:opacity .8s ease;z-index:-1}
+.vit-fundo-novo.on{opacity:1}
+.vitrine::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 110% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.28))}
+.palco{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,1.5fr) minmax(0,1fr);align-items:center;gap:20px;padding:110px var(--gr) 20px var(--gl)}
+.nome{position:absolute;left:50%;top:50%;transform:translate(-50%,-56%);font-weight:900;font-size:clamp(4.6rem,16vw,15rem);line-height:.85;letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap;color:rgba(255,255,255,.16);pointer-events:none;z-index:0}
+.nome span{display:inline-block;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .4s}
+.esq{position:relative;z-index:3;display:grid;gap:16px;align-content:center;justify-items:start;max-width:360px}
+.setas{display:flex;gap:8px}
+.setas button{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.6);background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer}
+.setas button:hover{background:rgba(255,255,255,.15)}
+.setas svg{width:16px;height:16px}
+.esq h1,.esq h2{font-weight:600;font-size:clamp(2.1rem,3.6vw,3.3rem);line-height:1;letter-spacing:-.02em}
+.esq h1 b,.esq h2 b{display:block;font-weight:900}
+.esq p{color:rgba(255,255,255,.9);font-weight:500;max-width:32ch}
+.esq .acoes{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.produto{position:relative;z-index:2;justify-self:center;width:100%;max-width:640px;aspect-ratio:16/10;display:grid;place-items:center}
+.produto img{position:absolute;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 34px 30px rgba(0,0,0,.35));transition:transform .75s cubic-bezier(.2,.8,.2,1),opacity .45s}
+.produto img.sai{opacity:0}
+.flutua{animation:flutua 5s ease-in-out infinite}
+@keyframes flutua{50%{translate:0 -12px;rotate:-1deg}}
+.dir{position:relative;z-index:3;display:grid;gap:14px;justify-items:end;text-align:right}
+.ficha{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.ficha li{display:grid}
+.ficha b{font-weight:900;font-size:1.3rem;line-height:1.1}
+.ficha span{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.ilustr{font-size:.66rem;color:rgba(255,255,255,.6)}
+.base{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:end;gap:16px;padding:0 var(--gr) 24px var(--gl)}
+.abas{display:flex;gap:6px;flex-wrap:wrap}
+.abas button{min-height:44px;padding:10px 16px;border-radius:999px;border:0;background:rgba(0,0,0,.18);color:#fff;font:700 .8rem/1 var(--fonte);cursor:pointer;transition:background .3s,color .3s}
+.abas button[aria-selected="true"]{background:#fff;color:var(--marrom)}
+.proximo{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.18);border:0;border-radius:18px;padding:8px 14px 8px 8px;color:#fff;cursor:pointer;font:700 .78rem/1.2 var(--fonte);text-align:left}
+.proximo img{width:70px;height:46px;object-fit:contain}
+.proximo small{display:block;font-weight:600;opacity:.75;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase}
+.barra-tempo{position:absolute;left:0;bottom:0;height:4px;background:var(--amarelo);width:0;z-index:4}
+@media (max-width:900px){
+  .palco{grid-template-columns:1fr;grid-template-areas:"prod" "esq" "dir";padding-top:96px;gap:14px;text-align:left}
+  .produto{grid-area:prod;max-width:520px}
+  .esq{grid-area:esq;max-width:none}
+  .dir{grid-area:dir;justify-items:start;text-align:left}
+  .ficha{grid-template-columns:repeat(3,auto);gap:18px}
+  .nome{top:24%;font-size:20vw}
+  .proximo{display:none}
+}
+
+/* ===== Faixa ===== */
+.faixa{background:var(--amarelo);color:var(--laranja);overflow:hidden;border-block:3px solid var(--marrom)}
+.faixa .trilho{display:flex;width:max-content;animation:corre 26s linear infinite}
+.faixa span{font-weight:900;font-size:clamp(1.3rem,2.6vw,2rem);text-transform:uppercase;padding:14px 0;white-space:nowrap}
+.faixa span::after{content:"✦";color:var(--marrom);margin:0 26px;font-size:.8em}
+@keyframes corre{to{transform:translateX(-50%)}}
+
+/* ===== Seções ===== */
+.sec{padding-block:100px}
+.titulo{font-weight:900;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1;letter-spacing:-.02em;color:var(--laranja);text-wrap:balance}
+.titulo em{font-style:normal;color:var(--marrom)}
+.sub{color:var(--tinta2);font-weight:500;max-width:46ch}
+
+/* pedido */
+.pedido .in{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.pedido .fone{max-width:440px;justify-self:center;filter:drop-shadow(0 30px 30px rgba(42,20,8,.25))}
+.passos{list-style:none;margin:28px 0;padding:0;display:grid;gap:14px;counter-reset:p}
+.passos li{counter-increment:p;display:flex;align-items:center;gap:16px;font-weight:700;font-size:1.1rem}
+.passos li::before{content:counter(p);flex:none;width:44px;height:44px;border-radius:50%;background:var(--laranja);color:#fff;display:grid;place-items:center;font-weight:900}
+
+/* slogan */
+.slogan{background:#fff}
+.slogan .in{display:grid;grid-template-columns:1.2fr .8fr;gap:50px;align-items:center}
+.slogan img{width:100%;max-width:560px}
+.slogan p{font-size:1.15rem;font-weight:500;color:var(--tinta2)}
+
+/* história */
+.historia{background:var(--laranja);color:#fff}
+.historia .titulo{color:#fff}
+.historia .titulo em{color:var(--amarelo)}
+.linha{list-style:none;margin:50px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.linha li{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.25);border-radius:24px;padding:28px;display:grid;gap:10px;align-content:start}
+.linha .ano{font-weight:900;font-size:3rem;line-height:1;color:var(--amarelo)}
+.linha h3{font-weight:800;font-size:1.15rem}
+.linha p{color:rgba(255,255,255,.88);font-size:.96rem}
+.fundadores{margin-top:26px;font-weight:600;color:rgba(255,255,255,.85)}
+
+/* unidades + franquia */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.cartao{border-radius:28px;padding:40px;display:grid;gap:16px;align-content:start;min-height:320px;position:relative;overflow:hidden}
+.cartao h2{font-weight:900;font-size:clamp(1.9rem,3.6vw,2.8rem);line-height:1}
+.cartao p{font-weight:500;max-width:36ch}
+.cartao .btn{justify-self:start;margin-top:auto}
+.c-unidades{background:var(--amarelo);color:var(--marrom)}
+.c-unidades .btn{background:var(--laranja);color:#fff}
+.c-franquia{background:var(--marrom);color:#fff}
+.cartao .pin{position:absolute;right:-20px;bottom:-30px;width:180px;opacity:.14}
+
+/* rodapé */
+.rodape{background:#1c0d05;color:#d9c7bb;padding-block:56px 30px;font-size:.92rem}
+.rodape .in{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:30px}
+.rodape h4{margin:0 0 12px;color:#fff;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase}
+.rodape ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.rodape a{text-decoration:none;display:inline-block;padding-block:11px}
+.rodape a:hover{color:var(--amarelo)}
+.rodape .logo{width:120px}
+.legal{max-width:1200px;margin:36px auto 0;padding:20px var(--gr) 0 var(--gl);border-top:1px solid rgba(255,255,255,.12);font-size:.78rem;color:#a08a7c}
+
+.zap{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;min-height:56px;padding:0 20px;border-radius:999px;background:var(--laranja);color:#fff;display:flex;align-items:center;gap:8px;font-weight:800;text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.zap svg{width:22px;height:22px}
+@media (min-width:901px){.zap{display:none}}
+
+.rev{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.rev.vis{opacity:1;transform:none}
+
+@media (max-width:900px){
+  .pedido .in,.slogan .in,.duo{grid-template-columns:1fr}
+  .linha{grid-template-columns:1fr}
+  .rodape .in{grid-template-columns:1fr 1fr}
+  .sec{padding-block:70px}
+  .cartao{padding:30px;min-height:0}
+}
+@media (max-width:520px){.rodape .in{grid-template-columns:1fr}.zap span{display:none}.zap{padding:0 16px}}
+@media (prefers-reduced-motion:reduce){
+  .flutua,.faixa .trilho{animation:none}
+  .rev{opacity:1;transform:none;transition:none}
+  .produto img,.nome span{transition:opacity .3s}
+  html{scroll-behavior:auto}
+}
+
+/* ajustes da revisão visual */
+.slogan{background:var(--laranja);color:#fff}
+.slogan p{color:rgba(255,255,255,.92)}
+.slogan .btn.laranja{background:var(--amarelo);color:var(--marrom)}
+.historia{background:var(--creme);color:var(--tinta)}
+.historia .titulo{color:var(--laranja)}
+.historia .titulo em{color:var(--marrom)}
+.linha li{background:#fff;border:2px solid #f3dcc7}
+.linha .ano{color:var(--laranja)}
+.linha p{color:var(--tinta2)}
+.fundadores{color:var(--tinta2)}
+@media (max-width:900px){.pedido .fone{max-width:260px}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="seta" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="sacola" viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7L6 7Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 7a3 3 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="pino" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="currentColor"/><circle cx="12" cy="10" r="2.6" fill="#fff"/></symbol>
+</svg>
+
+<header class="topo" id="topo">
+  <div class="in">
+    <a class="marca" href="#inicio" aria-label="LanLan, página inicial"><img src="img/logotipo_branco.svg" alt="LanLan" width="100" height="48"></a>
+    <nav aria-label="Seções"><a href="#sabores">Sabores</a><a href="#pedir">Como pedir</a><a href="#historia">Nossa história</a><a href="#unidades">Unidades</a><a href="#franquia">Seja um franqueado</a></nav>
+    <a class="btn so-pc js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Fazer pedido</a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuCel"><span>Menu</span><i aria-hidden="true"></i></button>
+  </div>
+</header>
+
+<div class="menu-cel" id="menuCel" hidden>
+  <nav aria-label="Menu"><a href="#sabores">Sabores</a><a href="#pedir">Como pedir</a><a href="#historia">Nossa história</a><a href="#unidades">Unidades</a><a href="#franquia">Seja um franqueado</a></nav>
+  <a class="btn js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Fazer pedido</a>
+</div>
+
+<main id="inicio">
+  <section class="vitrine" id="sabores" aria-roledescription="carrossel" aria-label="Sabores LanLan">
+    <div class="vit-fundo" id="fundo"></div>
+    <div class="vit-fundo-novo" id="fundoNovo"></div>
+    <div class="palco">
+      <div class="nome" id="nome" aria-hidden="true"></div>
+      <div class="esq">
+        <span class="selo" id="selo">Novo sabor</span>
+        <h1 id="titulo">Coxão <b>Iracema</b></h1>
+        <p id="texto"></p>
+        <div class="acoes">
+          <a class="btn js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Fazer pedido</a>
+          <div class="setas"><button id="ant" aria-label="Sabor anterior"><svg><use href="#seta"/></svg></button><button id="prox" aria-label="Próximo sabor"><svg style="transform:scaleX(-1)"><use href="#seta"/></svg></button></div>
+        </div>
+      </div>
+      <div class="produto" aria-live="polite"><img id="foto" class="flutua" src="img/iracema.webp" alt="Coxão Iracema aberto, recheado com camarão e requeijão" width="1100" height="537"></div>
+      <div class="dir">
+        <ul class="ficha" id="ficha"></ul>
+        <span class="ilustr">Imagens meramente ilustrativas</span>
+      </div>
+    </div>
+    <div class="base">
+      <div class="abas" role="tablist" aria-label="Escolha o sabor" id="abas"></div>
+      <button class="proximo" id="proximo"><img id="miniFoto" src="" alt=""><span><small>Próximo</small><span id="miniNome"></span></span></button>
+    </div>
+    <i class="barra-tempo" id="barraTempo" aria-hidden="true"></i>
+  </section>
+
+  <div class="faixa" aria-hidden="true"><div class="trilho">
+    <span>Muito mais que uma coxinha</span><span>Desde 1994</span><span>Nascida em Fortaleza</span><span>Coxinha de verdade</span><span>Peça a sua</span>
+    <span>Muito mais que uma coxinha</span><span>Desde 1994</span><span>Nascida em Fortaleza</span><span>Coxinha de verdade</span><span>Peça a sua</span>
+  </div></div>
+
+  <section class="sec pedido" id="pedir">
+    <div class="in">
+      <img class="fone rev" src="img/cardapio.webp" alt="Cardápio do LanLan aberto no celular" width="982" height="972" loading="lazy">
+      <div class="rev">
+        <span class="selo">Peça online</span>
+        <h2 class="titulo" style="margin-top:14px">Bateu a vontade? <em>Peça em 3 passos.</em></h2>
+        <ol class="passos">
+          <li>Selecione seu pedido</li>
+          <li>Confira tudo</li>
+          <li>Finalize</li>
+        </ol>
+        <a class="btn laranja js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Fazer pedido agora</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec slogan">
+    <div class="in">
+      <img class="rev" src="img/slogan.svg" alt="Muito mais que uma coxinha." width="442" height="280" loading="lazy">
+      <div class="rev">
+        <p>São mais de 20 anos de trabalho, dedicação e muito amor em cada coxinha do LanLan.</p>
+        <a class="btn laranja" href="#historia" style="margin-top:22px">Conheça nossa história</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec historia" id="historia">
+    <div class="in">
+      <span class="selo">Nossa história</span>
+      <h2 class="titulo" style="margin-top:14px">Começou numa garagem. <em>Virou paixão de Fortaleza.</em></h2>
+      <ol class="linha">
+        <li class="rev"><span class="ano">1994</span><h3>A locadora e as primeiras coxinhas</h3><p>O Erlanio, o "LanLan", abriu uma locadora de videogames na garagem de casa. Com a esposa Morgana, passou a vender sucos e coxinhas, feitas por ele mesmo no quintal da casa da mãe.</p></li>
+        <li class="rev"><span class="ano">2006</span><h3>Nasce a LanLan Sanduíches</h3><p>A lanchonete abre no Conjunto José Walter, em Fortaleza, com hambúrgueres, sanduíches, coxinhas e vitaminas, e vira referência no bairro.</p></li>
+        <li class="rev"><span class="ano">2015</span><h3>O foco na legítima coxinha</h3><p>O negócio se reinventa: a operação é reformulada e compactada, ganha identidade visual nova e passa a girar em torno da coxinha.</p></li>
+      </ol>
+      <p class="fundadores">Fundadores: Erlânio e Morgana.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="in duo">
+      <article class="cartao c-unidades rev" id="unidades">
+        <svg class="pin" aria-hidden="true"><use href="#pino"/></svg>
+        <span class="selo" style="background:var(--laranja);color:#fff;justify-self:start">Unidades</span>
+        <h2>Encontre o seu LanLan</h2>
+        <p>Veja a unidade mais perto de você e passe para buscar a sua coxinha.</p>
+        <a class="btn" href="https://lanlanoficial.com.br/unidades" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#pino"/></svg>Ver unidades</a>
+      </article>
+      <article class="cartao c-franquia rev" id="franquia">
+        <span class="selo" style="justify-self:start">Franquia</span>
+        <h2>Seja um franqueado LanLan</h2>
+        <p>Leve a coxinha que nasceu em Fortaleza para a sua cidade, com o apoio de uma marca com mais de 20 anos de estrada.</p>
+        <a class="btn js-franquia" href="https://franquia.lanlanoficial.com.br" target="_blank" rel="noopener">Quero ser franqueado</a>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="in">
+    <div><img class="logo" src="img/logotipo_branco.svg" alt="LanLan" width="120" height="58" loading="lazy"><p style="margin-top:14px">Muito mais que uma coxinha.</p></div>
+    <div><h4>Info</h4><ul><li><a href="https://lanlanoficial.com.br/historia" target="_blank" rel="noopener">Nossa história</a></li><li><a href="https://lanlanoficial.com.br/informacoes-nutricionais" target="_blank" rel="noopener">Informações nutricionais</a></li><li><a href="https://lanlanoficial.com.br/politica-de-privacidade" target="_blank" rel="noopener">Política de privacidade</a></li><li><a href="https://lanlanoficial.com.br/radio" target="_blank" rel="noopener">Rádio LanLan</a></li></ul></div>
+    <div><h4>Junte-se a nós</h4><ul><li><a href="https://franquia.lanlanoficial.com.br" target="_blank" rel="noopener">Seja um franqueado</a></li><li><a href="https://lanlanoficial.com.br/trabalhe-conosco" target="_blank" rel="noopener">Trabalhe conosco</a></li><li><a href="https://lanlanoficial.com.br/franqueado" target="_blank" rel="noopener">Já sou franqueado</a></li></ul></div>
+    <div><h4>Contato</h4><ul><li><a href="https://lanlanoficial.com.br/fale-conosco" target="_blank" rel="noopener">Fale conosco</a></li><li><a href="https://www.instagram.com/lanlanoficial" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.facebook.com/lanlanoficial" target="_blank" rel="noopener">Facebook</a></li></ul></div>
+  </div>
+  <p class="legal">© LanLan – Todos os direitos reservados. LANLAN INDÚSTRIA DE ALIMENTOS &amp; SERVIÇOS LTDA – CNPJ: 07.215.774/0004-21</p>
+</footer>
+
+<a class="zap js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener" aria-label="Fazer pedido"><svg aria-hidden="true"><use href="#sacola"/></svg><span>Pedir</span></a>
+
+<script>
+/* ======================================================
+   RASTREAMENTO DE ANÚNCIOS: preencha os IDs para ativar.
+   Cliques em "Fazer pedido" enviam: Meta "InitiateCheckout" + "CliquePedido" (com o local)
+   e Google "clique_pedido". Cliques em franquia enviam Meta "Lead" e Google "clique_franquia".
+   ====================================================== */
+const META_PIXEL_ID = "";
+const GOOGLE_TAG_ID = "";
+if (META_PIXEL_ID) {
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', META_PIXEL_ID); fbq('track', 'PageView');
+}
+if (GOOGLE_TAG_ID) {
+  const g = document.createElement("script"); g.async = true; g.src = "https://www.googletagmanager.com/gtag/js?id=" + GOOGLE_TAG_ID; document.head.appendChild(g);
+  window.dataLayer = window.dataLayer || []; window.gtag = function(){ dataLayer.push(arguments); }; gtag("js", new Date()); gtag("config", GOOGLE_TAG_ID);
+}
+const local = a => a.closest("section,header,.menu-cel")?.id || (a.classList.contains("zap") ? "botao-flutuante" : "outro");
+document.querySelectorAll(".js-pedido").forEach(a => a.addEventListener("click", () => {
+  try { if (window.fbq) { fbq('track','InitiateCheckout'); fbq('trackCustom','CliquePedido',{local:local(a)}); } if (window.gtag) gtag("event","clique_pedido",{local:local(a)}); } catch(e) {}
+}));
+document.querySelectorAll(".js-franquia").forEach(a => a.addEventListener("click", () => {
+  try { if (window.fbq) fbq('track','Lead'); if (window.gtag) gtag("event","clique_franquia"); } catch(e) {}
+}));
+
+const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+
+/* ===== Vitrine de sabores ===== */
+const SABORES = [
+  { aba:"Coxão Iracema", nome:"IRACEMA", selo:"Novo sabor", titulo:"Coxão <b>Iracema</b>", foto:"img/iracema.webp", alt:"Coxão Iracema aberto, recheado com camarão e requeijão",
+    texto:"Deliciosos filés de camarão com requeijão cremoso e massa crocante empanada com farinha panko.",
+    ficha:[["Camarão","em filés"],["Requeijão","cremoso"],["Panko","massa crocante"]], c1:"#2cc3e3", c2:"#0a5b84" },
+  { aba:"Coxinha Fit", nome:"FIT", selo:"Leve e saborosa", titulo:"Coxinha Fit <b>Frango</b>", foto:"img/fit.webp", alt:"Coxinha Fit aberta, recheada com frango desfiado",
+    texto:"Massa feita com batata e semente de chia, recheada com frango desfiado.",
+    ficha:[["Batata","na massa"],["Chia","em semente"],["Frango","desfiado"]], c1:"#8fd14f", c2:"#2c7419" },
+  { aba:"Empanadas", nome:"EMPANADA", selo:"Chegaram", titulo:"Empanadas <b>Nordestinas</b>", foto:"img/empanada.webp", alt:"Empanadas nordestinas, uma delas aberta mostrando o recheio",
+    texto:"Assadas no forno, com massa levemente folhada e recheio extremamente suculento.",
+    ficha:[["Assada","no forno"],["Folhada","massa leve"],["Suculenta","no recheio"]], c1:"#f7a738", c2:"#9a3d08" },
+  { aba:"Cookies", nome:"COOKIES", selo:"Chegaram", titulo:"Cookies com <b>Nutella</b>", foto:"img/cookies.webp", alt:"Dois cookies partidos, recheados com Nutella",
+    texto:"Chegaram os cookies feitos com Nutella. Para fechar o pedido com um docinho.",
+    ficha:[["Nutella","no recheio"],["Novidade","no cardápio"]], c1:"#8a4a28", c2:"#2a120a" },
+];
+const abas = $("abas");
+SABORES.forEach((s, i) => { const b = document.createElement("button"); b.role = "tab"; b.textContent = s.aba; b.onclick = () => { ir(i); reinicia(); }; abas.appendChild(b); });
+SABORES.forEach(s => { const im = new Image(); im.src = s.foto; });   // pré-carrega
+let atual = -1;
+function fundoDe(s){ return `radial-gradient(ellipse 60% 70% at 52% 46%, ${s.c1}, ${s.c2} 82%)`; }
+function ir(i, dir){
+  i = (i + SABORES.length) % SABORES.length; if (i === atual) return;
+  const s = SABORES[i], primeira = atual < 0, ida = dir ?? (i > atual ? 1 : -1); atual = i;
+  const fn = $("fundoNovo"); fn.style.background = fundoDe(s); fn.classList.add("on");
+  setTimeout(() => { $("fundo").style.background = fundoDe(s); fn.classList.remove("on"); }, primeira ? 0 : 800);
+  $("nome").innerHTML = [...s.nome].map(c => `<span>${c}</span>`).join("");
+  $("selo").textContent = s.selo; $("titulo").innerHTML = s.titulo; $("texto").textContent = s.texto;
+  $("ficha").innerHTML = s.ficha.map(([a,b]) => `<li><b>${a}</b><span>${b}</span></li>`).join("");
+  const foto = $("foto");
+  if (primeira || reduz){ foto.src = s.foto; foto.alt = s.alt; }
+  else {
+    foto.style.transform = `translateX(${-50*ida}%) rotate(${-10*ida}deg) scale(.85)`; foto.classList.add("sai");
+    setTimeout(() => {
+      foto.style.transition = "none"; foto.src = s.foto; foto.alt = s.alt; foto.style.transform = `translateX(${50*ida}%) rotate(${10*ida}deg) scale(.85)`;
+      void foto.offsetWidth; foto.style.transition = ""; foto.classList.remove("sai"); foto.style.transform = "";
+    }, 380);
+  }
+  const p = SABORES[(i+1) % SABORES.length]; $("miniFoto").src = p.foto; $("miniNome").textContent = p.aba;
+  [...abas.children].forEach((b, k) => b.setAttribute("aria-selected", k === i));
+}
+$("ant").onclick = () => { ir(atual-1, -1); reinicia(); };
+$("prox").onclick = () => { ir(atual+1, 1); reinicia(); };
+$("proximo").onclick = () => { ir(atual+1, 1); reinicia(); };
+let x0 = null; const vit = $("sabores");
+vit.addEventListener("touchstart", e => x0 = e.touches[0].clientX, {passive:true});
+vit.addEventListener("touchend", e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) { ir(atual + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); reinicia(); } x0 = null; });
+/* troca sozinha a cada 6s, com barrinha de tempo; pausa fora da tela */
+const TEMPO = 6000; let t0 = performance.now(), visivel = true, pausado = reduz;
+new IntersectionObserver(es => { visivel = es[0].isIntersecting; }, {threshold:.3}).observe(vit);
+function reinicia(){ t0 = performance.now(); }
+(function laco(agora){
+  if (!pausado && visivel && document.visibilityState === "visible"){
+    const p = (agora - t0) / TEMPO; $("barraTempo").style.width = Math.min(100, p*100) + "%";
+    if (p >= 1){ ir(atual+1, 1); reinicia(); }
+  } else t0 = agora - (parseFloat($("barraTempo").style.width) || 0) / 100 * TEMPO;
+  requestAnimationFrame(laco);
+})(performance.now());
+ir(0);
+
+/* ===== Menu do celular ===== */
+(function(){ const b = $("menuBtn"), m = $("menuCel");
+  const abre = v => { m.hidden = !v; b.setAttribute("aria-expanded", v); b.firstElementChild.textContent = v ? "Fechar" : "Menu"; document.body.classList.toggle("menu-aberto", v); };
+  b.addEventListener("click", () => abre(m.hidden));
+  m.querySelectorAll("a").forEach(a => a.addEventListener("click", () => abre(false)));
+  addEventListener("keydown", e => { if (e.key === "Escape" && !m.hidden) { abre(false); b.focus(); } });
+})();
+
+/* ===== Topo ganha fundo depois da vitrine ===== */
+(function(){ const t = $("topo"); const ver = () => t.classList.toggle("fundo", scrollY > innerHeight * .7 || !$("menuCel").hidden);
+  addEventListener("scroll", ver, {passive:true}); ver(); })();
+
+/* ===== Elementos entram quando aparecem ===== */
+(function(){ const els = document.querySelectorAll(".rev");
+  if (reduz || !("IntersectionObserver" in window)) { els.forEach(e => e.classList.add("vis")); return; }
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("vis"); io.unobserve(e.target); } }), {threshold:.15});
+  els.forEach(e => io.observe(e));
+})();
+</script>
+</body>
+</html>
