@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- Pina · auditoria de site (UX/UI)
+ Dina · auditoria de site (UX/UI)
  ================================
  Abre o site como um cliente faria, no computador (1366x768) e no celular (390x844),
  rola a página inteira tirando uma captura por tela e roda checagens automáticas.

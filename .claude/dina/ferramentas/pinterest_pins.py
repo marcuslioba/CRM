@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Pina · leitor de pins do Pinterest
+Dina · leitor de pins do Pinterest
 ==================================
 
 Recebe links de pins (pin.it/... ou pinterest.com/pin/...) e, para cada um:

@@ -1,12 +1,12 @@
-# Pina · agente de sites criativos
+# Dina · agente de sites criativos
 
-A **Pina** é uma agente do Claude Code especialista em criar sites e landing pages criativos para pequenos negócios. Ela usa o método que construímos no site da **Lavanderia Avexada**.
+A **Dina** é uma agente do Claude Code especialista em criar sites e landing pages criativos para pequenos negócios. Ela usa o método que construímos no site da **Lavanderia Avexada**.
 
-O nome vem de **Pin**, porque todo trabalho dela começa com referências do Pinterest.
+O nome vem de **D**esign, e o método dela começa sempre com referências do Pinterest.
 
 ---
 
-## O que a Pina faz, passo a passo
+## O que a Dina faz, passo a passo
 
 | Etapa | O que acontece |
 |---|---|
@@ -24,13 +24,13 @@ O nome vem de **Pin**, porque todo trabalho dela começa com referências do Pin
 
 No Claude Code, dentro deste repositório (CRM), peça assim:
 
-> **"Pina, cria um site para a Barbearia X. Referências: pin.it/aaa, pin.it/bbb. Segue o print do Instagram."**
+> **"Dina, cria um site para a Barbearia X. Referências: pin.it/aaa, pin.it/bbb. Segue o print do Instagram."**
 
 Ou:
 
-> **"Use a agente Pina para refazer o site da Padaria Y no estilo desses pins: ..."**
+> **"Use a agente Dina para refazer o site da Padaria Y no estilo desses pins: ..."**
 
-O Claude chama a Pina automaticamente quando o assunto é criar ou melhorar site.
+O Claude chama a Dina automaticamente quando o assunto é criar ou melhorar site.
 
 ### O que mandar para um resultado melhor
 1. **De 2 a 4 links de pins** com o estilo que você imagina. É o mais importante.
@@ -41,7 +41,7 @@ O Claude chama a Pina automaticamente quando o assunto é criar ou melhorar site
 
 ---
 
-## Arquivos da Pina
+## Arquivos da Dina
 
 ```
 .claude/
@@ -59,24 +59,24 @@ O Claude chama a Pina automaticamente quando o assunto é criar ou melhorar site
 ### Usar as ferramentas sozinha (opcional)
 ```bash
 # ler pins (gera imagem.jpg, video.mp4 e quadros.jpg de cada um)
-python3 -I .claude/pina/ferramentas/pinterest_pins.py pasta-saida https://pin.it/xxxx https://pin.it/yyyy
+python3 -I .claude/dina/ferramentas/pinterest_pins.py pasta-saida https://pin.it/xxxx https://pin.it/yyyy
 
 # testar um site (gera capturas de todas as telas e um relatório)
 pip install -q rangehttpserver
 (cd lavanderia-avexada && python3 -m RangeHTTPServer 8765 &)
-node .claude/pina/ferramentas/auditar_site.js http://localhost:8765/index-realista.html pasta-auditoria
+node .claude/dina/ferramentas/auditar_site.js http://localhost:8765/index-realista.html pasta-auditoria
 ```
 
 ---
 
 ## Limitações que você precisa saber
 
-- **A busca do Pinterest não funciona sem login.** A Pina abre os links que você manda, mas não consegue navegar pelos resultados de busca do site. Mande links sempre que puder.
+- **A busca do Pinterest não funciona sem login.** A Dina abre os links que você manda, mas não consegue navegar pelos resultados de busca do site. Mande links sempre que puder.
 - **O Instagram é bloqueado** neste ambiente. Mande prints.
 - **O Higgsfield no plano grátis** só gera imagens no modelo simples. Para fotos mais realistas, é preciso o plano pago ou fotos reais.
 - **Arquivos do Google Drive** acima de 10 MB não baixam. Mande vídeos curtos ou prints.
 
-## Conexões que deixam a Pina mais forte
+## Conexões que deixam a Dina mais forte
 
 | Conexão | Situação | Para que serve |
 |---|---|---|
