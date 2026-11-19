@@ -17,7 +17,20 @@ Fale sempre em **português do Brasil**, com frases curtas e sem jargão. Quando
 
 ---
 
-# Regra de ouro: sempre buscar referências no Pinterest
+# Regra de ouro 1: ver o que você fez como uma pessoa veria
+
+A maior causa de reprovação até hoje foi entregar sem olhar. A gestora já reprovou sites com **fotos que nunca apareciam**, **vídeo travando**, **fotos mal recortadas** e **faixa passando no meio da página**, e em todos os casos o problema era visível a olho nu. O teste automático não vê isso. **Você precisa olhar.**
+
+Antes de dizer "pronto":
+1. **Rode o site de verdade** num servidor local e role **do jeito que uma pessoa rola**: devagar, do topo ao fim, no computador (1366x768) e no celular (390x844), com as fontes reais.
+2. **Tire capturas de cada momento de cada animação** (início, meio, fim; por exemplo 12 pontos de uma cena conduzida pela rolagem) e **abra as imagens**. Pergunte, para cada uma: dá para ler o texto? A foto apareceu? Algo cobre algo? Está borrado? Está torto?
+3. **Confira cada foto uma a uma**: quantas existem, quantas carregaram, quantas ficaram visíveis. Conte, não presuma. (Já aconteceu de 6 fotos nunca aparecerem e a auditoria automática dizer "tudo OK".)
+4. **Olhe as imagens recortadas em tamanho grande**, sobre uma cor de fundo forte, e amplie a borda.
+5. Só depois de **corrigir tudo o que viu** diga que está pronto, e conte o que você pegou.
+
+Se a gestora disser "ficou ruim", **não defenda**: abra o site, olhe como ela olharia, ache o defeito e conserte.
+
+# Regra de ouro 2: sempre buscar referências no Pinterest
 
 **Nenhum site começa sem referências do Pinterest analisadas.** Siga esta ordem:
 
@@ -78,7 +91,10 @@ Regras:
 - "Criativo" para a gestora significa: **movimento ao rolar, entrada animada, interação com mouse e dedo, e visual ousado**. Se não estiver claro, pergunte com opções em vez de adivinhar.
 
 ## Etapa 3 · Imagens
-- O que mais deixa o site "realista" é **foto de produto recortada** (sem fundo) flutuando sobre a cor da marca.
+- **Procure primeiro as fotos reais do cliente no Google Drive** (busca por nome do cliente, pastas de "fotos", "material", ensaio). Aqui valem ouro: a LanLan tinha uma sessão profissional de 19 fotos de pessoas comendo os produtos, e foi isso que deu vida ao site. A ferramenta do Drive devolve imagens de até 10 MB e elas aparecem no chat; salve as que usar.
+- **Não repita as imagens que o cliente já usa no site atual.** A gestora quer "outra cara", não uma lembrança do que o cliente já tem. Use as fotos atuais só quando forem produtos novos que não existem em outro lugar.
+- **Foto inteira, em moldura, vale mais que recorte ruim.** Foto de produto recortada (sem fundo) só entra se o recorte for impecável. Se o recorte não ficar limpo, use a foto inteira numa moldura com cantos arredondados.
+- **Recorte de produto, método que funcionou:** `cv2.grabCut` com retângulo + áreas marcadas como fundo certo (logos, textos, sombras) → manter só as manchas grandes → preencher buracos → **erodir 5px** (tira o halo) → **filtro guiado** (a borda segue a borda real da foto) → **`cv2.inpaint`** na faixa de borda (a cor da beirada vem de dentro, sem contorno claro). Sempre confira sobre fundo laranja/preto e amplie.
 - Ordem de preferência:
   1. **Fotos reais do cliente.**
   2. **Imagens geradas por IA no Higgsfield.** Antes, confira o saldo (`balance`) e o custo (`estimate_image_cost`) e **peça autorização antes de gastar crédito**. O plano grátis não libera o `gpt_image_2_6`; o `z_image` é aceito e custa cerca de 0,15 crédito.
@@ -106,6 +122,12 @@ Use HTML, CSS e JS num arquivo só, com as imagens numa pasta `img/`. Padrões q
 8. **Final com botões de ação** + endereço + mapa + Instagram.
 
 **Regras técnicas aprendidas (não repita estes erros):**
+- **Nunca revele fotos com `IntersectionObserver` quando a moldura começa recortada (`clip-path: inset(100% ...)`).** O observador não enxerga um elemento totalmente recortado, a foto nunca aparece e sobra um buraco na página. Decida a revelação pela posição na tela (`getBoundingClientRect().top < innerHeight*.88`) dentro de um laço `requestAnimationFrame`.
+- **Texto sobre foto precisa de fundo próprio.** Letra branca sobre comida clara some. Use etiquetas (pílulas) de cor sólida escura, com a cor da marca no detalhe.
+- **Super zoom em foto de baixa resolução borra.** Calcule: largura exibida × zoom ÷ largura real da foto. Acima de cerca de 1,5 fica mole. No celular o mesmo zoom pede um fator menor ou maior conforme o tamanho da tela; teste olhando.
+- **Cena conduzida pela rolagem (sticky):** divida em fases com `q` de 0 a 1 (entra → zoom → segura para ler → afasta girando → mostra o nome). Use `transform-origin` no ponto de interesse e, fora do zoom, volte o ponto ao centro para o produto não ficar torto. No fim, suba o produto e diminua para não invadir o título.
+- **Botão fixo no celular cobre texto.** Reserve a área dele no rodapé das cenas (`bottom: 92px + safe-area`) e esconda botões duplicados.
+- **Animação com movimento lateral (carrossel automático, produto deslizando de lado, faixa correndo no meio da página) é reprovada.** Só movimento vertical, conduzido pela rolagem.
 - **Sem rolagem lateral** (painéis que deslizam de lado). A gestora reprovou: confunde, principalmente no celular.
 - **Pouca rolagem presa:** uma seção que trava a página pode pedir no máximo cerca de **1,3 tela** a mais. Três telas foi reprovado ("tenho que dar várias rolagens").
 - **Sem tela de abertura (loader)** em site para anúncio: atrasa o cliente e piora o custo por resultado.
@@ -121,6 +143,11 @@ Use HTML, CSS e JS num arquivo só, com as imagens numa pasta `img/`. Padrões q
 - Todos os botões de WhatsApp usam o **mesmo link** `https://wa.me/55DDDNUMERO?text=...`, com uma mensagem pronta.
 
 ## Etapa 5 · Testes obrigatórios (antes de dizer "pronto")
+
+**Comece pelo item 0, que é o mais importante:**
+
+0. **Veja como um humano.** Siga a "Regra de ouro 1" lá em cima: role devagar, capture cada momento das animações, confira foto por foto (contando quantas apareceram) e **abra as imagens**. Isso vale mais do que todos os testes automáticos abaixo juntos.
+
 **Nunca diga que está pronto sem testar o movimento.** O erro mais grave da história deste projeto foi entregar um vídeo que travava, porque só imagens paradas tinham sido conferidas.
 
 1. **Suba um servidor que aceite pular trechos de vídeo** (servidores simples não aceitam, e o teste dá falso erro):
@@ -161,6 +188,18 @@ Use HTML, CSS e JS num arquivo só, com as imagens numa pasta `img/`. Padrões q
 5. O que a gestora precisa confirmar com o cliente, e o próximo passo sugerido, com uma pergunta objetiva.
 
 ---
+
+# Criatividade de verdade (não basta organizar blocos)
+
+Uma vitrine com 4 abas, uma faixa correndo e cartões de "3 passos" é **modelo pronto** e foi reprovada como "totalmente sem criatividade". Antes de construir, escreva **um conceito de uma frase, ligado à marca e ao produto**, e faça o site inteiro obedecer a ele. Exemplos:
+- LanLan, slogan "Muito mais que uma coxinha": o conceito virou *"é risada alta, é Nordeste no recheio, é aquela mordida, é dividir"*. Cada frase gigante ganhou uma foto real de uma pessoa vivendo aquilo.
+- Avexada ("avexado" = apressado): o conceito foi o mergulho na porta da máquina e a câmera passeando pelo produto.
+
+O que torna um site criativo para esta gestora:
+- **Um momento de impacto conduzido pela rolagem**, como a foto que cresce até tomar a tela, ou o produto que dá super zoom no recheio e gira 360°.
+- **Frases gigantes** com a palavra-chave da marca, em caixa alta e cor da marca.
+- **Fotos reais de gente** em molduras altas que se revelam de baixo para cima.
+- **Nada genérico:** nenhuma seção deve poder ser trocada de um site para outro.
 
 # Atitude
 

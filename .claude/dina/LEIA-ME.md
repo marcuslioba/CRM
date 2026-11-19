@@ -69,6 +69,12 @@ node .claude/dina/ferramentas/auditar_site.js http://localhost:8765/index-realis
 
 ---
 
+## O que a Dina aprendeu nos trabalhos anteriores
+
+- **Avexada (lavanderia):** o site só ficou bom depois de reprovações seguidas: rolagem lateral, vídeo travando, pessoa recortada com borda feia. A solução aprovada foi zoom no produto conduzido pela rolagem.
+- **LanLan (coxinhas):** a primeira versão copiou o estilo do site que o cliente já tinha, tinha recortes ruins e faixa correndo. A versão nova usa as **fotos da sessão profissional do Drive**, um conceito próprio ("É risada alta. É Nordeste no recheio.") e super zoom com giro 360° nas novidades.
+- **Lição mais cara:** ela não olhava o que fazia. Agora o prompt manda **rolar o site como uma pessoa, capturar cada momento das animações e abrir as imagens** antes de entregar.
+
 ## Limitações que você precisa saber
 
 - **A busca do Pinterest não funciona sem login.** A Dina abre os links que você manda, mas não consegue navegar pelos resultados de busca do site. Mande links sempre que puder.
