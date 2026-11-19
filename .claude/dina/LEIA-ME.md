@@ -46,8 +46,8 @@ O Claude chama a Dina automaticamente quando o assunto é criar ou melhorar site
 ```
 .claude/
 ├── agents/
-│   └── pina.md                    ← as instruções da agente (o "cérebro")
-└── pina/
+│   └── dina.md                    ← as instruções da agente (o "cérebro")
+└── dina/
     ├── LEIA-ME.md                 ← este guia
     └── ferramentas/
         ├── pinterest_pins.py      ← lê links de pins: título, imagem, vídeo e quadros
