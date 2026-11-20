@@ -216,7 +216,6 @@ body.menu-aberto{overflow:hidden}
 .sobe.vis{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .sobe{opacity:1;transform:none;transition:none}
-  .dest-pin{height:auto}.dest-cena{position:static;height:auto;padding-block:80px}.dest-moldura{aspect-ratio:auto;width:100%;overflow:visible;border-radius:0;display:grid;gap:12px;background:none;box-shadow:none}.dest,.dest+.dest{position:relative;clip-path:none;aspect-ratio:1600/719}.dest-cont{display:none}
   .fr{opacity:1}
   html{scroll-behavior:auto}
 }
@@ -384,7 +383,7 @@ const onde = a => a.closest("section,header,.menu-cel")?.id || (a.classList.cont
 document.querySelectorAll(".js-pedido").forEach(a => a.addEventListener("click", () => { try { if (window.fbq) { fbq('track','InitiateCheckout'); fbq('trackCustom','CliquePedido',{local:onde(a)}); } if (window.gtag) gtag("event","clique_pedido",{local:onde(a)}); } catch(e) {} }));
 document.querySelectorAll(".js-franquia").forEach(a => a.addEventListener("click", () => { try { if (window.fbq) fbq('track','Lead'); if (window.gtag) gtag("event","clique_franquia"); } catch(e) {} }));
 
-const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reduz = false; /* as cenas só se mexem quando a pessoa rola; por isso seguem ativas mesmo com "reduzir animações" ou economia de bateria ligados */
 const $ = id => document.getElementById(id);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const suave = t => t * t * (3 - 2 * t);
@@ -392,7 +391,7 @@ const mix = (a, b, t) => a + (b - a) * t;
 const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.offsetHeight - innerHeight; return clamp(-r.top / total, 0, 1); };
 
 /* ===== Abertura (computador): o banner cresce da moldura até tomar a tela. No celular fica estático. ===== */
-(function(){
+(function(){ try {
   const sec = $("abertura"), cena = $("abCena"), foto = $("abFoto"), texto = $("abTexto"), cta = $("abCta"), q = $("abQuadro");
   let ini = null, ultimo = -1;
   addEventListener("resize", () => { ini = null; ultimo = -1; });
@@ -411,10 +410,10 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
     }
     requestAnimationFrame(quadro);
   })();
-})();
+} catch (e) { console.error("LanLan efeito:", e); } })();
 
 /* ===== Por dentro: entra → super zoom no recheio (ingredientes) → afasta girando 360° → nome → próxima ===== */
-(function(){
+(function(){ try {
   const PRODS = [
     { nome:"Coxão <b>Iracema</b>", selo:"Novo sabor", img:"img/n-iracema.webp", depth:"img/d-iracema.webp", w:1116, h:544, base:"#1a0e08", glow:"rgba(255,120,45,.40)", alt:"Coxão Iracema aberto, recheado com camarão e requeijão",
       desc:"Deliciosos filés de camarão com requeijão cremoso e massa crocante empanada com farinha panko.",
@@ -529,10 +528,10 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
     requestAnimationFrame(quadro);
   })();
   monta(0);
-})();
+} catch (e) { console.error("LanLan efeito:", e); } })();
 
 /* ===== Destaques: os 3 banners na mesma tela; cada um sobe por cima do anterior com um zoom leve, conduzido pela rolagem ===== */
-(function(){
+(function(){ try {
   const sec = $("destPin"), ds = [...sec.querySelectorAll(".dest")], bars = [...sec.querySelectorAll(".dest-cont i b")], n = $("destN");
   if (reduz) return;
   let ultimo = -1;
@@ -553,11 +552,11 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
     }
     requestAnimationFrame(quadro);
   })();
-})();
+} catch (e) { console.error("LanLan efeito:", e); } })();
 
 /* ===== Revelações: banners sobem da base e correm devagar; frases acendem no centro da tela; textos sobem =====
    (a revelação é decidida pela posição na tela, não por IntersectionObserver: um elemento recortado não "aparece" para o observador) */
-(function(){
+(function(){ try {
   const frs = [...document.querySelectorAll(".fr")], els = [...document.querySelectorAll(".sobe")];
   if (reduz) { [...els].forEach(e => e.classList.add("vis")); frs.forEach(f => f.style.opacity = 1); return; }
   (function laco(){
@@ -569,10 +568,10 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
     for (const e of els){ if (!e.classList.contains("vis") && e.getBoundingClientRect().top < H * .92) e.classList.add("vis"); }
     requestAnimationFrame(laco);
   })();
-})();
+} catch (e) { console.error("LanLan efeito:", e); } })();
 
 /* ===== Menu do celular, topo com fundo e botão fixo ===== */
-(function(){ const b = $("menuBtn"), m = $("menuCel");
+(function(){ try { const b = $("menuBtn"), m = $("menuCel");
   const abre = v => { m.hidden = !v; b.setAttribute("aria-expanded", v); b.firstElementChild.textContent = v ? "Fechar" : "Menu"; document.body.classList.toggle("menu-aberto", v); ver(); };
   b.addEventListener("click", () => abre(m.hidden));
   m.querySelectorAll("a").forEach(a => a.addEventListener("click", () => abre(false)));
@@ -580,5 +579,5 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
   const t = $("topo"), ab = $("abertura"), pc = $("pedirCel");
   function ver(){ const passou = scrollY > ab.offsetHeight - innerHeight * .9; t.classList.toggle("fundo", passou || !m.hidden); pc.classList.toggle("some", scrollY < innerHeight * .5); }
   addEventListener("scroll", ver, {passive:true}); ver();
-})();
+} catch (e) { console.error("LanLan efeito:", e); } })();
 </script>
