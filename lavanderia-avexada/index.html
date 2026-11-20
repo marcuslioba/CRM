@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Lavanderia Avexada</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: faixas azul/branco como os posts do Instagram, títulos condensados em caixa alta com etiqueta verde; 1 coluna no celular */
+:root{
+  --azul:#1f5fd6;        /* azul da marca */
+  --azul-esc:#0d2f7a;    /* azul profundo */
+  --verde:#5cc83b;       /* verde-limão da marca */
+  --verde-esc:#2f8f1c;
+  --bg:#f7faff;
+  --fg:#0b1f4d;
+  --muted:#4a5b80;
+  --card:#ffffff;
+  --linha:#d6e2f7;
+  --suave:#e8f0fd;
+  --display:"Anton", Impact, "Arial Narrow", sans-serif;
+  --body:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --gutter-l:max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r:max(16px, env(safe-area-inset-right, 0px));
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --azul:#4b86ef;--azul-esc:#0a1d4d;--verde:#6fd84d;--verde-esc:#9be880;--bg:#06112b;--fg:#e6eeff;--muted:#9eb0d6;--card:#0c1c42;--linha:#1c3166;--suave:#0e2150;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --azul:#4b86ef;--azul-esc:#0a1d4d;--verde:#6fd84d;--verde-esc:#9be880;--bg:#06112b;--fg:#e6eeff;--muted:#9eb0d6;--card:#0c1c42;--linha:#1c3166;--suave:#0e2150;color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:.95;margin:0;text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--verde);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+.tag{display:inline-block;background:var(--verde);color:#0b2a05;font-family:var(--body);font-weight:700;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;transform:rotate(-2deg);justify-self:start;line-height:1.3}
+
+/* Topo */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--azul)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--azul);color:#fff}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:10px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff}
+.logo svg{width:44px;height:44px;flex:none}
+.logo b{display:block;font-family:var(--display);font-weight:400;font-size:1.6rem;line-height:1;letter-spacing:.02em}
+.logo small{display:block;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.9}
+nav{display:flex;gap:22px;align-items:center}
+nav a.link{text-decoration:none;font-weight:500;color:#fff;opacity:.85}
+nav a.link:hover{opacity:1}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;border-radius:12px;padding:14px 22px;border:0;cursor:pointer;font-family:var(--body);font-size:1rem;transition:transform .15s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-verde{background:var(--verde);color:#0b2a05}
+.btn-branco{background:#fff;color:#0d2f7a}
+.btn-linha{border:2px solid currentColor;background:transparent}
+.btn-sm{padding:9px 16px;font-size:.92rem}
+.btn svg{width:20px;height:20px;flex:none}
+@media (max-width:780px){nav a.link{display:none}}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;background:var(--azul);color:#fff}
+#bolhas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding-block:64px 80px}
+.hero-txt{display:grid;gap:22px;min-width:0}
+.hero h1{font-size:clamp(3.2rem,9vw,6.6rem);color:#fff}
+.hero h1 .verde{color:var(--verde)}
+.hero p.lead{font-size:1.2rem;max-width:36ch;opacity:.92}
+.ctas{display:flex;flex-wrap:wrap;gap:14px}
+.fatos{display:flex;flex-wrap:wrap;gap:12px}
+.fatos span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:8px 14px;border-radius:999px;font-size:.92rem;font-weight:500}
+
+/* Máquina */
+.maquina{justify-self:center;width:min(340px,100%);aspect-ratio:4/5;max-width:100%;background:#fff;border-radius:26px;padding:22px;display:grid;grid-template-rows:auto 1fr;gap:16px;box-shadow:14px 14px 0 var(--verde);color:#0d2f7a}
+.painel{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:2px dashed #d6e2f7;padding-bottom:12px}
+.painel .tempo{font-family:var(--display);font-size:1.7rem;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.painel .estado{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:#5cc83b;color:#0b2a05;padding:4px 10px;border-radius:6px}
+.porta{align-self:center;justify-self:center;width:88%;aspect-ratio:1;max-width:100%;border-radius:50%;border:12px solid #c9d3e3;outline:4px solid #0d2f7a;background:radial-gradient(circle at 35% 30%,#bcd4ff,#1f5fd6 75%);position:relative;overflow:hidden}
+.tambor{position:absolute;inset:0;animation:gira 3s linear infinite}
+.tambor b{position:absolute;border-radius:40% 60% 50% 50%}
+.tambor b:nth-child(1){width:42%;height:30%;left:12%;top:52%;background:#5cc83b}
+.tambor b:nth-child(2){width:36%;height:26%;left:50%;top:18%;background:#fff}
+.tambor b:nth-child(3){width:30%;height:22%;left:22%;top:16%;background:#0d2f7a}
+.agua-nivel{position:absolute;left:-10%;right:-10%;bottom:-8%;height:45%;background:rgba(255,255,255,.3);border-radius:45%;animation:onda 4s ease-in-out infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+@keyframes onda{50%{transform:translateX(6%) rotate(4deg)}}
+
+section{padding-block:84px}
+.titulo{display:grid;gap:14px;margin-bottom:44px;max-width:680px}
+.titulo h2{font-size:clamp(2.6rem,6vw,4.2rem);color:var(--azul)}
+.titulo p{color:var(--muted)}
+
+/* Preços */
+.precos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.preco{background:var(--card);border:2px solid var(--linha);border-radius:20px;padding:28px;display:grid;gap:10px;align-content:start;min-width:0}
+.preco.destaque{background:var(--azul);border-color:var(--azul);color:#fff}
+.preco h3{font-size:2rem;color:var(--azul)}
+.preco.destaque h3{color:#fff}
+.valor{font-family:var(--display);font-size:3.4rem;line-height:1;font-variant-numeric:tabular-nums;color:var(--fg)}
+.preco.destaque .valor{color:var(--verde)}
+.valor sup{font-size:.4em;vertical-align:top;margin-right:4px;position:relative;top:.4em}
+.preco p{color:var(--muted);font-size:.98rem}
+.preco.destaque p{color:rgba(255,255,255,.88)}
+.nota{margin-top:18px;color:var(--muted);font-size:.9rem}
+
+/* Passo a passo */
+.passo-faixa{background:var(--azul-esc);color:#fff}
+.passo-faixa .titulo h2{color:#fff}
+.passo-faixa .titulo p{color:rgba(255,255,255,.8)}
+.passos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:22px;counter-reset:p}
+.passos li{counter-increment:p;display:grid;gap:10px;align-content:start;padding-top:18px;border-top:3px solid var(--verde);min-width:0}
+.passos li::before{content:counter(p);font-family:var(--display);font-size:3rem;line-height:1;color:var(--verde)}
+.passos h3{font-size:1.6rem}
+.passos p{color:rgba(255,255,255,.82);font-size:.98rem}
+
+/* Motivos */
+.motivos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.motivo{background:var(--suave);border-radius:18px;padding:24px;display:grid;gap:10px;align-content:start;min-width:0}
+.motivo .ico{width:50px;height:50px;border-radius:14px;background:var(--azul);color:#fff;display:grid;place-items:center}
+.motivo .ico svg{width:26px;height:26px}
+.motivo h3{font-size:1.5rem;color:var(--azul)}
+.motivo p{color:var(--muted);font-size:.96rem}
+
+/* Horário */
+.horario{background:var(--verde);color:#0b2a05}
+.horario .wrap{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center}
+.relogio{font-family:var(--display);font-size:clamp(4rem,13vw,9rem);line-height:.9;color:var(--azul-esc);white-space:nowrap}
+.horario h2{font-size:clamp(2.2rem,5vw,3.4rem);color:var(--azul-esc)}
+.horario p{margin-top:12px;max-width:44ch;font-size:1.08rem}
+.aberto{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:700;background:rgba(255,255,255,.55);padding:6px 14px;border-radius:999px}
+.aberto i{width:10px;height:10px;border-radius:50%;background:#0b2a05}
+
+/* Dicas */
+.dicas{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;list-style:none;margin:0;padding:0;counter-reset:d}
+.dicas li{counter-increment:d;background:var(--card);border:2px solid var(--linha);border-radius:18px;padding:24px;display:grid;gap:8px;align-content:start;min-width:0}
+.dicas li::before{content:"Dica " counter(d);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--verde-esc)}
+.dicas strong{font-size:1.1rem;color:var(--fg)}
+.dicas span{color:var(--muted);font-size:.96rem}
+
+/* Dicionário */
+.dic{background:var(--suave)}
+.verbete{max-width:760px;margin:0 auto;background:var(--card);border:3px solid var(--azul);border-radius:20px;padding:34px;display:grid;gap:12px;box-shadow:10px 10px 0 var(--verde)}
+.verbete .pal{font-family:var(--display);font-size:clamp(2.4rem,6vw,3.4rem);color:var(--azul);line-height:1}
+.verbete .pal i{font-family:var(--body);font-style:italic;font-size:1rem;color:var(--muted);margin-left:8px}
+.verbete ol{margin:0;padding-left:22px;display:grid;gap:6px;color:var(--muted)}
+.verbete .ex{border-left:4px solid var(--verde);padding-left:14px;font-style:italic}
+
+/* FAQ */
+.faq{max-width:780px}
+details{border-bottom:2px solid var(--linha);padding-block:18px}
+summary{cursor:pointer;font-weight:700;font-size:1.15rem;color:var(--fg);list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--azul);font-size:1.6rem;line-height:1;transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin-top:10px;color:var(--muted)}
+
+/* Contato */
+.contato{background:var(--azul);color:#fff}
+.contato .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.contato h2{font-size:clamp(2.8rem,7vw,4.8rem)}
+.contato h2 span{color:var(--verde)}
+.contato p{opacity:.9;margin-top:14px;max-width:40ch}
+.info{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:26px}
+.info dl{margin:0;display:grid;gap:16px}
+.info div{display:grid;gap:2px}
+.info dt{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--verde);font-weight:700}
+.info dd{margin:0;font-size:1.05rem}
+.info a{text-underline-offset:3px}
+
+footer{padding-block:26px;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+.zap{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:20;width:60px;height:60px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .2s}
+.zap:hover{transform:scale(1.08)}
+.zap svg{width:32px;height:32px}
+
+@media (max-width:960px){
+  .motivos-grid,.passos{grid-template-columns:1fr 1fr}
+}
+@media (max-width:900px){
+  .hero .wrap,.contato .wrap{grid-template-columns:1fr}
+  .precos,.dicas{grid-template-columns:1fr}
+  .horario .wrap{grid-template-columns:1fr;gap:16px}
+  .maquina{width:min(290px,100%)}
+}
+@media (max-width:560px){
+  .motivos-grid,.passos{grid-template-columns:1fr}
+  section{padding-block:60px}
+  .hero .wrap{padding-block:40px 60px}
+  .verbete{padding:24px}
+}
+@media (prefers-reduced-motion:reduce){
+  .tambor,.agua-nivel{animation:none}
+  html{scroll-behavior:auto}
+  .btn,.zap{transition:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="zapico" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3Z"/></symbol>
+</svg>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#inicio">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#fff"/><circle cx="27" cy="27" r="11" fill="none" stroke="#5cc83b" stroke-width="4"/><path d="M27 27V20M27 27l4 3" stroke="#0d2f7a" stroke-width="3" stroke-linecap="round"/><rect x="24" y="10" width="6" height="4" rx="1" fill="#5cc83b"/><path d="M7 22h8M9 27h6M11 32h5" stroke="#5cc83b" stroke-width="3" stroke-linecap="round"/></svg>
+      <span><b>Avexada</b><small>Lavanderia Inteligente</small></span>
+    </a>
+    <nav aria-label="Principal">
+      <a class="link" href="#precos">Preços</a>
+      <a class="link" href="#como">Como usar</a>
+      <a class="link" href="#duvidas">Dúvidas</a>
+      <a class="btn btn-verde btn-sm js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener">Fale conosco</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero" style="padding-block:0">
+    <canvas id="bolhas" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div class="hero-txt">
+        <span class="tag">Lavanderia self-service em Aquiraz</span>
+        <h1>Lave e seque <span class="verde">sem perder tempo</span></h1>
+        <p class="lead">Máquinas profissionais, ambiente limpo e climatizado, aberto das 6h às 23h. Você chega, lava, seca e sai com tudo pronto.</p>
+        <div class="ctas">
+          <a class="btn btn-verde js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#zapico"/></svg>Chamar no WhatsApp</a>
+          <a class="btn btn-linha" href="#onde">Como chegar</a>
+        </div>
+        <div class="fatos"><span>Lavar R$ 14,90</span><span>Secar R$ 14,90</span><span>Todos os dias, 6h às 23h</span></div>
+      </div>
+      <div class="maquina" aria-hidden="true">
+        <div class="painel"><span class="tempo" id="tempo">32:00</span><span class="estado">Lavando</span></div>
+        <div class="porta"><div class="tambor"><b></b><b></b><b></b></div><div class="agua-nivel"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="precos">
+    <div class="wrap">
+      <div class="titulo">
+        <span class="tag">Preço justo</span>
+        <h2>Preço por ciclo, sem surpresa</h2>
+        <p>Cada ciclo é uma máquina inteira só para as suas roupas.</p>
+      </div>
+      <div class="precos">
+        <article class="preco">
+          <h3>Lavar</h3>
+          <div class="valor"><sup>R$</sup>14,90</div>
+          <p>Ciclo completo de lavagem com sabão e amaciante.</p>
+        </article>
+        <article class="preco destaque">
+          <h3>Lavar + secar</h3>
+          <div class="valor"><sup>R$</sup>29,80</div>
+          <p>O combo completo. Roupa limpa e seca na mesma visita.</p>
+        </article>
+        <article class="preco">
+          <h3>Secar</h3>
+          <div class="valor"><sup>R$</sup>14,90</div>
+          <p>Secadora profissional. Sai quentinha, pronta pra dobrar.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="passo-faixa" id="como">
+    <div class="wrap">
+      <div class="titulo">
+        <span class="tag">Primeira vez?</span>
+        <h2>Como usar a lavanderia</h2>
+        <p>É simples. E se tiver dúvida, é só chamar no WhatsApp.</p>
+      </div>
+      <ol class="passos">
+        <li><h3>Separe as roupas</h3><p>Claras de um lado, escuras do outro. Confira as etiquetas.</p></li>
+        <li><h3>Escolha a máquina</h3><p>Coloque as roupas na lavadora livre e feche a porta.</p></li>
+        <li><h3>Pague e lave</h3><p>Faça o pagamento e a máquina começa o ciclo sozinha.</p></li>
+        <li><h3>Seque e leve</h3><p>Passe para a secadora e saia com tudo pronto.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="titulo">
+        <span class="tag">Por que a Avexada</span>
+        <h2>Tecnologia que cuida das suas roupas</h2>
+      </div>
+      <div class="motivos-grid">
+        <article class="motivo"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></div><h3>Rapidez</h3><p>Lave e seque no mesmo lugar, sem esperar dias pela roupa.</p></article>
+        <article class="motivo"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="3"/><circle cx="12" cy="13" r="5"/><path d="M8 6h.01M11 6h.01"/></svg></div><h3>Máquinas profissionais</h3><p>Equipamentos de alta capacidade que lavam melhor que a de casa.</p></article>
+        <article class="motivo"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 7l14 10M19 7 5 17"/></svg></div><h3>Ambiente climatizado</h3><p>Espaço limpo e confortável enquanto suas roupas ficam prontas.</p></article>
+        <article class="motivo"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></div><h3>No Centro</h3><p>Fácil de chegar, na Av. Raimundo Pires Cardoso.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="horario">
+    <div class="wrap">
+      <div class="relogio">6h–23h</div>
+      <div>
+        <h2>Horários que cabem na sua rotina</h2>
+        <p>A correria do dia a dia não espera. Por isso a Avexada abre cedinho e fecha tarde: dá pra lavar antes do trabalho ou depois da faculdade.</p>
+        <span class="aberto" id="aberto"><i></i>Aberto das 6h às 23h</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="titulo">
+        <span class="tag">Dicas</span>
+        <h2>Para cuidar das suas roupas</h2>
+      </div>
+      <ol class="dicas">
+        <li><strong>Separe claras e escuras</strong><span>Evita que a cor de uma peça passe para a outra.</span></li>
+        <li><strong>Respeite a etiqueta</strong><span>Ela diz a temperatura certa e se a peça pode ir na secadora.</span></li>
+        <li><strong>Sem excesso de sabão</strong><span>Sabão e amaciante demais deixam resíduo e endurecem o tecido.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="dic">
+    <div class="wrap">
+      <div class="verbete">
+        <span class="tag">Dicionário cearense</span>
+        <div class="pal">a·ve·xa·do <i>adjetivo</i></div>
+        <ol>
+          <li>Que está com pressa, apressado.</li>
+          <li>Que não tem tempo a perder com roupa suja.</li>
+        </ol>
+        <p class="ex">“Tô avexada demais essa semana, vou lavar tudo na Avexada.”</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="duvidas">
+    <div class="wrap">
+      <div class="titulo">
+        <span class="tag">Dúvidas</span>
+        <h2>Perguntas frequentes</h2>
+      </div>
+      <div class="faq">
+        <details><summary>Preciso levar sabão e amaciante?</summary><p>Não precisa se preocupar. Na dúvida sobre os produtos usados nas máquinas, chame a gente no WhatsApp.</p></details>
+        <details><summary>Quanto custa lavar e secar?</summary><p>A lavagem custa R$ 14,90 e a secagem também R$ 14,90 por ciclo. Lavar e secar sai por R$ 29,80.</p></details>
+        <details><summary>Qual o horário de funcionamento?</summary><p>Funcionamos das 6h às 23h.</p></details>
+        <details><summary>Onde fica?</summary><p>Av. Raimundo Pires Cardoso, 217, Loja 4, Centro, Aquiraz (CE).</p></details>
+        <details><summary>Nunca usei uma lavanderia self-service. É difícil?</summary><p>É bem simples, e o passo a passo fica na loja. Se precisar de ajuda, fale com a gente pelo WhatsApp.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="contato" id="onde">
+    <div class="wrap">
+      <div>
+        <span class="tag">Venha nos conhecer</span>
+        <h2>Estamos te <span>esperando</span></h2>
+        <p>Para deixar suas roupas prontinhas com praticidade e qualidade.</p>
+        <div class="ctas" style="margin-top:26px">
+          <a class="btn btn-verde js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#zapico"/></svg>WhatsApp</a>
+          <a class="btn btn-branco" href="https://www.google.com/maps/search/?api=1&query=Av.+Raimundo+Pires+Cardoso+217+Centro+Aquiraz+CE" target="_blank" rel="noopener">Abrir no mapa</a>
+        </div>
+      </div>
+      <div class="info">
+        <dl>
+          <div><dt>Endereço</dt><dd>Av. Raimundo Pires Cardoso, 217, Loja 4<br>Centro, Aquiraz (CE)</dd></div>
+          <div><dt>Horário</dt><dd>Das 6h às 23h</dd></div>
+          <div><dt>WhatsApp</dt><dd>(85) 98203-1297</dd></div>
+          <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/lavanderiaavexada/" target="_blank" rel="noopener">@lavanderiaavexada</a></dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span>© 2026 Avexada Lavanderia Inteligente</span><span>Aquiraz, Ceará</span></div>
+</footer>
+
+<a class="zap js-zap" href="https://wa.me/5585982031297" target="_blank" rel="noopener" aria-label="Chamar no WhatsApp"><svg aria-hidden="true"><use href="#zapico"/></svg></a>
+
+<script>
+/* Mensagem que já aparece escrita quando o cliente abre o WhatsApp */
+const WHATSAPP = "5585982031297";
+const MENSAGEM = "Oi! Vim pelo site da Avexada e queria tirar uma dúvida.";
+const url = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(MENSAGEM);
+document.querySelectorAll(".js-zap").forEach(a => a.href = url);
+
+/* Aberto agora? (horário de Fortaleza) */
+try {
+  const h = Number(new Intl.DateTimeFormat("pt-BR",{hour:"numeric",hourCycle:"h23",timeZone:"America/Fortaleza"}).format(new Date()));
+  const el = document.getElementById("aberto");
+  el.lastChild.textContent = (h >= 6 && h < 23) ? "Aberto agora · fecha às 23h" : "Fechado agora · abre às 6h";
+} catch(e) {}
+
+/* Cronômetro da máquina */
+let s = 32 * 60;
+const tEl = document.getElementById("tempo");
+setInterval(() => { s = s > 0 ? s - 1 : 32 * 60; tEl.textContent = String(Math.floor(s/60)).padStart(2,"0") + ":" + String(s%60).padStart(2,"0"); }, 1000);
+
+/* Bolhas de sabão */
+(function(){
+  const c = document.getElementById("bolhas"), ctx = c.getContext("2d");
+  const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let W, H, bs = [];
+  function tam(){ const r = c.getBoundingClientRect(), d = devicePixelRatio || 1; W = r.width; H = r.height; c.width = W*d; c.height = H*d; ctx.setTransform(d,0,0,d,0,0); }
+  function nova(y){ return { x: Math.random()*W, y: y ?? H + 40, r: 6 + Math.random()*26, v: .25 + Math.random()*.7, f: Math.random()*6.28 }; }
+  tam(); for (let i = 0; i < 26; i++) bs.push(nova(Math.random()*H));
+  addEventListener("resize", tam);
+  function desenha(){
+    ctx.clearRect(0,0,W,H);
+    for (const b of bs){
+      if (!reduz){ b.y -= b.v; b.f += .02; b.x += Math.sin(b.f)*.35; if (b.y < -40) Object.assign(b, nova()); }
+      ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 6.283);
+      ctx.strokeStyle = "#ffffff"; ctx.globalAlpha = .28; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.beginPath(); ctx.arc(b.x - b.r*.35, b.y - b.r*.35, b.r*.22, 0, 6.283);
+      ctx.fillStyle = "#ffffff"; ctx.globalAlpha = .25; ctx.fill(); ctx.globalAlpha = 1;
+    }
+    if (!reduz) requestAnimationFrame(desenha);
+  }
+  desenha();
+})();
+</script>
+</body>
+</html>
