@@ -93,28 +93,21 @@ body.menu-aberto{overflow:hidden}
 
 /* ===== Destaques: os banners da campanha, em tela cheia ===== */
 .destaques{background:var(--fundo)}
-.dest-pin{position:relative;height:240vh}
+.dest-pin{position:relative;height:250vh}
 .dest-cena{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:22px;padding-top:76px;padding-bottom:20px}
 .dest-cab{width:100%}
 .dest-cab h2{font-size:clamp(2.4rem,5.4vw,5rem);margin-top:12px}
 .dest-cab p{margin-top:12px;font-size:1rem;color:var(--t2);max-width:44ch}
-.dest-moldura{position:relative;margin:0 auto;width:min(calc(100% - var(--gl) - var(--gr)), calc((100svh - 300px) * 2.225));min-width:min(100%, 320px);aspect-ratio:1600/719;overflow:hidden}
-.dest{position:absolute;inset:0;overflow:hidden;clip-path:inset(0 0 0 0)}
-.dest+.dest{clip-path:inset(100% 0 0 0)}
+.dest-moldura{position:relative;margin:34px auto 0;width:min(calc(100% - var(--gl) - var(--gr)), calc((100svh - 340px) * 2.225));min-width:min(100%, 320px);aspect-ratio:1600/719;perspective:1500px;perspective-origin:50% 28%}
+.dest{position:absolute;inset:0;overflow:hidden;border-radius:7px;border:7px solid #0b0603;background:#0b0603;outline:1px solid rgba(246,234,217,.18);box-shadow:0 40px 70px -26px rgba(0,0,0,.85);will-change:transform;transform-origin:50% 100%;clip-path:none}
+.dest+.dest{clip-path:none}
 .dest picture{display:contents}
-.dest img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform}
-.dest .btn{position:absolute;z-index:2;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px)}
-.dest-moldura{border-radius:6px;padding:0;border:7px solid #0b0603;outline:1px solid rgba(246,234,217,.16);background:#0b0603;box-shadow:0 50px 90px -30px rgba(0,0,0,.75),inset 0 0 0 1px rgba(246,234,217,.1)}
-.dest-moldura::before{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,0) 28%,rgba(255,255,255,0) 62%,rgba(255,255,255,.05) 100%)}
-.dest-moldura::after{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;z-index:5;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,0));border-right:1px solid rgba(255,255,255,.14)}
-.dest-prat{display:flex;align-items:flex-end;justify-content:center;gap:5px;height:58px;padding-bottom:2px;border-bottom:3px solid rgba(246,234,217,.16);width:min(100%,520px);margin:0 auto}
-.lomb{all:unset;box-sizing:border-box;cursor:pointer;position:relative;width:34px;height:46px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,#1c0f08,#2a170c);border:1px solid rgba(246,234,217,.18);border-bottom:0;transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s;display:grid;justify-items:center;align-items:end;overflow:hidden}
-.lomb::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--c);opacity:.9}
-.lomb span{writing-mode:vertical-rl;transform:rotate(180deg);font-weight:600;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);padding-bottom:6px;white-space:nowrap}
-.lomb.on{transform:translateY(-10px);border-color:var(--c)}
-.lomb.on span{color:var(--creme)}
-.lomb:focus-visible{outline:2px solid var(--laranja);outline-offset:2px}
-@media (max-width:900px){.dest-pin{height:230vh}.dest-cena{gap:16px;padding-top:72px;justify-content:center;padding-top:72px;padding-bottom:84px}.dest-moldura{width:calc(100% - var(--gl) - var(--gr));aspect-ratio:768/467;border-radius:5px;border-width:5px}.dest .btn{display:none}.lomb{width:30px;height:40px}.dest-prat{height:50px}}
+.dest img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dest::before{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.12) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0) 64%,rgba(255,255,255,.05) 100%)}
+.dest::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:#0b0603;opacity:var(--esc,0)}
+.dest .btn{position:absolute;z-index:6;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px)}
+.dest .espinha{position:absolute;left:0;top:0;bottom:0;width:14px;z-index:4;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,0));border-right:1px solid rgba(255,255,255,.14)}
+@media (max-width:900px){.dest-pin{height:230vh}.dest-cena{gap:16px;justify-content:center;padding-top:72px;padding-bottom:84px}.dest-moldura{width:calc(100% - var(--gl) - var(--gr));aspect-ratio:768/467}.dest{border-width:5px}.dest .btn{display:none}}
 
 /* ===== Por dentro: super zoom no recheio + giro 360° ===== */
 .novidades{position:relative;height:520vh}
@@ -228,7 +221,7 @@ body.menu-aberto{overflow:hidden}
 .sobe.vis{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .sobe{opacity:1;transform:none;transition:none}
-  .dest-pin{height:auto}.dest-cena{position:static;height:auto;padding-block:80px}.dest-moldura{aspect-ratio:auto;width:100%;overflow:visible;border:0;outline:0;display:grid;gap:12px;background:none;box-shadow:none}.dest-moldura::before,.dest-moldura::after{display:none}.dest,.dest+.dest{position:relative;clip-path:none;aspect-ratio:1600/719}.dest-prat{display:none}
+  .dest-pin{height:auto}.dest-cena{position:static;height:auto;padding-block:80px}.dest-moldura{aspect-ratio:auto;width:100%;margin:0;display:grid;gap:12px;perspective:none}.dest{position:relative;aspect-ratio:1600/719}.dest-prat{display:none}
   .fr{opacity:1}
   html{scroll-behavior:auto}
 }
@@ -281,22 +274,20 @@ body.menu-aberto{overflow:hidden}
     </div>
       <div class="dest-moldura" id="destMold">
     <article class="dest">
+      <i class="espinha"></i>
       <picture><source media="(max-width:900px)" srcset="img/m-fit.webp"><img src="img/b-fit.webp" alt="Coxinha Fit Frango: massa de batata com semente de chia, recheada com frango desfiado" width="1600" height="719" loading="lazy"></picture>
       <a class="btn vidro js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener">Fazer pedido</a>
     </article>
     <article class="dest">
+      <i class="espinha"></i>
       <picture><source media="(max-width:900px)" srcset="img/m-empanada.webp"><img src="img/b-empanada.webp" alt="Chegaram as Empanadas Nordestinas: assadas no forno, massa folhada e recheio suculento" width="1600" height="719" loading="lazy"></picture>
       <a class="btn vidro js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener">Fazer pedido</a>
     </article>
     <article class="dest">
+      <i class="espinha"></i>
       <picture><source media="(max-width:900px)" srcset="img/m-iracema.webp"><img src="img/b-iracema.webp" alt="Novo sabor Coxão Iracema: camarão com requeijão cremoso e massa crocante com panko" width="1600" height="719" loading="lazy"></picture>
       <a class="btn vidro js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener">Fazer pedido</a>
     </article>
-      </div>
-      <div class="dest-prat" id="destPrat" role="tablist" aria-label="Escolher destaque">
-        <button type="button" class="lomb" data-i="0" style="--c:#7cb342" aria-label="Coxinha Fit Frango"><span>Fit Frango</span></button>
-        <button type="button" class="lomb" data-i="1" style="--c:#d9962b" aria-label="Empanadas Nordestinas"><span>Empanadas</span></button>
-        <button type="button" class="lomb" data-i="2" style="--c:#ff5a1f" aria-label="Coxão Iracema"><span>Iracema</span></button>
       </div>
     </div></div>
   </section>
@@ -551,27 +542,26 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
 
 /* ===== Destaques: os 3 banners na mesma tela; cada um sobe por cima do anterior com um zoom leve, conduzido pela rolagem ===== */
 (function(){
-  const sec = $("destPin"), ds = [...sec.querySelectorAll(".dest")], lombs = [...sec.querySelectorAll(".lomb")];
-  /* a prateleira de lombadas embaixo lembra a locadora: o destaque em cena é a "fita" puxada da prateleira; tocar numa lombada leva até ela */
-  const alvo = [0, .5, .92];
-  lombs.forEach((l, i) => l.addEventListener("click", () => {
-    const total = sec.offsetHeight - innerHeight, y = sec.getBoundingClientRect().top + scrollY + alvo[i] * total;
-    scrollTo({top: y, behavior: reduz ? "auto" : "smooth"});
-  }));
+  const sec = $("destPin"), ds = [...sec.querySelectorAll(".dest")], mold = $("destMold");
   if (reduz) return;
+  /* pilha de capas em 3D: a de cima é puxada para a frente e cai, a de baixo sobe para o lugar */
+  const trechos = [[.12, .42], [.52, .82]]; /* quando cada capa sai */
   let ultimo = -1;
   (function quadro(){
     const p = progresso(sec);
     if (p !== ultimo){
       ultimo = p;
-      const fases = [[0, 0], [.22, .44], [.56, .78]];
-      let ativo = 0;
+      let c = 0; trechos.forEach(([a, b], i) => { c += suave(clamp((p - a) / (b - a), 0, 1)); });
+      const H = mold.offsetHeight;
       ds.forEach((d, i) => {
-        const t = i === 0 ? 1 : suave(clamp((p - fases[i][0]) / (fases[i][1] - fases[i][0]), 0, 1));
-        if (i > 0){ d.style.clipPath = `inset(${((1 - t) * 100).toFixed(2)}% 0 0 0)`; if (t > .5) ativo = i; }
-        d.querySelector("img").style.transform = `scale(${(1 + (i === 0 ? 0 : (1 - t) * .12) + (i < 2 ? clamp((p - (i ? fases[i][1] : 0)) / .5, 0, 1) * .04 : 0)).toFixed(4)})`;
+        const dd = i - c; let ty = 0, tz = 0, rx = 0, sc = 1, op = 1, esc = 0;
+        if (dd >= 0){ const k = Math.min(dd, 2); ty = -k * H * .055; tz = -k * 90; sc = 1 - k * .03; esc = Math.min(.7, k * .38); }
+        else { const s = clamp(-dd, 0, 1); ty = s * H * .62; tz = s * 300; rx = s * 52; op = 1 - clamp((s - .62) / .38, 0, 1); }
+        d.style.transform = `translate3d(0, ${ty.toFixed(1)}px, ${tz.toFixed(1)}px) rotateX(${rx.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
+        d.style.opacity = op.toFixed(3); d.style.setProperty("--esc", esc.toFixed(3));
+        d.style.zIndex = String(20 - i); d.style.visibility = op <= 0 ? "hidden" : "visible";
+        d.style.pointerEvents = i === Math.round(c) ? "auto" : "none";
       });
-      lombs.forEach((l, i) => l.classList.toggle("on", i === ativo));
     }
     requestAnimationFrame(quadro);
   })();
