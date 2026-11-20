@@ -93,24 +93,23 @@ body.menu-aberto{overflow:hidden}
 .dest-cab{width:100%}
 .dest-cab h2{font-size:clamp(2.4rem,5.4vw,5rem);margin-top:12px}
 .dest-cab p{margin-top:12px;font-size:1rem;color:var(--t2);max-width:44ch}
-.dest-moldura{position:relative;margin:0 auto;width:min(calc(100% - var(--gl) - var(--gr)), calc((100svh - 290px) * 2.225));min-width:min(100%, 320px);aspect-ratio:1600/719;border-radius:20px;overflow:hidden;background:#1b1b1b;box-shadow:0 50px 90px -30px rgba(0,0,0,.7)}
+.dest-moldura{position:relative;margin:0 auto;width:min(calc(100% - var(--gl) - var(--gr)), calc((100svh - 300px) * 2.225));min-width:min(100%, 320px);aspect-ratio:1600/719;overflow:hidden}
 .dest{position:absolute;inset:0;overflow:hidden;clip-path:inset(0 0 0 0)}
 .dest+.dest{clip-path:inset(100% 0 0 0)}
 .dest picture{display:contents}
 .dest img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform}
 .dest .btn{position:absolute;z-index:2;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px)}
-.dest-ficha{display:flex;align-items:center;justify-content:center;gap:12px;font-weight:500;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(178,167,153,.8);margin-top:-6px}
-.dest-ficha span{transition:opacity .35s}
-.dest-ficha em{font-style:normal;color:var(--creme)}
-.dest-ficha small{font-size:inherit}
-.dest-ficha u{text-decoration:none;display:grid;place-items:center;width:17px;height:17px;border:1px solid rgba(178,167,153,.7);border-radius:3px;font-size:.58rem;letter-spacing:0;font-weight:700}
-@media (max-width:640px){.dest-cont{gap:10px;font-size:.7rem}.dest-cont i{width:22px}.dest-ficha small{display:none}.dest-ficha{margin-top:0}}
-.dest-cont{display:flex;align-items:center;justify-content:center;gap:14px;font-weight:500;font-size:.8rem;letter-spacing:.16em;color:var(--t2)}
-#destN{white-space:nowrap}
-@media (max-width:640px){.dest-cont.fim i{display:none}}
-.dest-cont i{display:block;width:44px;height:2px;border-radius:2px;background:rgba(246,234,217,.2);overflow:hidden}
-.dest-cont i b{display:block;height:100%;width:100%;background:var(--laranja);transform:scaleX(0);transform-origin:left}
-@media (max-width:900px){.dest-pin{height:230vh}.dest-cena{gap:16px;padding-top:72px;justify-content:center;padding-top:72px;padding-bottom:84px}.dest-moldura{width:calc(100% - var(--gl) - var(--gr));aspect-ratio:768/467;border-radius:16px}.dest .btn{display:none}}
+.dest-moldura{border-radius:6px;padding:0;border:7px solid #0b0603;outline:1px solid rgba(246,234,217,.16);background:#0b0603;box-shadow:0 50px 90px -30px rgba(0,0,0,.75),inset 0 0 0 1px rgba(246,234,217,.1)}
+.dest-moldura::before{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,0) 28%,rgba(255,255,255,0) 62%,rgba(255,255,255,.05) 100%)}
+.dest-moldura::after{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;z-index:5;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,0));border-right:1px solid rgba(255,255,255,.14)}
+.dest-prat{display:flex;align-items:flex-end;justify-content:center;gap:5px;height:58px;padding-bottom:2px;border-bottom:3px solid rgba(246,234,217,.16);width:min(100%,520px);margin:0 auto}
+.lomb{all:unset;box-sizing:border-box;cursor:pointer;position:relative;width:34px;height:46px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,#1c0f08,#2a170c);border:1px solid rgba(246,234,217,.18);border-bottom:0;transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s;display:grid;justify-items:center;align-items:end;overflow:hidden}
+.lomb::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--c);opacity:.9}
+.lomb span{writing-mode:vertical-rl;transform:rotate(180deg);font-weight:600;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);padding-bottom:6px;white-space:nowrap}
+.lomb.on{transform:translateY(-10px);border-color:var(--c)}
+.lomb.on span{color:var(--creme)}
+.lomb:focus-visible{outline:2px solid var(--laranja);outline-offset:2px}
+@media (max-width:900px){.dest-pin{height:230vh}.dest-cena{gap:16px;padding-top:72px;justify-content:center;padding-top:72px;padding-bottom:84px}.dest-moldura{width:calc(100% - var(--gl) - var(--gr));aspect-ratio:768/467;border-radius:5px;border-width:5px}.dest .btn{display:none}.lomb{width:30px;height:40px}.dest-prat{height:50px}}
 
 /* ===== Por dentro: super zoom no recheio + giro 360° ===== */
 .novidades{position:relative;height:520vh}
@@ -224,7 +223,7 @@ body.menu-aberto{overflow:hidden}
 .sobe.vis{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .sobe{opacity:1;transform:none;transition:none}
-  .dest-pin{height:auto}.dest-cena{position:static;height:auto;padding-block:80px}.dest-moldura{aspect-ratio:auto;width:100%;overflow:visible;border-radius:0;display:grid;gap:12px;background:none;box-shadow:none}.dest,.dest+.dest{position:relative;clip-path:none;aspect-ratio:1600/719}.dest-cont{display:none}
+  .dest-pin{height:auto}.dest-cena{position:static;height:auto;padding-block:80px}.dest-moldura{aspect-ratio:auto;width:100%;overflow:visible;border:0;outline:0;display:grid;gap:12px;background:none;box-shadow:none}.dest-moldura::before,.dest-moldura::after{display:none}.dest,.dest+.dest{position:relative;clip-path:none;aspect-ratio:1600/719}.dest-prat{display:none}
   .fr{opacity:1}
   html{scroll-behavior:auto}
 }
@@ -287,8 +286,11 @@ body.menu-aberto{overflow:hidden}
       <a class="btn vidro js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener">Fazer pedido</a>
     </article>
       </div>
-      <div class="dest-cont" aria-hidden="true"><span id="destN">▶ 1 / 3</span><i><b></b></i><i><b></b></i><i><b></b></i></div>
-      <div class="dest-ficha" aria-hidden="true"><span id="destFicha"><em></em><small></small></span><u>L</u></div>
+      <div class="dest-prat" id="destPrat" role="tablist" aria-label="Escolher destaque">
+        <button type="button" class="lomb" data-i="0" style="--c:#7cb342" aria-label="Coxinha Fit Frango"><span>Fit Frango</span></button>
+        <button type="button" class="lomb" data-i="1" style="--c:#d9962b" aria-label="Empanadas Nordestinas"><span>Empanadas</span></button>
+        <button type="button" class="lomb" data-i="2" style="--c:#ff5a1f" aria-label="Coxão Iracema"><span>Iracema</span></button>
+      </div>
     </div></div>
   </section>
 
@@ -542,30 +544,27 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
 
 /* ===== Destaques: os 3 banners na mesma tela; cada um sobe por cima do anterior com um zoom leve, conduzido pela rolagem ===== */
 (function(){
-  const sec = $("destPin"), ds = [...sec.querySelectorAll(".dest")], bars = [...sec.querySelectorAll(".dest-cont i b")], n = $("destN"), fi = $("destFicha");
-  /* detalhe para quem lembra da locadora: ficha técnica de capa de filme, classificação "L" e o aviso de rebobinar */
-  const FICHAS = ["Coxinha Fit Frango", "Empanadas Nordestinas", "Coxão Iracema"], RESTO = " · Direção: LanLan · Duração: 1 mordida · Classificação: livre";
-  let fAtivo = -1;
+  const sec = $("destPin"), ds = [...sec.querySelectorAll(".dest")], lombs = [...sec.querySelectorAll(".lomb")];
+  /* a prateleira de lombadas embaixo lembra a locadora: o destaque em cena é a "fita" puxada da prateleira; tocar numa lombada leva até ela */
+  const alvo = [0, .5, .92];
+  lombs.forEach((l, i) => l.addEventListener("click", () => {
+    const total = sec.offsetHeight - innerHeight, y = sec.getBoundingClientRect().top + scrollY + alvo[i] * total;
+    scrollTo({top: y, behavior: reduz ? "auto" : "smooth"});
+  }));
   if (reduz) return;
   let ultimo = -1;
-  fi.firstChild.textContent = FICHAS[0]; fi.lastChild.textContent = RESTO; fAtivo = 0;
   (function quadro(){
     const p = progresso(sec);
     if (p !== ultimo){
       ultimo = p;
-      // banner 0 já está lá; banner 1 entra em .22–.44; banner 2 entra em .56–.78
       const fases = [[0, 0], [.22, .44], [.56, .78]];
       let ativo = 0;
       ds.forEach((d, i) => {
         const t = i === 0 ? 1 : suave(clamp((p - fases[i][0]) / (fases[i][1] - fases[i][0]), 0, 1));
         if (i > 0){ d.style.clipPath = `inset(${((1 - t) * 100).toFixed(2)}% 0 0 0)`; if (t > .5) ativo = i; }
-        const im = d.querySelector("img"); im.style.transform = `scale(${(1 + (i === 0 ? 0 : (1 - t) * .12) + (i < 2 ? clamp((p - (i ? fases[i][1] : 0)) / .5, 0, 1) * .04 : 0)).toFixed(4)})`;
-        if (bars[i]) bars[i].style.transform = `scaleX(${(i === ativo ? 1 : i < ativo ? 1 : 0)})`;
+        d.querySelector("img").style.transform = `scale(${(1 + (i === 0 ? 0 : (1 - t) * .12) + (i < 2 ? clamp((p - (i ? fases[i][1] : 0)) / .5, 0, 1) * .04 : 0)).toFixed(4)})`;
       });
-      const fim = ativo === 2 && p > .93;
-      n.parentNode.classList.toggle("fim", fim);
-      n.textContent = fim ? "FIM · seja gentil, rebobine" : "▶ " + (ativo + 1) + " / " + ds.length;
-      if (fAtivo !== ativo){ fAtivo = ativo; fi.style.opacity = 0; setTimeout(() => { fi.firstChild.textContent = FICHAS[ativo]; fi.lastChild.textContent = RESTO; fi.style.opacity = 1; }, 180); }
+      lombs.forEach((l, i) => l.classList.toggle("on", i === ativo));
     }
     requestAnimationFrame(quadro);
   })();
