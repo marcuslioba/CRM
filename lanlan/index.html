@@ -102,7 +102,7 @@ body.menu-aberto{overflow:hidden}
 @media (max-width:900px){.dest-cab{padding-block:76px 40px}.dest{aspect-ratio:768/467}.dest .btn{display:none}}
 
 /* ===== Por dentro: super zoom no recheio + giro 360° ===== */
-.novidades{position:relative;height:440vh}
+.novidades{position:relative;height:520vh}
 .nv-cena{position:sticky;top:0;height:100svh;overflow:hidden;color:var(--creme);transition:background-color .7s ease;background:#1a0e08}
 .nv-cena::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 62% 62% at 50% 52%,var(--glow,rgba(255,120,45,.38)),transparent 72%);pointer-events:none;transition:background .7s}
 .nv-cena::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 120% 100% at 50% 50%,transparent 55%,rgba(0,0,0,.45));pointer-events:none}
@@ -124,7 +124,7 @@ body.menu-aberto{overflow:hidden}
 .nv-zoomtxt{position:absolute;left:50%;top:13svh;transform:translateX(-50%);z-index:4;font-weight:600;text-transform:uppercase;letter-spacing:.22em;font-size:.74rem;white-space:nowrap;background:rgba(20,10,5,.55);border:1px solid rgba(246,234,217,.3);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:9px 18px;border-radius:999px;opacity:0;transition:opacity .4s}
 .nv-zoomtxt.on{opacity:1}
 @media (max-width:900px){
-  .novidades{height:400vh}
+  .novidades{height:480vh}
   .nv-prod{width:92vw}
   .nv-ingr{padding:9px 14px 9px 12px;max-width:62%;gap:9px}
   .nv-ingr b{font-size:.95rem}
@@ -257,7 +257,7 @@ body.menu-aberto{overflow:hidden}
     <div class="in dest-cab">
       <span class="selo">Destaques</span>
       <h2 class="t sobe">Chegou <b>coisa boa.</b></h2>
-      <p class="sobe">Os destaques do cardápio, direto da cozinha do LanLan.</p>
+      <p class="sobe">Os destaques do cardápio, direto da indústria do LanLan.</p>
     </div>
     <article class="dest">
       <picture><source media="(max-width:900px)" srcset="img/m-fit.webp"><img src="img/b-fit.webp" alt="Coxinha Fit Frango: massa de batata com semente de chia, recheada com frango desfiado" width="1600" height="719" loading="lazy"></picture>
@@ -290,8 +290,8 @@ body.menu-aberto{overflow:hidden}
     <div class="in">
       <span class="selo">Muito mais que uma coxinha</span>
       <div class="fr"><h2 class="t">É crocante <b>por fora.</b></h2><p>Casquinha de panko que estala na primeira mordida.</p></div>
-      <div class="fr"><h2 class="t">É farto <b>por dentro.</b></h2><p>Frango desfiado de sobra, na massa de batata com chia.</p></div>
-      <div class="fr"><h2 class="t">É Nordeste <b>no recheio.</b></h2><p>Empanadas nordestinas assadas no forno, com massa folhada e recheio suculento.</p></div>
+      <div class="fr"><h2 class="t">Tem fartura <b>por dentro.</b></h2><p>Frango desfiado de sobra, na massa de batata com chia.</p></div>
+      <div class="fr"><h2 class="t">É nordestino <b>no recheio.</b></h2><p>Empanadas nordestinas assadas no forno, com massa folhada e recheio suculento.</p></div>
     </div>
   </section>
 
@@ -408,12 +408,10 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
   const PRODS = [
     { nome:"Coxão <b>Iracema</b>", selo:"Novo sabor", img:"img/n-iracema.webp", w:1116, h:544, base:"#1a0e08", glow:"rgba(255,120,45,.40)", alt:"Coxão Iracema aberto, recheado com camarão e requeijão",
       desc:"Deliciosos filés de camarão com requeijão cremoso e massa crocante empanada com farinha panko.",
-      foco:{x:.40, y:.48}, zoom:2.2,
-      ingr:[ {t:"Filés de camarão", s:"inteiros no recheio", x:5, y:27}, {t:"Requeijão cremoso", s:"escorrendo", x:52, y:72, dir:1}, {t:"Panko crocante", s:"na casquinha", x:54, y:24, dir:1} ] },
+      ingr:[ {t:"Filés de camarão", s:"inteiros no recheio", fx:.30, fy:.46, z:3.0}, {t:"Requeijão cremoso", s:"escorrendo", fx:.55, fy:.62, z:3.2}, {t:"Panko crocante", s:"na casquinha", fx:.78, fy:.34, z:3.0} ] },
     { nome:"Coxinha Fit <b>Frango</b>", selo:"Leve e saborosa", img:"img/n-fit.webp", w:902, h:465, base:"#17100a", glow:"rgba(232,172,72,.36)", alt:"Coxinha Fit aberta, recheada com frango desfiado",
       desc:"Massa feita com batata e semente de chia, recheada com frango desfiado.",
-      foco:{x:.45, y:.45}, zoom:2.2,
-      ingr:[ {t:"Frango desfiado", s:"bem servido", x:5, y:27}, {t:"Massa de batata", s:"no lugar da tradicional", x:50, y:24, dir:1}, {t:"Semente de chia", s:"na massa", x:52, y:72, dir:1} ] },
+      ingr:[ {t:"Frango desfiado", s:"bem servido", fx:.38, fy:.50, z:3.0}, {t:"Massa de batata", s:"no lugar da tradicional", fx:.80, fy:.55, z:3.0}, {t:"Semente de chia", s:"na massa", fx:.24, fy:.56, z:2.8} ] },
   ];
   const sec = $("novidades"), cena = $("nvCena"), prod = $("nvProd"), img = $("nvImg"), info = $("nvInfo"), zt = $("nvZoomTxt"), box = $("nvIngrs");
   let atual = -1, ingrEls = [];
@@ -422,9 +420,9 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
     img.src = p.img; img.alt = p.alt; img.width = p.w; img.height = p.h;
     $("nvNome").innerHTML = p.nome; $("nvSelo").textContent = p.selo; $("nvDesc").textContent = p.desc; $("nvCont").textContent = (k + 1) + " / " + PRODS.length;
     cena.style.backgroundColor = p.base; cena.style.setProperty("--glow", p.glow);
-    const cel = innerWidth <= 900, ys = [21, 43, 65];
-    box.innerHTML = p.ingr.map((i, n) => { const dir = cel ? n % 2 === 1 : !!i.dir;
-      const pos = cel ? `${dir ? "right:4%" : "left:4%"};top:${ys[n]}%` : `left:${i.x}%;top:${i.y}%`;
+    const cel = innerWidth <= 900;
+    box.innerHTML = p.ingr.map((i, n) => { const dir = n % 2 === 1;
+      const pos = `${dir ? "right:4%" : "left:4%"};top:${cel ? 70 : 68}%`;
       return `<div class="nv-ingr${dir ? " dir" : ""}" style="${pos}"><i></i><div><b>${i.t}</b><span>${i.s}</span></div></div>`; }).join("");
     ingrEls = [...box.children];
   }
@@ -437,25 +435,31 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
       const seg = 1 / PRODS.length, k = Math.min(PRODS.length - 1, Math.floor(P / seg)), q = (P - k * seg) / seg;
       if (k !== atual) monta(k);
       const p = PRODS[k];
-      // fases: 0–.12 entra · .12–.42 super zoom · .42–.58 segura (ingredientes) · .58–.80 afasta girando 360° · .80–.93 nome · .93–1 sai
-      const cel = innerWidth <= 900, Z = p.zoom * (cel ? 1.12 : 1), fim = cel ? .8 : .62;
-      let esc = 1, rot = 0, op = 1, ty = 0, zf = 0, alto = 0;
-      if (q < .12){ const t = suave(q / .12); esc = mix(.55, 1, t); op = t; ty = mix(30, 0, t); }
-      else if (q < .42){ const t = suave((q - .12) / .30); zf = t; esc = mix(1, Z, t); }
-      else if (q < .58){ zf = 1; esc = Z; }
-      else if (q < .80){ const t = suave((q - .58) / .22); zf = 1 - t; alto = t; esc = mix(Z, fim, t); rot = 360 * t; }
-      else { esc = fim; rot = 360; alto = 1; }
+      // fases: entra · super zoom no 1º ingrediente · passa de ingrediente em ingrediente (zoom em cada um) · afasta sem girar · nome
+      const cel = innerWidth <= 900, fim = cel ? .8 : .62, kz = cel ? 1.12 : 1;
+      const I = p.ingr, ks = [[.10, .20, I[0]], [.34, .42, I[1]], [.54, .62, I[2]]];
+      let esc = 1, op = 1, ty = 0, alto = 0, fx = .5, fy = .5;
+      if (q < .10){ const t = suave(q / .10); esc = mix(.55, 1, t); op = t; ty = mix(30, 0, t); }
+      else if (q < .20){ const t = suave((q - .10) / .10); fx = mix(.5, I[0].fx, t); fy = mix(.5, I[0].fy, t); esc = mix(1, I[0].z * kz, t); }
+      else if (q < .34){ fx = I[0].fx; fy = I[0].fy; esc = I[0].z * kz; }
+      else if (q < .42){ const t = suave((q - .34) / .08); fx = mix(I[0].fx, I[1].fx, t); fy = mix(I[0].fy, I[1].fy, t); esc = mix(I[0].z, I[1].z, t) * kz; }
+      else if (q < .54){ fx = I[1].fx; fy = I[1].fy; esc = I[1].z * kz; }
+      else if (q < .62){ const t = suave((q - .54) / .08); fx = mix(I[1].fx, I[2].fx, t); fy = mix(I[1].fy, I[2].fy, t); esc = mix(I[1].z, I[2].z, t) * kz; }
+      else if (q < .72){ fx = I[2].fx; fy = I[2].fy; esc = I[2].z * kz; }
+      else if (q < .84){ const t = suave((q - .72) / .12); alto = t; fx = mix(I[2].fx, .5, t); fy = mix(I[2].fy, .5, t); esc = mix(I[2].z * kz, fim, t); }
+      else { esc = fim; alto = 1; }
       if (q > .93){ const t = suave((q - .93) / .07); op = 1 - t; ty = mix(0, -25, t); }
       if (k === PRODS.length - 1 && q > .93){ op = 1; ty = 0; }
       const W = prod.offsetWidth, H = prod.offsetHeight;
-      const ox = mix(.5, p.foco.x, zf) * W, oy = mix(.5, p.foco.y, zf) * H;
+      const ox = fx * W, oy = fy * H;
       const desloc = -innerHeight * (cel ? .24 : .2) * alto;
       prod.style.transformOrigin = `${ox}px ${oy}px`;
-      prod.style.transform = `translate(${-ox}px, ${-oy + desloc}px) translateY(${ty}%) scale(${esc.toFixed(4)}) rotate(${rot.toFixed(2)}deg)`;
+      prod.style.transform = `translate(${-ox}px, ${-oy + desloc}px) translateY(${ty}%) scale(${esc.toFixed(4)})`;
       prod.style.opacity = op.toFixed(3);
-      zt.classList.toggle("on", q > .2 && q < .58);
-      ingrEls.forEach((el, j) => el.classList.toggle("on", q > .26 + j * .06 && q < .6));
-      info.classList.toggle("on", q > .78 && (q < .95 || k === PRODS.length - 1));
+      zt.classList.toggle("on", q > .12 && q < .30);
+      const jan = [[.14,.38],[.36,.58],[.56,.76]];
+      ingrEls.forEach((el, j) => el.classList.toggle("on", q > jan[j][0] + (j ? 0 : .04) && q < jan[j][1]));
+      info.classList.toggle("on", q > .82 && (q < .95 || k === PRODS.length - 1));
     }
     requestAnimationFrame(quadro);
   })();
