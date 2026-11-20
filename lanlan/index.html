@@ -7,212 +7,201 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="LanLan – Muito mais que uma coxinha. Coxinha de verdade, recheio de sobra e sabor de Nordeste. Desde 1994 em Fortaleza.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap">
 <style>
-/* Conceito: "Muito mais que uma coxinha." — os banners de campanha do cliente são os protagonistas (abertura que cresce até tomar a tela + destaques em tela cheia),
-   seguidos de um palco de novidades com super zoom no recheio e giro 360°, e frases gigantes com o produto flutuando. Sem fotos de pessoas.
-   Movimento só na vertical, conduzido pela rolagem. */
+/* Direção: fotográfica e quente. Fundo marrom bem escuro, creme, UMA cor de destaque (o laranja da marca).
+   A emoção vem das fotos reais dos banners; a interface só dá moldura: sem sombra dura, sem discos chapados, sem nada inclinado.
+   Tipografia Montserrat com contraste de pesos: 300 nos títulos longos e 800 só na palavra-chave. Movimento só na vertical, conduzido pela rolagem. */
 :root{
-  --laranja:#ff500a; --amarelo:#ffd600; --creme:#fff4e4; --marrom:#2a1408; --cacto:#2f9a54;
-  --tinta:#2a1408; --tinta2:#6e4f3b;
+  --fundo:#140a05; --cartao:#1f1109; --creme:#f6ead9; --laranja:#ff5a1f; --laranja-esc:#c93a06; --marrom:#2a1408;
+  --t2:#b2a799; --t2-claro:#6e4f3b; --linha:rgba(246,234,217,.14);
   --fonte:"Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
   --gl:max(16px, env(safe-area-inset-left, 0px)); --gr:max(16px, env(safe-area-inset-right, 0px));
-  color-scheme:light;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--creme);color:var(--tinta);font-family:var(--fonte);font-size:17px;line-height:1.55}
+html{scroll-behavior:smooth;background:var(--fundo)}
+body{margin:0;background:var(--fundo);color:var(--creme);font-family:var(--fonte);font-size:17px;line-height:1.6;font-weight:400}
 main{overflow-x:clip}
 h1,h2,h3,p,figure{margin:0}
 a{color:inherit}
 img{display:block;max-width:100%}
 [hidden]{display:none !important}
-:focus-visible{outline:3px solid var(--amarelo);outline-offset:3px;border-radius:8px}
+:focus-visible{outline:2px solid var(--laranja);outline-offset:3px;border-radius:8px}
 .in{max-width:1240px;margin:0 auto;padding-left:var(--gl);padding-right:var(--gr)}
-.grito{font-weight:900;text-transform:uppercase;line-height:.9;letter-spacing:-.025em;text-wrap:balance}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:15px 28px;border-radius:999px;background:var(--amarelo);color:var(--marrom);font-weight:800;font-size:1rem;text-decoration:none;box-shadow:0 6px 0 var(--marrom);transition:transform .15s,box-shadow .15s}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--marrom)}
-.btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--marrom)}
-.btn.laranja{background:var(--laranja);color:#fff}
+.t{font-weight:300;letter-spacing:-.035em;line-height:1;text-wrap:balance}
+.t b{font-weight:800}
+.t.laranja b{color:var(--laranja)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:14px 26px;border-radius:14px;background:var(--laranja);color:var(--fundo);font-weight:700;font-size:1rem;text-decoration:none;box-shadow:0 14px 34px -10px rgba(255,90,31,.55);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 18px 40px -10px rgba(255,90,31,.65)}
+.btn:active{transform:translateY(1px)}
+.btn.vidro{background:rgba(20,10,5,.55);color:var(--creme);border:1px solid rgba(246,234,217,.38);box-shadow:none;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .btn svg{width:20px;height:20px}
-.selo{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase}
-.selo::before{content:"";width:28px;height:3px;background:currentColor}
+.selo{display:inline-flex;align-items:center;gap:12px;font-weight:600;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--laranja)}
+.selo::before{content:"";width:34px;height:1px;background:currentColor}
 
 /* ===== Topo ===== */
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--laranja)}
-.topo{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;transition:background .3s,box-shadow .3s}
-.topo.fundo{background:var(--laranja);box-shadow:0 2px 20px rgba(0,0,0,.15)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--fundo)}
+.topo{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;transition:background .35s,box-shadow .35s}
+.topo.fundo{background:rgba(20,10,5,.84);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 1px 0 var(--linha)}
 .topo .in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px;max-width:none}
 .marca{display:block;width:98px;flex:none}
 .marca img{width:100%;height:auto}
-.topo nav{display:flex;align-items:center;gap:26px}
-.topo nav a{color:#fff;text-decoration:none;font-weight:700;font-size:.9rem;padding-block:12px}
-.topo nav a:hover{color:var(--amarelo)}
-.topo .btn{min-height:44px;padding:10px 20px;font-size:.9rem;box-shadow:0 4px 0 var(--marrom)}
-.menu-btn{display:none;align-items:center;gap:10px;min-height:44px;padding:10px 16px;border-radius:999px;border:2px solid rgba(255,255,255,.8);background:transparent;color:#fff;font:800 .8rem/1 var(--fonte);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
-.menu-btn i{position:relative;width:16px;height:2px;background:#fff}
-.menu-btn i::before,.menu-btn i::after{content:"";position:absolute;left:0;width:16px;height:2px;background:#fff;transition:transform .25s}
+.topo nav{display:flex;align-items:center;gap:30px}
+.topo nav a{color:var(--creme);text-decoration:none;font-weight:500;font-size:.9rem;padding-block:12px;opacity:.86;transition:opacity .2s,color .2s}
+.topo nav a:hover{opacity:1;color:var(--laranja)}
+.topo .btn{min-height:44px;padding:10px 20px;font-size:.9rem;box-shadow:none}
+.menu-btn{display:none;align-items:center;gap:10px;min-height:44px;padding:10px 16px;border-radius:12px;border:1px solid rgba(246,234,217,.4);background:transparent;color:var(--creme);font:600 .78rem/1 var(--fonte);letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.menu-btn i{position:relative;width:16px;height:1.5px;background:var(--creme)}
+.menu-btn i::before,.menu-btn i::after{content:"";position:absolute;left:0;width:16px;height:1.5px;background:var(--creme);transition:transform .25s}
 .menu-btn i::before{top:-5px}.menu-btn i::after{top:5px}
 .menu-btn[aria-expanded="true"] i{background:transparent}
 .menu-btn[aria-expanded="true"] i::before{transform:translateY(5px) rotate(45deg)}
 .menu-btn[aria-expanded="true"] i::after{transform:translateY(-5px) rotate(-45deg)}
-.menu-cel{position:fixed;inset:0;z-index:45;background:var(--laranja);padding:calc(96px + env(safe-area-inset-top,0px)) var(--gr) 32px var(--gl);display:flex;flex-direction:column;gap:26px;overflow-y:auto}
+.menu-cel{position:fixed;inset:0;z-index:45;background:var(--fundo);padding:calc(96px + env(safe-area-inset-top,0px)) var(--gr) 32px var(--gl);display:flex;flex-direction:column;gap:28px;overflow-y:auto}
 .menu-cel nav{display:grid}
-.menu-cel nav a{color:#fff;text-decoration:none;font-weight:900;font-size:2.1rem;line-height:1.1;text-transform:uppercase;padding:14px 0;border-bottom:2px solid rgba(255,255,255,.25)}
+.menu-cel nav a{color:var(--creme);text-decoration:none;font-weight:300;font-size:2.2rem;line-height:1.1;letter-spacing:-.03em;padding:15px 0;border-bottom:1px solid var(--linha)}
 .menu-cel .btn{align-self:flex-start}
 body.menu-aberto{overflow:hidden}
 @media (max-width:900px){.topo nav{display:none}.menu-btn{display:inline-flex}.topo .btn.so-pc{display:none}}
 
 /* ===== Abertura: o banner sai da moldura e cresce até tomar a tela ===== */
-.abertura{position:relative;height:190vh;background:var(--laranja)}
+.abertura{position:relative;height:190vh;background:var(--fundo)}
 .ab-cena{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;grid-template-columns:.95fr 1.05fr;align-items:center;gap:40px;padding:96px var(--gr) 40px var(--gl)}
-.ab-texto{position:relative;z-index:2;display:grid;gap:26px;color:#fff;max-width:640px}
-.ab-texto h1{font-size:clamp(3.4rem,8vw,8.2rem)}
+.ab-cena::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 78% 52%,rgba(255,90,31,.22),transparent 70%);pointer-events:none}
+.ab-texto{position:relative;z-index:2;display:grid;gap:26px;max-width:640px}
+.ab-texto h1{font-size:clamp(3.4rem,8vw,8.2rem);font-weight:300;letter-spacing:-.04em;line-height:.95}
 .ab-texto h1 span{display:block}
-.ab-texto h1 .y{color:var(--amarelo)}
-.ab-texto p{font-size:1.2rem;font-weight:500;max-width:34ch;color:rgba(255,255,255,.94)}
-.ab-quadro{justify-self:end;width:min(100%,800px);aspect-ratio:1600/719;border-radius:28px}
-.ab-foto{position:absolute;z-index:3;left:0;top:0;width:100%;height:100%;overflow:hidden;border-radius:28px;visibility:hidden;box-shadow:0 30px 60px rgba(0,0,0,.25)}
+.ab-texto h1 .b{font-weight:800;color:var(--laranja)}
+.ab-texto p{font-size:1.15rem;font-weight:400;max-width:36ch;color:var(--t2)}
+.ab-quadro{justify-self:end;width:min(100%,800px);aspect-ratio:1600/719;border-radius:20px}
+.ab-foto{position:absolute;z-index:3;left:0;top:0;width:100%;height:100%;overflow:hidden;border-radius:20px;visibility:hidden;box-shadow:0 50px 90px -30px rgba(0,0,0,.7)}
 .ab-foto.pronto{visibility:visible}
 .ab-foto img{width:100%;height:100%;object-fit:cover;object-position:50% 50%}
-.ab-adesivo{position:absolute;z-index:5;right:calc(var(--gr) + 1%);top:15svh;width:118px;height:118px;border-radius:50%;background:var(--amarelo);color:var(--marrom);display:grid;place-items:center;text-align:center;font-weight:900;font-size:.8rem;line-height:1.05;text-transform:uppercase;transform:rotate(-10deg);box-shadow:0 10px 0 rgba(0,0,0,.18)}
-.ab-adesivo b{display:block;font-size:1.7rem}
 .ab-cta{position:absolute;z-index:6;left:var(--gl);bottom:8svh;opacity:0;pointer-events:none}
 @media (max-width:900px){
   .abertura{height:auto}
-  .ab-cena{position:relative;height:auto;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-start;gap:26px;padding-top:96px;padding-bottom:44px;overflow:visible}
+  .ab-cena{position:relative;height:auto;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-start;gap:28px;padding-top:100px;padding-bottom:44px;overflow:visible}
   .ab-quadro{display:none}
-  .ab-foto{position:relative !important;left:auto !important;top:auto !important;width:100% !important;height:auto !important;aspect-ratio:768/467;border-radius:22px !important;visibility:visible !important;box-shadow:0 18px 40px rgba(0,0,0,.25)}
-  .ab-texto h1{font-size:clamp(3rem,14.5vw,5.2rem)}
+  .ab-foto{position:relative !important;left:auto !important;top:auto !important;width:100% !important;height:auto !important;aspect-ratio:768/467;border-radius:16px !important;visibility:visible !important;box-shadow:0 30px 60px -24px rgba(0,0,0,.7)}
+  .ab-texto h1{font-size:clamp(3.2rem,15vw,5.4rem)}
   .ab-texto p{font-size:1.05rem}
-  .ab-adesivo{width:86px;height:86px;font-size:.6rem;top:auto;bottom:34px;right:calc(var(--gr) + 6px)}
-  .ab-adesivo b{font-size:1.2rem}
   .ab-cta{display:none}
 }
 
 /* ===== Destaques: os banners da campanha, em tela cheia ===== */
-.destaques{background:var(--creme)}
-.dest-cab{padding-block:100px 54px}
-.dest-cab h2{font-size:clamp(3rem,8.4vw,7.8rem);color:var(--laranja);margin-top:16px}
-.dest-cab p{margin-top:18px;font-size:1.15rem;font-weight:500;color:var(--tinta2);max-width:34ch}
+.destaques{background:var(--fundo)}
+.dest-cab{padding-block:110px 56px}
+.dest-cab h2{font-size:clamp(3rem,8vw,7.4rem);margin-top:18px}
+.dest-cab p{margin-top:20px;font-size:1.1rem;color:var(--t2);max-width:36ch}
 .dest{position:relative;overflow:hidden;aspect-ratio:1600/719;background:#1b1b1b;clip-path:inset(100% 0 0 0);transition:clip-path 1.1s cubic-bezier(.2,.8,.2,1)}
 .dest.vis{clip-path:inset(0 0 0 0)}
 .dest picture{display:contents}
 .dest img{position:absolute;left:0;top:-6%;width:100%;height:112%;object-fit:cover;will-change:transform}
 .dest .btn{position:absolute;z-index:2;right:var(--gr);bottom:clamp(14px,3vw,36px)}
-@media (max-width:900px){.dest-cab{padding-block:70px 36px}.dest{aspect-ratio:768/467}.dest .btn{display:none}}
+@media (max-width:900px){.dest-cab{padding-block:76px 40px}.dest{aspect-ratio:768/467}.dest .btn{display:none}}
 
 /* ===== Por dentro: super zoom no recheio + giro 360° ===== */
 .novidades{position:relative;height:440vh}
-.nv-cena{position:sticky;top:0;height:100svh;overflow:hidden;color:#fff;transition:background-color .6s ease;background:#0e6e95}
-.nv-cena::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 55% 60% at 50% 50%,rgba(255,255,255,.22),transparent 70%);pointer-events:none}
-.nv-cab{position:absolute;left:var(--gl);top:92px;z-index:5;display:flex;align-items:center;gap:14px}
-.nv-cab .selo{color:var(--amarelo)}
-.nv-cont{font-weight:800;font-size:.8rem;letter-spacing:.12em;opacity:.8}
+.nv-cena{position:sticky;top:0;height:100svh;overflow:hidden;color:var(--creme);transition:background-color .7s ease;background:#1a0e08}
+.nv-cena::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 62% 62% at 50% 52%,var(--glow,rgba(255,120,45,.38)),transparent 72%);pointer-events:none;transition:background .7s}
+.nv-cena::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 120% 100% at 50% 50%,transparent 55%,rgba(0,0,0,.45));pointer-events:none}
+.nv-cab{position:absolute;left:var(--gl);top:92px;z-index:5;display:flex;align-items:center;gap:16px}
+.nv-cont{font-weight:500;font-size:.8rem;letter-spacing:.16em;color:var(--t2)}
 .nv-prod{position:absolute;left:50%;top:50%;width:min(56vw,680px);z-index:2;will-change:transform,opacity}
-.nv-prod img{width:100%;height:auto;filter:drop-shadow(0 40px 34px rgba(0,0,0,.35))}
-.nv-ingr{position:absolute;z-index:4;display:flex;align-items:center;gap:12px;background:var(--marrom);color:#fff;padding:12px 20px 12px 16px;border-radius:18px;box-shadow:0 12px 0 rgba(0,0,0,.22);max-width:44%;opacity:0;transform:translateY(16px) rotate(var(--giro,-2deg));transition:opacity .45s ease,transform .45s ease;pointer-events:none}
-.nv-ingr.on{opacity:1;transform:rotate(var(--giro,-2deg))}
-.nv-ingr b{display:block;font-weight:900;font-size:clamp(1.05rem,2vw,1.7rem);line-height:1;text-transform:uppercase}
-.nv-ingr span{display:block;font-weight:600;font-size:.84rem;color:var(--amarelo);margin-top:4px}
-.nv-ingr i{flex:none;width:16px;height:16px;border-radius:50%;background:var(--amarelo);box-shadow:0 0 0 6px rgba(255,214,0,.35)}
-.nv-ingr.dir{flex-direction:row-reverse;text-align:right;--giro:2deg}
+.nv-prod img{width:100%;height:auto;filter:drop-shadow(0 44px 38px rgba(0,0,0,.55))}
+.nv-ingr{position:absolute;z-index:4;display:flex;align-items:center;gap:12px;background:rgba(20,10,5,.74);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(246,234,217,.3);color:var(--creme);padding:12px 20px 12px 16px;border-radius:14px;box-shadow:0 24px 44px -14px rgba(0,0,0,.6);max-width:44%;opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease;pointer-events:none}
+.nv-ingr.on{opacity:1;transform:none}
+.nv-ingr b{display:block;font-weight:700;font-size:clamp(1rem,1.7vw,1.4rem);line-height:1.1}
+.nv-ingr span{display:block;font-weight:400;font-size:.84rem;color:rgba(246,234,217,.82);margin-top:3px}
+.nv-ingr i{flex:none;width:9px;height:9px;border-radius:50%;background:var(--laranja);box-shadow:0 0 14px rgba(255,90,31,.9)}
+.nv-ingr.dir{flex-direction:row-reverse;text-align:right}
 .nv-info{position:absolute;left:var(--gl);right:var(--gr);bottom:7svh;z-index:5;display:grid;grid-template-columns:1fr auto;align-items:end;gap:24px;opacity:0;transform:translateY(30px);transition:opacity .5s ease,transform .5s ease}
 .nv-info.on{opacity:1;transform:none}
-.nv-info h2{font-size:clamp(3rem,8.6vw,8.4rem)}
-.nv-info p{font-weight:600;font-size:1.1rem;max-width:42ch;margin-top:10px}
-.nv-zoomtxt{position:absolute;left:50%;top:13svh;transform:translateX(-50%);z-index:4;font-weight:900;text-transform:uppercase;letter-spacing:.2em;font-size:.82rem;background:rgba(0,0,0,.25);padding:8px 16px;border-radius:999px;opacity:0;transition:opacity .4s}
+.nv-info h2{font-size:clamp(3rem,8.4vw,8.2rem);margin-top:12px}
+.nv-info h2 b{color:var(--laranja)}
+.nv-info p{font-weight:400;font-size:1.1rem;max-width:44ch;margin-top:14px;color:rgba(246,234,217,.86)}
+.nv-zoomtxt{position:absolute;left:50%;top:13svh;transform:translateX(-50%);z-index:4;font-weight:600;text-transform:uppercase;letter-spacing:.22em;font-size:.74rem;white-space:nowrap;background:rgba(20,10,5,.55);border:1px solid rgba(246,234,217,.3);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:9px 18px;border-radius:999px;opacity:0;transition:opacity .4s}
 .nv-zoomtxt.on{opacity:1}
 @media (max-width:900px){
   .novidades{height:400vh}
   .nv-prod{width:92vw}
   .nv-ingr{padding:9px 14px 9px 12px;max-width:62%;gap:9px}
   .nv-ingr b{font-size:.95rem}
-  .nv-ingr span{font-size:.72rem}
+  .nv-ingr span{font-size:.74rem}
   .nv-info{grid-template-columns:1fr;bottom:calc(92px + env(safe-area-inset-bottom,0px))}
-  .nv-info h2{font-size:clamp(2.6rem,13vw,4.4rem)}
+  .nv-info h2{font-size:clamp(2.7rem,13vw,4.6rem)}
   .nv-info p{font-size:.98rem}
   .nv-info .btn{display:none}
 }
 
-/* ===== Manifesto: frase gigante + produto flutuando ===== */
-.manifesto{padding-block:120px 30px}
-.par{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:50px;margin-bottom:100px}
-.par:nth-child(even){grid-template-columns:.95fr 1.05fr}
-.par:nth-child(even) .prod{order:-1}
-.par h2{font-size:clamp(2.8rem,6.4vw,6rem);color:var(--laranja);line-height:.94}
-.par h2 em{font-style:normal;color:var(--marrom)}
-.par p{margin-top:22px;font-size:1.15rem;font-weight:500;color:var(--tinta2);max-width:34ch}
-.prod{position:relative;width:100%;max-width:560px;aspect-ratio:1;justify-self:center;display:grid;place-items:center}
-.prod::before{content:"";position:absolute;inset:4%;border-radius:50%;background:var(--bola,var(--amarelo));transform:scale(.3);opacity:0;transition:transform .9s cubic-bezier(.2,.8,.2,1),opacity .6s ease}
-.prod.vis::before{transform:scale(1);opacity:1}
-.prod img{position:relative;width:112%;max-width:none;height:auto;filter:drop-shadow(0 34px 28px rgba(42,20,8,.32));will-change:transform}
-@media (max-width:900px){
-  .manifesto{padding-block:80px 10px}
-  .par,.par:nth-child(even){grid-template-columns:1fr;gap:20px;margin-bottom:70px}
-  .par:nth-child(even) .prod{order:0}
-  .prod{max-width:420px}
-  .prod img{width:100%}
-}
+/* ===== Manifesto: frases gigantes que acendem conforme você rola ===== */
+.manifesto{background:var(--creme);color:var(--marrom);padding-block:120px 80px}
+.manifesto .selo{color:var(--marrom)}
+.manifesto .selo::before{background:var(--laranja-esc)}
+.fr{padding-block:min(11vh,110px);border-top:1px solid rgba(42,20,8,.16);opacity:.2}
+.fr:first-of-type{margin-top:46px}
+.fr h2{font-size:clamp(2.8rem,7.4vw,7rem)}
+.fr h2 b{color:var(--laranja-esc)}
+.fr p{margin-top:22px;font-size:1.15rem;color:var(--t2-claro);max-width:40ch}
+@media (max-width:900px){.manifesto{padding-block:84px 50px}.fr{padding-block:50px}}
 
-/* ===== Pedido ===== */
-.pedido{background:var(--laranja);color:#fff;padding-block:110px;overflow:hidden}
-.pedido .in{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center}
-.pedido h2{font-size:clamp(3.2rem,7.4vw,6.8rem)}
-.pedido h2 span{display:block;color:var(--amarelo)}
-.pedido p{margin:24px 0 0;font-size:1.2rem;font-weight:500;max-width:30ch}
-.escolha{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.tile{display:grid;gap:8px;justify-items:center;text-align:center;text-decoration:none;padding:22px 14px 22px;border-radius:28px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);color:#fff;transition:transform .25s,background .25s}
-.tile:hover{transform:translateY(-8px) rotate(-1.5deg);background:rgba(255,255,255,.22)}
-.tile .disco{position:relative;width:74%;aspect-ratio:1;border-radius:50%;background:var(--d,var(--amarelo));display:grid;place-items:center;margin-bottom:8px}
-.tile .disco img{width:132%;max-width:none;height:auto;filter:drop-shadow(0 16px 14px rgba(0,0,0,.35))}
-.tile b{font-weight:900;font-size:1.15rem;line-height:1.05;text-transform:uppercase}
-.tile span{font-weight:600;font-size:.82rem;color:var(--amarelo)}
-@media (max-width:900px){.pedido{padding-block:80px}.pedido .in{grid-template-columns:1fr;gap:36px}.escolha{gap:12px}.tile{padding:16px 8px 18px}.tile b{font-size:.95rem}}
+/* ===== Pedido (a única seção em laranja) ===== */
+.pedido{background:var(--laranja);color:var(--fundo);padding-block:120px;overflow:hidden}
+.pedido .in{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center}
+.pedido h2{font-size:clamp(3rem,7vw,6.6rem)}
+.pedido h2 b{display:block}
+.pedido p{margin:24px 0 0;font-size:1.15rem;font-weight:500;max-width:30ch}
+.escolha{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tile{position:relative;overflow:hidden;display:grid;gap:4px;justify-items:start;text-align:left;padding:22px;border-radius:22px;background:var(--fundo);color:var(--creme);text-decoration:none;border:1px solid rgba(246,234,217,.1);transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s;box-shadow:0 30px 50px -28px rgba(20,10,5,.7)}
+.tile::before{content:"";position:absolute;left:50%;top:-8%;width:130%;aspect-ratio:1;transform:translateX(-50%);background:radial-gradient(circle,rgba(255,110,40,.34),transparent 62%)}
+.tile:hover{transform:translateY(-6px);border-color:rgba(255,90,31,.8)}
+.tile .foto{position:relative;width:100%;aspect-ratio:1.5;display:grid;place-items:center;margin-bottom:12px}
+.tile .foto img{width:94%;max-height:100%;height:auto;object-fit:contain;filter:drop-shadow(0 22px 18px rgba(0,0,0,.6));transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.tile:hover .foto img{transform:scale(1.07)}
+.tile b{position:relative;font-weight:700;font-size:1.05rem;line-height:1.15}
+.tile span{position:relative;color:var(--t2);font-size:.86rem}
+@media (max-width:900px){.pedido{padding-block:84px}.pedido .in{grid-template-columns:1fr;gap:40px}.escolha{gap:12px}.tile{padding:16px}.tile b{font-size:.95rem}}
 
 /* ===== História ===== */
-.historia{padding-block:110px}
-.historia h2{font-size:clamp(2.6rem,5.6vw,5rem);color:var(--laranja);max-width:14ch}
-.historia h2 em{font-style:normal;color:var(--marrom)}
-.anos{list-style:none;margin:60px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);border-top:3px solid var(--marrom)}
-.anos li{padding:30px 28px 10px 0;display:grid;gap:12px;align-content:start}
-.anos li+li{padding-left:28px;border-left:3px solid var(--marrom)}
-.anos b{font-weight:900;font-size:clamp(3rem,6vw,5rem);line-height:.9;color:var(--laranja)}
-.anos h3{font-weight:800;font-size:1.15rem}
-.anos p{color:var(--tinta2);font-size:.98rem}
-@media (max-width:900px){.historia{padding-block:80px}.anos{grid-template-columns:1fr}.anos li+li{padding-left:0;border-left:0;border-top:3px solid var(--marrom)}.anos li{padding:26px 0 20px}}
+.historia{padding-block:120px;background:var(--fundo)}
+.historia h2{font-size:clamp(2.8rem,6vw,5.4rem);max-width:14ch;margin-top:18px}
+.anos{list-style:none;margin:70px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--linha)}
+.anos li{padding:34px 30px 10px 0;display:grid;gap:12px;align-content:start}
+.anos li+li{padding-left:30px;border-left:1px solid var(--linha)}
+.anos b{font-weight:200;font-size:clamp(3.4rem,7vw,6rem);line-height:.9;color:var(--laranja);letter-spacing:-.04em}
+.anos h3{font-weight:600;font-size:1.15rem}
+.anos p{color:var(--t2);font-size:.98rem}
+@media (max-width:900px){.historia{padding-block:84px}.anos{grid-template-columns:1fr}.anos li+li{padding-left:0;border-left:0;border-top:1px solid var(--linha)}.anos li{padding:28px 0 20px}}
 
 /* ===== Unidades + franquia ===== */
-.unidades{background:var(--cacto);color:#fff}
-.unidades .in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding-block:56px}
+.unidades{background:var(--creme);color:var(--marrom)}
+.unidades .in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding-block:60px}
 .unidades h2{font-size:clamp(2rem,4.4vw,3.6rem)}
-.franquia{background:var(--marrom);color:#fff;padding-block:110px}
-.franquia .in{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.franquia h2{font-size:clamp(2.8rem,6vw,5.4rem)}
-.franquia h2 span{color:var(--amarelo)}
-.franquia p{margin:22px 0 32px;font-size:1.15rem;font-weight:500;color:rgba(255,255,255,.85);max-width:34ch}
-.badge{position:relative;width:min(100%,440px);aspect-ratio:1;border-radius:50%;background:var(--amarelo);color:var(--marrom);display:grid;place-items:center;justify-self:center;text-align:center}
-.badge .anel{position:absolute;inset:0;animation:gira 40s linear infinite}
-.badge .miolo{display:grid;gap:6px}
-.badge .miolo b{font-weight:900;font-size:clamp(4.4rem,10vw,7.6rem);line-height:.85;letter-spacing:-.03em}
-.badge .miolo span{font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:.82rem}
-@keyframes gira{to{transform:rotate(360deg)}}
-@media (max-width:900px){.franquia{padding-block:80px}.franquia .in{grid-template-columns:1fr;gap:40px}.badge{width:min(80%,340px)}}
+.unidades .btn{background:var(--marrom);color:var(--creme);box-shadow:none}
+.franquia{background:var(--fundo);padding-block:120px}
+.franquia .in{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.ano-gigante{display:grid;gap:8px;justify-items:start}
+.ano-gigante small{font-weight:600;font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--t2)}
+.ano-gigante b{font-weight:800;font-size:clamp(7rem,19vw,17rem);line-height:.82;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:2px var(--laranja)}
+.franquia h2{font-size:clamp(2.8rem,5.8vw,5.2rem);margin-top:18px}
+.franquia p{margin:22px 0 32px;font-size:1.15rem;color:var(--t2);max-width:34ch}
+@media (max-width:900px){.franquia{padding-block:84px}.franquia .in{grid-template-columns:1fr;gap:40px}}
 
 /* ===== Rodapé ===== */
-.rodape{background:#1c0d05;color:#d9c7bb;padding-block:56px 30px;font-size:.92rem}
+.rodape{background:#0d0603;color:#c9bcae;padding-block:56px 30px;font-size:.92rem}
 .rodape .in{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:30px}
-.rodape h4{margin:0 0 10px;color:#fff;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase}
+.rodape h4{margin:0 0 10px;color:var(--creme);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
 .rodape ul{list-style:none;margin:0;padding:0;display:grid}
 .rodape a{text-decoration:none;display:inline-block;padding-block:11px}
-.rodape a:hover{color:var(--amarelo)}
+.rodape a:hover{color:var(--laranja)}
 .rodape .logo{width:120px}
-.legal{max-width:1240px;margin:30px auto 0;padding:20px var(--gr) 0 var(--gl);border-top:1px solid rgba(255,255,255,.12);font-size:.78rem;color:#a08a7c}
+.legal{max-width:1240px;margin:30px auto 0;padding:20px var(--gr) 0 var(--gl);border-top:1px solid var(--linha);font-size:.78rem;color:#a08f80}
 @media (max-width:900px){.rodape .in{grid-template-columns:1fr 1fr}}
 @media (max-width:520px){.rodape .in{grid-template-columns:1fr}}
 
 .pedir-cel{display:none}
-@media (max-width:900px){.pedir-cel{display:flex;position:fixed;left:var(--gl);right:var(--gr);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;justify-content:center;box-shadow:0 6px 0 var(--marrom),0 14px 30px rgba(0,0,0,.25);transition:opacity .3s,transform .3s}
+@media (max-width:900px){.pedir-cel{display:flex;position:fixed;left:var(--gl);right:var(--gr);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;justify-content:center;box-shadow:0 18px 40px -8px rgba(255,90,31,.55),0 0 0 1px rgba(20,10,5,.2);transition:opacity .3s,transform .3s}
   .pedir-cel.some{opacity:0;transform:translateY(120%);pointer-events:none}
   .rodape{padding-bottom:100px}}
 
@@ -221,8 +210,7 @@ body.menu-aberto{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
   .sobe{opacity:1;transform:none;transition:none}
   .dest{clip-path:none;transition:none}
-  .prod::before{transform:none;opacity:1;transition:none}
-  .badge .anel{animation:none}
+  .fr{opacity:1}
   html{scroll-behavior:auto}
 }
 </style>
@@ -230,8 +218,8 @@ body.menu-aberto{overflow:hidden}
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="sacola" viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7L6 7Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9 7a3 3 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
-  <symbol id="pino" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="12" cy="10" r="2.4" fill="currentColor"/></symbol>
+  <symbol id="sacola" viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7L6 7Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 7a3 3 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="pino" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.4" fill="currentColor"/></symbol>
 </svg>
 
 <header class="topo" id="topo">
@@ -252,36 +240,36 @@ body.menu-aberto{overflow:hidden}
   <section class="abertura" id="abertura">
     <div class="ab-cena" id="abCena">
       <div class="ab-texto" id="abTexto">
-        <h1 class="grito"><span class="y">Muito mais</span><span>que uma</span><span>coxinha.</span></h1>
-        <p>Coxinha de verdade, recheio de sobra e sabor de Nordeste. Desde 1994, em Fortaleza.</p>
+        <span class="selo">Fortaleza, desde 1994</span>
+        <h1><span>Muito mais</span><span>que uma</span><span class="b">coxinha.</span></h1>
+        <p>Coxinha de verdade, recheio de sobra e sabor de Nordeste.</p>
         <div><a class="btn js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Fazer pedido</a></div>
       </div>
       <div class="ab-quadro" id="abQuadro" aria-hidden="true"></div>
       <div class="ab-foto" id="abFoto">
         <picture><source media="(max-width:900px)" srcset="img/m-cookies.webp"><img src="img/b-cookies.webp" alt="Chegaram os cookies feitos com Nutella: dois cookies partidos, com Nutella derretida no recheio" width="1600" height="719"></picture>
       </div>
-      <div class="ab-adesivo" id="abAdesivo" aria-hidden="true"><span>desde<b>1994</b></span></div>
       <div class="ab-cta" id="abCta"><a class="btn js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Fazer pedido</a></div>
     </div>
   </section>
 
   <section class="destaques" id="destaques" aria-label="Destaques do cardápio">
     <div class="in dest-cab">
-      <span class="selo" style="color:var(--laranja)">Destaques</span>
-      <h2 class="grito sobe">Chegou coisa boa.</h2>
+      <span class="selo">Destaques</span>
+      <h2 class="t sobe">Chegou <b>coisa boa.</b></h2>
       <p class="sobe">Os destaques do cardápio, direto da cozinha do LanLan.</p>
     </div>
     <article class="dest">
       <picture><source media="(max-width:900px)" srcset="img/m-fit.webp"><img src="img/b-fit.webp" alt="Coxinha Fit Frango: massa de batata com semente de chia, recheada com frango desfiado" width="1600" height="719" loading="lazy"></picture>
-      <a class="btn js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Fazer pedido</a>
+      <a class="btn vidro js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener">Fazer pedido</a>
     </article>
     <article class="dest">
       <picture><source media="(max-width:900px)" srcset="img/m-empanada.webp"><img src="img/b-empanada.webp" alt="Chegaram as Empanadas Nordestinas: assadas no forno, massa folhada e recheio suculento" width="1600" height="719" loading="lazy"></picture>
-      <a class="btn js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Fazer pedido</a>
+      <a class="btn vidro js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener">Fazer pedido</a>
     </article>
     <article class="dest">
       <picture><source media="(max-width:900px)" srcset="img/m-iracema.webp"><img src="img/b-iracema.webp" alt="Novo sabor Coxão Iracema: camarão com requeijão cremoso e massa crocante com panko" width="1600" height="719" loading="lazy"></picture>
-      <a class="btn js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Fazer pedido</a>
+      <a class="btn vidro js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener">Fazer pedido</a>
     </article>
   </section>
 
@@ -292,7 +280,7 @@ body.menu-aberto{overflow:hidden}
       <div class="nv-prod" id="nvProd"><img id="nvImg" src="img/n-iracema.webp" alt="Coxão Iracema aberto, recheado com camarão e requeijão" width="1116" height="544"></div>
       <div id="nvIngrs"></div>
       <div class="nv-info" id="nvInfo">
-        <div><span class="selo" id="nvSelo" style="color:var(--amarelo)">Novo sabor</span><h2 class="grito" id="nvNome" style="margin-top:12px">Coxão Iracema</h2><p id="nvDesc"></p></div>
+        <div><span class="selo" id="nvSelo">Novo sabor</span><h2 class="t" id="nvNome"></h2><p id="nvDesc"></p></div>
         <a class="btn js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Quero esse</a>
       </div>
     </div>
@@ -300,40 +288,32 @@ body.menu-aberto{overflow:hidden}
 
   <section class="manifesto" id="manifesto" aria-label="O que é o LanLan">
     <div class="in">
-      <article class="par">
-        <div class="sobe"><span class="selo" style="color:var(--laranja)">Muito mais que uma coxinha</span><h2 class="grito" style="margin-top:18px">É crocante <em>por fora.</em></h2><p>Casquinha de panko que estala na primeira mordida.</p></div>
-        <div class="prod" style="--bola:var(--amarelo)"><img src="img/n-iracema.webp" alt="Coxão Iracema partido ao meio" width="1116" height="544" loading="lazy"></div>
-      </article>
-      <article class="par">
-        <div class="sobe"><span class="selo" style="color:var(--laranja)">Muito mais que uma coxinha</span><h2 class="grito" style="margin-top:18px">É farto <em>por dentro.</em></h2><p>Frango desfiado de sobra, na massa de batata com chia.</p></div>
-        <div class="prod" style="--bola:#8fd14f"><img src="img/n-fit.webp" alt="Coxinha Fit aberta, cheia de frango desfiado" width="902" height="465" loading="lazy"></div>
-      </article>
-      <article class="par">
-        <div class="sobe"><span class="selo" style="color:var(--laranja)">Muito mais que uma coxinha</span><h2 class="grito" style="margin-top:18px">É Nordeste <em>no recheio.</em></h2><p>Empanadas nordestinas assadas no forno, com massa folhada e recheio suculento.</p></div>
-        <div class="prod" style="--bola:#f39a2e"><img src="img/n-empanada.webp" alt="Empanadas nordestinas, uma delas aberta" width="1007" height="586" loading="lazy"></div>
-      </article>
+      <span class="selo">Muito mais que uma coxinha</span>
+      <div class="fr"><h2 class="t">É crocante <b>por fora.</b></h2><p>Casquinha de panko que estala na primeira mordida.</p></div>
+      <div class="fr"><h2 class="t">É farto <b>por dentro.</b></h2><p>Frango desfiado de sobra, na massa de batata com chia.</p></div>
+      <div class="fr"><h2 class="t">É Nordeste <b>no recheio.</b></h2><p>Empanadas nordestinas assadas no forno, com massa folhada e recheio suculento.</p></div>
     </div>
   </section>
 
   <section class="pedido" id="pedir">
     <div class="in">
       <div class="sobe">
-        <h2 class="grito">Bateu a vontade? <span>Escolhe o seu.</span></h2>
+        <h2 class="t">Bateu a vontade? <b>Escolhe o seu.</b></h2>
         <p>Toque no que você quer e finalize o pedido.</p>
       </div>
       <div class="escolha">
-        <a class="tile js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener" style="--d:var(--amarelo)"><div class="disco"><img src="img/n-iracema.webp" alt="" width="1116" height="544" loading="lazy"></div><b>Coxão Iracema</b><span>Novo sabor</span></a>
-        <a class="tile js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener" style="--d:#8fd14f"><div class="disco"><img src="img/n-fit.webp" alt="" width="902" height="465" loading="lazy"></div><b>Coxinha Fit</b><span>Frango desfiado</span></a>
-        <a class="tile js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener" style="--d:#f39a2e"><div class="disco"><img src="img/n-empanada.webp" alt="" width="1007" height="586" loading="lazy"></div><b>Empanadas</b><span>Assadas no forno</span></a>
-        <a class="tile js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener" style="--d:#7a4a2e"><div class="disco"><img src="img/n-cookies.webp" alt="" width="1664" height="561" loading="lazy"></div><b>Cookies</b><span>Com Nutella</span></a>
+        <a class="tile js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><div class="foto"><img src="img/n-iracema.webp" alt="" width="1116" height="544" loading="lazy"></div><b>Coxão Iracema</b><span>Novo sabor</span></a>
+        <a class="tile js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><div class="foto"><img src="img/n-fit.webp" alt="" width="902" height="465" loading="lazy"></div><b>Coxinha Fit</b><span>Frango desfiado</span></a>
+        <a class="tile js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><div class="foto"><img src="img/n-empanada.webp" alt="" width="1007" height="586" loading="lazy"></div><b>Empanadas</b><span>Assadas no forno</span></a>
+        <a class="tile js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><div class="foto"><img src="img/n-cookies.webp" alt="" width="1664" height="561" loading="lazy"></div><b>Cookies</b><span>Com Nutella</span></a>
       </div>
     </div>
   </section>
 
   <section class="historia" id="historia">
     <div class="in">
-      <span class="selo" style="color:var(--laranja)">Nossa história</span>
-      <h2 class="grito sobe" style="margin-top:18px">Começou numa <em>garagem.</em></h2>
+      <span class="selo">Nossa história</span>
+      <h2 class="t sobe">Começou numa <b>garagem.</b></h2>
       <ol class="anos">
         <li class="sobe"><b>1994</b><h3>A locadora e as primeiras coxinhas</h3><p>O Erlanio, o "LanLan", abriu uma locadora de videogames na garagem de casa. Com a esposa Morgana, passou a vender sucos e coxinhas feitas por ele no quintal da casa da mãe.</p></li>
         <li class="sobe"><b>2006</b><h3>Nasce a LanLan Sanduíches</h3><p>A lanchonete abre no Conjunto José Walter, em Fortaleza, e vira referência no bairro.</p></li>
@@ -344,20 +324,17 @@ body.menu-aberto{overflow:hidden}
 
   <section class="unidades" id="unidades">
     <div class="in">
-      <h2 class="grito">Tem LanLan perto de você.</h2>
+      <h2 class="t">Tem LanLan <b>perto de você.</b></h2>
       <a class="btn" href="https://lanlanoficial.com.br/unidades" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#pino"/></svg>Encontrar unidade</a>
     </div>
   </section>
 
   <section class="franquia" id="franquia">
     <div class="in">
-      <div class="badge" aria-hidden="true">
-        <svg class="anel" viewBox="0 0 400 400"><defs><path id="circ" d="M200,200 m-170,0 a170,170 0 1,1 340,0 a170,170 0 1,1 -340,0"/></defs><text font-family="Montserrat, sans-serif" font-weight="900" font-size="27" fill="#2a1408"><textPath href="#circ" textLength="1055" lengthAdjust="spacing">MUITO MAIS QUE UMA COXINHA • MUITO MAIS QUE UMA COXINHA •</textPath></text></svg>
-        <div class="miolo"><span>Desde</span><b>1994</b></div>
-      </div>
+      <div class="ano-gigante" aria-hidden="true"><small>Desde</small><b>1994</b><small>em Fortaleza</small></div>
       <div class="sobe">
-        <span class="selo" style="color:var(--amarelo)">Franquia</span>
-        <h2 class="grito" style="margin-top:18px">Leve o LanLan <span>pra sua cidade.</span></h2>
+        <span class="selo">Franquia</span>
+        <h2 class="t">Leve o LanLan <b>pra sua cidade.</b></h2>
         <p>Seja um franqueado de uma marca nordestina com mais de 20 anos de estrada.</p>
         <a class="btn js-franquia" href="https://franquia.lanlanoficial.com.br" target="_blank" rel="noopener">Quero ser franqueado</a>
       </div>
@@ -406,12 +383,12 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
 
 /* ===== Abertura (computador): o banner cresce da moldura até tomar a tela. No celular fica estático. ===== */
 (function(){
-  const sec = $("abertura"), cena = $("abCena"), foto = $("abFoto"), texto = $("abTexto"), ades = $("abAdesivo"), cta = $("abCta"), q = $("abQuadro");
+  const sec = $("abertura"), cena = $("abCena"), foto = $("abFoto"), texto = $("abTexto"), cta = $("abCta"), q = $("abQuadro");
   let ini = null, ultimo = -1;
   addEventListener("resize", () => { ini = null; ultimo = -1; });
   (function quadro(){
     if (innerWidth > 900){
-      if (!ini){ const c = cena.getBoundingClientRect(), r = q.getBoundingClientRect(); ini = {x:r.left - c.left, y:r.top - c.top, w:r.width, h:r.height, raio:28}; }
+      if (!ini){ const c = cena.getBoundingClientRect(), r = q.getBoundingClientRect(); ini = {x:r.left - c.left, y:r.top - c.top, w:r.width, h:r.height, raio:20}; }
       const p = reduz ? 0 : progresso(sec);
       if (p !== ultimo){
         ultimo = p; const e = suave(clamp(p / .7, 0, 1)), W = cena.clientWidth, H = cena.clientHeight;
@@ -419,7 +396,6 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
         foto.style.width = mix(ini.w, W, e).toFixed(1) + "px"; foto.style.height = mix(ini.h, H, e).toFixed(1) + "px";
         foto.style.borderRadius = mix(ini.raio, 0, e).toFixed(1) + "px"; foto.classList.add("pronto");
         const s = clamp(p / .3, 0, 1); texto.style.opacity = (1 - s).toFixed(3); texto.style.transform = `translateY(${(-60 * s).toFixed(1)}px)`;
-        ades.style.opacity = (1 - clamp(p / .2, 0, 1)).toFixed(3);
         const c = clamp((p - .72) / .2, 0, 1); cta.style.opacity = c.toFixed(3); cta.style.pointerEvents = c > .6 ? "auto" : "none";
       }
     }
@@ -430,11 +406,11 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
 /* ===== Por dentro: entra → super zoom no recheio (ingredientes) → afasta girando 360° → nome → próxima ===== */
 (function(){
   const PRODS = [
-    { nome:"Coxão Iracema", selo:"Novo sabor", img:"img/n-iracema.webp", w:1116, h:544, cor:"#0e6e95", alt:"Coxão Iracema aberto, recheado com camarão e requeijão",
+    { nome:"Coxão <b>Iracema</b>", selo:"Novo sabor", img:"img/n-iracema.webp", w:1116, h:544, base:"#1a0e08", glow:"rgba(255,120,45,.40)", alt:"Coxão Iracema aberto, recheado com camarão e requeijão",
       desc:"Deliciosos filés de camarão com requeijão cremoso e massa crocante empanada com farinha panko.",
       foco:{x:.40, y:.48}, zoom:2.2,
       ingr:[ {t:"Filés de camarão", s:"inteiros no recheio", x:5, y:27}, {t:"Requeijão cremoso", s:"escorrendo", x:52, y:72, dir:1}, {t:"Panko crocante", s:"na casquinha", x:54, y:24, dir:1} ] },
-    { nome:"Coxinha Fit Frango", selo:"Leve e saborosa", img:"img/n-fit.webp", w:902, h:465, cor:"#3d8a24", alt:"Coxinha Fit aberta, recheada com frango desfiado",
+    { nome:"Coxinha Fit <b>Frango</b>", selo:"Leve e saborosa", img:"img/n-fit.webp", w:902, h:465, base:"#17100a", glow:"rgba(232,172,72,.36)", alt:"Coxinha Fit aberta, recheada com frango desfiado",
       desc:"Massa feita com batata e semente de chia, recheada com frango desfiado.",
       foco:{x:.45, y:.45}, zoom:2.2,
       ingr:[ {t:"Frango desfiado", s:"bem servido", x:5, y:27}, {t:"Massa de batata", s:"no lugar da tradicional", x:50, y:24, dir:1}, {t:"Semente de chia", s:"na massa", x:52, y:72, dir:1} ] },
@@ -444,8 +420,8 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
   function monta(k){
     const p = PRODS[k]; atual = k;
     img.src = p.img; img.alt = p.alt; img.width = p.w; img.height = p.h;
-    $("nvNome").textContent = p.nome; $("nvSelo").textContent = p.selo; $("nvDesc").textContent = p.desc; $("nvCont").textContent = (k + 1) + " / " + PRODS.length;
-    cena.style.backgroundColor = p.cor;
+    $("nvNome").innerHTML = p.nome; $("nvSelo").textContent = p.selo; $("nvDesc").textContent = p.desc; $("nvCont").textContent = (k + 1) + " / " + PRODS.length;
+    cena.style.backgroundColor = p.base; cena.style.setProperty("--glow", p.glow);
     const cel = innerWidth <= 900, ys = [21, 43, 65];
     box.innerHTML = p.ingr.map((i, n) => { const dir = cel ? n % 2 === 1 : !!i.dir;
       const pos = cel ? `${dir ? "right:4%" : "left:4%"};top:${ys[n]}%` : `left:${i.x}%;top:${i.y}%`;
@@ -486,11 +462,11 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
   monta(0);
 })();
 
-/* ===== Revelações: banners sobem da base e correm devagar; produtos giram um pouco; textos sobem =====
+/* ===== Revelações: banners sobem da base e correm devagar; frases acendem no centro da tela; textos sobem =====
    (a revelação é decidida pela posição na tela, não por IntersectionObserver: um elemento recortado não "aparece" para o observador) */
 (function(){
-  const dests = [...document.querySelectorAll(".dest")], prods = [...document.querySelectorAll(".prod")], els = [...document.querySelectorAll(".sobe")];
-  if (reduz) { [...dests, ...prods, ...els].forEach(e => e.classList.add("vis")); return; }
+  const dests = [...document.querySelectorAll(".dest")], frs = [...document.querySelectorAll(".fr")], els = [...document.querySelectorAll(".sobe")];
+  if (reduz) { [...dests, ...els].forEach(e => e.classList.add("vis")); frs.forEach(f => f.style.opacity = 1); return; }
   (function laco(){
     const H = innerHeight;
     for (const d of dests){
@@ -498,11 +474,9 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
       if (r.bottom < -50 || r.top > H + 50) continue;
       const p = clamp((H - r.top) / (H + r.height), 0, 1); d.querySelector("img").style.transform = `translateY(${((p - .5) * -8).toFixed(2)}%)`;
     }
-    for (const m of prods){
-      const r = m.getBoundingClientRect(); if (r.top < H * .85 && r.bottom > 0) m.classList.add("vis");
-      if (r.bottom < -50 || r.top > H + 50) continue;
-      const p = clamp((H - r.top) / (H + r.height), 0, 1);
-      m.querySelector("img").style.transform = `translateY(${((p - .5) * -56).toFixed(1)}px) rotate(${((p - .5) * -22).toFixed(1)}deg)`;
+    for (const f of frs){
+      const r = f.getBoundingClientRect(), cy = r.top + r.height / 2;
+      f.style.opacity = clamp(1.3 - Math.abs(cy - H * .5) / (H * .34), .2, 1).toFixed(3);
     }
     for (const e of els){ if (!e.classList.contains("vis") && e.getBoundingClientRect().top < H * .92) e.classList.add("vis"); }
     requestAnimationFrame(laco);
