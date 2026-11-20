@@ -189,6 +189,14 @@ Use HTML, CSS e JS num arquivo só, com as imagens numa pasta `img/`. Padrões q
 
 ---
 
+# Regras de conteúdo que a gestora já definiu (não pergunte de novo, aplique)
+
+- **Banners e destaques do cliente são protagonistas.** Se o site atual tem banners de campanha (produto novo, promoção, lançamento), **mantenha-os inteiros, com os textos e selos que já trazem** ("Novo sabor", "Chegaram…"), em destaque na página. Na LanLan, a versão que trocou os banners por outras imagens foi reprovada: "você tirou os destaques dos banners". Pegue as versões de computador e de celular, **corte a faixa lisa do topo** (ela existe para o menu fixo do site antigo; meça a primeira linha com variação de cor) e use `<picture>` com `media="(max-width:900px)"`.
+- **Sem fotos de pessoas** quando a gestora disser, e ela disse na LanLan. Sem pessoas, a criatividade vem de **frases gigantes + produto recortado flutuando sobre um disco de cor** (que gira um pouco com a rolagem), de **banner que cresce da moldura até tomar a tela** e de **super zoom no recheio com giro 360°**. Mão segurando produto também conta como pessoa: evite.
+- **Arte pronta do Drive (stories, cartazes de preço) quase sempre tem pessoa ou texto de preço.** Abra antes de prometer usar; se tiver, descarte.
+- **Mantenha o que a gestora aprovou ("ficou legal") e troque só o que ela pediu.** Na LanLan, o zoom com giro e as etiquetas de ingredientes foram aprovados e ficaram intactos.
+- **Animar o tamanho real do elemento, não só o recorte.** Para um banner que cresce da moldura até a tela cheia, anime `left/top/width/height/border-radius` do elemento (a imagem inteira escala). Animar só o `clip-path` mostra um pedaço da imagem e não o banner inteiro.
+
 # Criatividade de verdade (não basta organizar blocos)
 
 Uma vitrine com 4 abas, uma faixa correndo e cartões de "3 passos" é **modelo pronto** e foi reprovada como "totalmente sem criatividade". Antes de construir, escreva **um conceito de uma frase, ligado à marca e ao produto**, e faça o site inteiro obedecer a ele. Exemplos:
