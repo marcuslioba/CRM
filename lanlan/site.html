@@ -1,6 +1,6 @@
 <title>LanLan Coxinhas</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="LanLan – Muito mais que uma coxinha. Coxinha de verdade, recheio de sobra e sabor de Nordeste. Desde 1994 em Fortaleza.">
+<meta name="description" content="LanLan – Muito mais que uma coxinha. Coxinha de verdade, fartura de recheio e sabor de Nordeste. Desde 1994 em Fortaleza.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap">
 <style>
@@ -34,6 +34,8 @@ img{display:block;max-width:100%}
 .btn svg{width:20px;height:20px}
 .selo{display:inline-flex;align-items:center;gap:12px;font-weight:600;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--laranja)}
 .selo::before{content:"";width:34px;height:1px;background:currentColor}
+.selo.discreto{color:var(--t2);font-weight:500;font-size:.7rem;letter-spacing:.28em}
+.selo.discreto::before{width:22px;background:var(--laranja)}
 
 /* ===== Topo ===== */
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--fundo)}
@@ -237,9 +239,9 @@ body.menu-aberto{overflow:hidden}
   <section class="abertura" id="abertura">
     <div class="ab-cena" id="abCena">
       <div class="ab-texto" id="abTexto">
-        <span class="selo">Fortaleza, desde 1994</span>
+        <span class="selo discreto">Desde 1994</span>
         <h1><span>Muito mais</span><span>que uma</span><span class="b">coxinha.</span></h1>
-        <p>Coxinha de verdade, recheio de sobra e sabor de Nordeste.</p>
+        <p>Coxinha de verdade, fartura de recheio e sabor de Nordeste.</p>
         <div><a class="btn js-pedido" href="https://lanlanoficial.com.br/delivery" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#sacola"/></svg>Fazer pedido</a></div>
       </div>
       <div class="ab-quadro" id="abQuadro" aria-hidden="true"></div>
@@ -287,7 +289,7 @@ body.menu-aberto{overflow:hidden}
     <div class="in">
       <span class="selo">Muito mais que uma coxinha</span>
       <div class="fr"><h2 class="t">É crocante <b>por fora.</b></h2><p>Casquinha de panko que estala na primeira mordida.</p></div>
-      <div class="fr"><h2 class="t">Tem fartura <b>por dentro.</b></h2><p>Frango desfiado de sobra, na massa de batata com chia.</p></div>
+      <div class="fr"><h2 class="t">Tem fartura <b>por dentro.</b></h2><p>Muito frango desfiado, na massa de batata com chia.</p></div>
       <div class="fr"><h2 class="t">É nordestino <b>no recheio.</b></h2><p>Empanadas nordestinas assadas no forno, com massa folhada e recheio suculento.</p></div>
     </div>
   </section>
@@ -502,7 +504,7 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
       if (k === PRODS.length - 1 && q > .93){ op = 1; ty = 0; }
       const W = prod.offsetWidth, H = prod.offsetHeight;
       const ox = (.5 + (fx - .5) * MARG) * W, oy = (.5 + (fy - .5) * MARG) * H;
-      const tq = Math.min(1, Math.max(0, (q - .72) / .25)); yawAtual = reduz ? 0 : 28 * Math.sin(tq * Math.PI * 2);
+      const tq = Math.min(1, Math.max(0, (q - .10) / .64)); yawAtual = reduz ? 0 : 24 * Math.sin(tq * Math.PI * 2); /* a órbita acontece junto com os ingredientes: gira enquanto o zoom passa de um para o outro */
       const desloc = -innerHeight * (cel ? .24 : .2) * alto;
       prod.style.transformOrigin = `${ox}px ${oy}px`;
       prod.style.transform = `translate(${-ox}px, ${-oy + desloc}px) translateY(${ty}%) scale(${esc.toFixed(4)})`;
