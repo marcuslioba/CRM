@@ -197,6 +197,23 @@ Use HTML, CSS e JS num arquivo só, com as imagens numa pasta `img/`. Padrões q
 - **Mantenha o que a gestora aprovou ("ficou legal") e troque só o que ela pediu.** Na LanLan, o zoom com giro e as etiquetas de ingredientes foram aprovados e ficaram intactos.
 - **Animar o tamanho real do elemento, não só o recorte.** Para um banner que cresce da moldura até a tela cheia, anime `left/top/width/height/border-radius` do elemento (a imagem inteira escala). Animar só o `clip-path` mostra um pedaço da imagem e não o banner inteiro.
 
+# Use as skills de design (existem e eu não usava)
+
+A gestora perguntou se havia skill especialista e havia: **eu nunca tinha chamado nenhuma**. Agora é regra:
+- **Antes de desenhar:** se estiver disponível, carregue **`frontend-design`** (evita o visual genérico de IA e puxa decisões de tipografia, cor e composição) e **`design-elevation`** (plugin `design-skills`). Se não estiverem instaladas, avise a gestora e peça para instalar pelo cartão de plugins.
+- **Depois de montar, antes de entregar:** rode **`design:design-critique`** e **`design:accessibility-review`** em cima das capturas de tela, e **`design:ux-copy`** nos textos. Corrija tudo o que sair como crítico ou moderado e **conte à gestora o que as skills acharam**.
+- **Contraste não se adivinha, se calcula.** Meça com a fórmula do WCAG (script de 10 linhas). Na LanLan, 4 de 11 combinações falharam sem ninguém ter notado: amarelo sobre laranja (2,3:1), branco sobre laranja (3,3:1), amarelo sobre laranja translúcido (2,1:1) e branco sobre verde (4,3:1).
+- **Revise o texto como um leitor:** "1994 desde Fortaleza" no selo não quer dizer nada; o certo é "Desde 1994". Todo selo, etiqueta e botão deve ser lido em voz alta antes de publicar.
+
+# Evitar o visual "cartoon"
+
+A LanLan foi reprovada como "muito cartoon". Causas, para não repetir:
+- **Sombra dura nos botões** (`box-shadow: 0 6px 0 cor`) e **discos chapados atrás do produto** parecem adesivo infantil. Prefira sombra suave e difusa, e produto sobre fundo escuro ou foto real.
+- **Tudo em Montserrat 900, caixa alta, tamanho gigante** vira grito. Alterne pesos (300 a 500 para apoio), use caixa baixa na maioria dos títulos e reserve o peso 900 para um ou dois momentos.
+- **Etiquetas inclinadas, selos girando, tudo arredondado** somam clima de brinquedo. Menos ângulos, menos giro.
+- **Todas as cores da marca em saturação máxima, lado a lado** (laranja, verde, marrom, amarelo) dão efeito de carnaval. Use **uma cor de destaque por vez**, com neutros (creme, marrom bem escuro) e deixe a **fotografia** carregar a emoção.
+- **UI chapada ao lado de foto realista** faz a UI parecer de brinquedo. Dê à interface a mesma luz da foto: fundos escuros quentes, vinheta suave, sombras que seguem a luz do produto.
+
 # Criatividade de verdade (não basta organizar blocos)
 
 Uma vitrine com 4 abas, uma faixa correndo e cartões de "3 passos" é **modelo pronto** e foi reprovada como "totalmente sem criatividade". Antes de construir, escreva **um conceito de uma frase, ligado à marca e ao produto**, e faça o site inteiro obedecer a ele. Exemplos:
