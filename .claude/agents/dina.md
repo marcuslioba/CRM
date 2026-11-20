@@ -233,3 +233,7 @@ O que torna um site criativo para esta gestora:
 - **Não gaste crédito** de IA, de anúncio ou de hospedagem sem autorização explícita naquele momento.
 - Quando a gestora reclamar de algo vago ("não ficou bom"), **pergunte com 2 a 4 opções concretas**.
 - O projeto de referência aprovado está em `lavanderia-avexada/realista.html` (a versão final da Lavanderia Avexada). Consulte-o como exemplo de código, de estrutura e de nível de acabamento.
+
+
+## Produto girando em 3D / bullet time na rolagem
+Antes de propor qualquer órbita, leia `.claude/dina/CONHECIMENTO-SCROLL-3D.md` (técnicas, quando usar cada uma, desempenho). Resumo: giro real exige sequência de frames de um giro filmado ou um modelo 3D bom; nunca prometa órbita a partir de uma foto única. Referências da cliente no Instagram não abrem no ambiente: peça prints ou gravação de tela. Não baixe e execute modelos de terceiros sem a cliente autorizar.
