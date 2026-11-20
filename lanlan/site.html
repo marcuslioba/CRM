@@ -88,7 +88,7 @@ body.menu-aberto{overflow:hidden}
 
 /* ===== Destaques: os banners da campanha, em tela cheia ===== */
 .destaques{background:var(--fundo)}
-.dest-pin{position:relative;height:250vh}
+.dest-pin{position:relative;height:225vh}
 .dest-cena{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:22px;padding-top:76px;padding-bottom:20px}
 .dest-cab{width:100%}
 .dest-cab h2{font-size:clamp(2.4rem,5.4vw,5rem);margin-top:12px}
@@ -102,7 +102,7 @@ body.menu-aberto{overflow:hidden}
 .dest::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:#0b0603;opacity:var(--esc,0)}
 .dest .btn{position:absolute;z-index:6;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px)}
 .dest .espinha{position:absolute;left:0;top:0;bottom:0;width:14px;z-index:4;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,0));border-right:1px solid rgba(255,255,255,.14)}
-@media (max-width:900px){.dest-pin{height:230vh}.dest-cena{gap:16px;justify-content:center;padding-top:72px;padding-bottom:84px}.dest-moldura{width:calc(100% - var(--gl) - var(--gr));aspect-ratio:768/467}.dest{border-width:5px}.dest .btn{display:none}}
+@media (max-width:900px){.dest-pin{height:215vh}.dest-cena{gap:16px;justify-content:center;padding-top:72px;padding-bottom:84px}.dest-moldura{width:calc(100% - var(--gl) - var(--gr));aspect-ratio:768/467}.dest{border-width:5px}.dest .btn{display:none}}
 
 /* ===== Por dentro: super zoom no recheio + giro 360° ===== */
 .novidades{position:relative;height:520vh}
@@ -538,7 +538,7 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
   const sec = $("destPin"), ds = [...sec.querySelectorAll(".dest")], mold = $("destMold");
   if (reduz) return;
   /* pilha de capas em 3D: a de cima é puxada para a frente e cai, a de baixo sobe para o lugar */
-  const trechos = [[.12, .42], [.52, .82]]; /* quando cada capa sai */
+  const trechos = [[.04, .46], [.50, .92]]; /* quando cada capa sai */
   let ultimo = -1;
   (function quadro(){
     const p = progresso(sec);
