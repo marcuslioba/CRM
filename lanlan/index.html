@@ -108,8 +108,12 @@ body.menu-aberto{overflow:hidden}
 .nv-cena::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 120% 100% at 50% 50%,transparent 55%,rgba(0,0,0,.45));pointer-events:none}
 .nv-cab{position:absolute;left:var(--gl);top:92px;z-index:5;display:flex;align-items:center;gap:16px}
 .nv-cont{font-weight:500;font-size:.8rem;letter-spacing:.16em;color:var(--t2)}
-.nv-prod{position:absolute;left:50%;top:50%;width:min(56vw,680px);z-index:2;will-change:transform,opacity}
-.nv-prod img{width:100%;height:auto;filter:drop-shadow(0 44px 38px rgba(0,0,0,.55))}
+.nv-prod{position:absolute;left:50%;top:50%;width:min(64vw,773px);z-index:2;will-change:transform,opacity}
+.nv-prod img{width:100%;height:auto}
+.nv-prod canvas{position:absolute;inset:0;width:100%;height:100%;display:none;filter:drop-shadow(0 44px 38px rgba(0,0,0,.55))}
+.nv-prod.gl canvas{display:block}
+.nv-prod.gl img{visibility:hidden}
+.nv-prod:not(.gl) img{filter:drop-shadow(0 44px 38px rgba(0,0,0,.55))}
 .nv-ingr{position:absolute;z-index:4;display:flex;align-items:center;gap:12px;background:rgba(20,10,5,.74);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(246,234,217,.3);color:var(--creme);padding:12px 20px 12px 16px;border-radius:14px;box-shadow:0 24px 44px -14px rgba(0,0,0,.6);max-width:44%;opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease;pointer-events:none}
 .nv-ingr.on{opacity:1;transform:none}
 .nv-ingr b{display:block;font-weight:700;font-size:clamp(1rem,1.7vw,1.4rem);line-height:1.1}
@@ -125,7 +129,7 @@ body.menu-aberto{overflow:hidden}
 .nv-zoomtxt.on{opacity:1}
 @media (max-width:900px){
   .novidades{height:480vh}
-  .nv-prod{width:92vw}
+  .nv-prod{width:104.5vw}
   .nv-ingr{padding:9px 14px 9px 12px;max-width:62%;gap:9px}
   .nv-ingr b{font-size:.95rem}
   .nv-ingr span{font-size:.74rem}
@@ -277,7 +281,7 @@ body.menu-aberto{overflow:hidden}
     <div class="nv-cena" id="nvCena">
       <div class="nv-cab"><span class="selo">Por dentro</span><span class="nv-cont" id="nvCont">1 / 2</span></div>
       <div class="nv-zoomtxt" id="nvZoomTxt">Olha esse recheio</div>
-      <div class="nv-prod" id="nvProd"><img id="nvImg" src="img/n-iracema.webp" alt="Coxão Iracema aberto, recheado com camarão e requeijão" width="1116" height="544"></div>
+      <div class="nv-prod" id="nvProd"><img id="nvImg" src="img/n-iracema.webp" alt="Coxão Iracema aberto, recheado com camarão e requeijão" width="1116" height="544"><canvas id="nvCv" aria-hidden="true"></canvas></div>
       <div id="nvIngrs"></div>
       <div class="nv-info" id="nvInfo">
         <div><span class="selo" id="nvSelo">Novo sabor</span><h2 class="t" id="nvNome"></h2><p id="nvDesc"></p></div>
@@ -406,17 +410,17 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
 /* ===== Por dentro: entra → super zoom no recheio (ingredientes) → afasta girando 360° → nome → próxima ===== */
 (function(){
   const PRODS = [
-    { nome:"Coxão <b>Iracema</b>", selo:"Novo sabor", img:"img/n-iracema.webp", w:1116, h:544, base:"#1a0e08", glow:"rgba(255,120,45,.40)", alt:"Coxão Iracema aberto, recheado com camarão e requeijão",
+    { nome:"Coxão <b>Iracema</b>", selo:"Novo sabor", img:"img/n-iracema.webp", depth:"img/d-iracema.webp", w:1116, h:544, base:"#1a0e08", glow:"rgba(255,120,45,.40)", alt:"Coxão Iracema aberto, recheado com camarão e requeijão",
       desc:"Deliciosos filés de camarão com requeijão cremoso e massa crocante empanada com farinha panko.",
       ingr:[ {t:"Filés de camarão", s:"inteiros no recheio", fx:.30, fy:.46, z:3.0}, {t:"Requeijão cremoso", s:"escorrendo", fx:.55, fy:.62, z:3.2}, {t:"Panko crocante", s:"na casquinha", fx:.78, fy:.34, z:3.0} ] },
-    { nome:"Coxinha Fit <b>Frango</b>", selo:"Leve e saborosa", img:"img/n-fit.webp", w:902, h:465, base:"#17100a", glow:"rgba(232,172,72,.36)", alt:"Coxinha Fit aberta, recheada com frango desfiado",
+    { nome:"Coxinha Fit <b>Frango</b>", selo:"Leve e saborosa", img:"img/n-fit.webp", depth:"img/d-fit.webp", w:902, h:465, base:"#17100a", glow:"rgba(232,172,72,.36)", alt:"Coxinha Fit aberta, recheada com frango desfiado",
       desc:"Massa feita com batata e semente de chia, recheada com frango desfiado.",
       ingr:[ {t:"Frango desfiado", s:"bem servido", fx:.38, fy:.50, z:3.0}, {t:"Massa de batata", s:"no lugar da tradicional", fx:.80, fy:.55, z:3.0}, {t:"Semente de chia", s:"na massa", fx:.24, fy:.56, z:2.8} ] },
   ];
   const sec = $("novidades"), cena = $("nvCena"), prod = $("nvProd"), img = $("nvImg"), info = $("nvInfo"), zt = $("nvZoomTxt"), box = $("nvIngrs");
   let atual = -1, ingrEls = [];
   function monta(k){
-    const p = PRODS[k]; atual = k;
+    const p = PRODS[k]; atual = k; ultimoYaw = null;
     img.src = p.img; img.alt = p.alt; img.width = p.w; img.height = p.h;
     $("nvNome").innerHTML = p.nome; $("nvSelo").textContent = p.selo; $("nvDesc").textContent = p.desc; $("nvCont").textContent = (k + 1) + " / " + PRODS.length;
     cena.style.backgroundColor = p.base; cena.style.setProperty("--glow", p.glow);
@@ -425,6 +429,59 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
       const pos = `${dir ? "right:4%" : "left:4%"};top:${cel ? 70 : 68}%`;
       return `<div class="nv-ingr${dir ? " dir" : ""}" style="${pos}"><i></i><div><b>${i.t}</b><span>${i.s}</span></div></div>`; }).join("");
     ingrEls = [...box.children];
+  }
+
+  /* Órbita com profundidade: a foto real vira uma malha deformada por um mapa de profundidade; a câmera gira na malha.
+     Se o navegador não tiver WebGL, a foto parada continua aparecendo. */
+  const MARG = .88, cv = $("nvCv");
+  const GL = (function(){
+    try{
+      const gl = cv.getContext("webgl", {alpha:true, premultipliedAlpha:true, antialias:true});
+      if (!gl || gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS) < 1) return null;
+      const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
+      const pr = gl.createProgram();
+      gl.attachShader(pr, sh(gl.VERTEX_SHADER, `attribute vec2 a; uniform sampler2D dep; uniform float yaw, asp, S, DS; varying vec2 uv;
+        void main(){ uv = a; float d = texture2D(dep, a).r;
+          float x = (a.x - .5) * asp, y = .5 - a.y, z = (d - .5) * DS;
+          float c = cos(yaw), s = sin(yaw); float xr = x * c + z * s, zr = -x * s + z * c;
+          gl_Position = vec4(xr / (asp * .5) * S, y / .5 * S, -zr, 1.0 - zr * .30); }`));
+      gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, `precision mediump float; uniform sampler2D tex; varying vec2 uv;
+        void main(){ vec4 c = texture2D(tex, uv); if (c.a < .01) discard; gl_FragColor = c; }`));
+      gl.linkProgram(pr); if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error("link");
+      gl.useProgram(pr);
+      const NX = 180, NY = 90, v = new Float32Array(NX * NY * 2), ix = new Uint16Array((NX - 1) * (NY - 1) * 6);
+      for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++){ v[(j * NX + i) * 2] = i / (NX - 1); v[(j * NX + i) * 2 + 1] = j / (NY - 1); }
+      let k = 0; for (let j = 0; j < NY - 1; j++) for (let i = 0; i < NX - 1; i++){ const p = j * NX + i; ix.set([p, p + 1, p + NX, p + 1, p + NX + 1, p + NX], k); k += 6; }
+      const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb); gl.bufferData(gl.ARRAY_BUFFER, v, gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(pr, "a"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, ix, gl.STATIC_DRAW);
+      gl.uniform1i(gl.getUniformLocation(pr, "tex"), 0); gl.uniform1i(gl.getUniformLocation(pr, "dep"), 1);
+      gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+      gl.enable(gl.DEPTH_TEST); gl.clearColor(0, 0, 0, 0);
+      const U = n => gl.getUniformLocation(pr, n);
+      const mk = image => { const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image); return t; };
+      return { gl, U, mk, ix: ix.length };
+    }catch(e){ return null; }
+  })();
+  const texes = [];
+  if (GL) PRODS.forEach((p, n) => {
+    const a = new Image(), b = new Image(); let ok = 0;
+    const fim = () => { if (++ok === 2){ texes[n] = {c: GL.mk(a), d: GL.mk(b)}; ultimoYaw = null; } };
+    a.onload = b.onload = fim; a.src = p.img; b.src = p.depth;
+  });
+  let ultimoYaw = null, glProd = -1, yawAtual = 0;
+  function desenha(k, yawDeg){
+    if (!GL || !texes[k]) return false;
+    const {gl, U} = GL, p = PRODS[k];
+    if (glProd !== k){ cv.width = Math.round(p.w / MARG); cv.height = Math.round(p.h / MARG); gl.viewport(0, 0, cv.width, cv.height); glProd = k; }
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, texes[k].c);
+    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, texes[k].d);
+    gl.uniform1f(U("yaw"), yawDeg * Math.PI / 180); gl.uniform1f(U("asp"), p.w / p.h); gl.uniform1f(U("S"), MARG); gl.uniform1f(U("DS"), .5);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); gl.drawElements(gl.TRIANGLES, GL.ix, gl.UNSIGNED_SHORT, 0);
+    return true;
   }
   PRODS.forEach(p => { const i = new Image(); i.src = p.img; });
   let ultimo = -1;
@@ -436,7 +493,7 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
       if (k !== atual) monta(k);
       const p = PRODS[k];
       // fases: entra · super zoom no 1º ingrediente · passa de ingrediente em ingrediente (zoom em cada um) · afasta sem girar · nome
-      const cel = innerWidth <= 900, fim = cel ? .8 : .62, kz = cel ? 1.12 : 1;
+      const cel = innerWidth <= 900, fim = cel ? .8 : .78, kz = cel ? 1.12 : 1;
       const I = p.ingr, ks = [[.10, .20, I[0]], [.34, .42, I[1]], [.54, .62, I[2]]];
       let esc = 1, op = 1, ty = 0, alto = 0, fx = .5, fy = .5;
       if (q < .10){ const t = suave(q / .10); esc = mix(.55, 1, t); op = t; ty = mix(30, 0, t); }
@@ -451,7 +508,8 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
       if (q > .93){ const t = suave((q - .93) / .07); op = 1 - t; ty = mix(0, -25, t); }
       if (k === PRODS.length - 1 && q > .93){ op = 1; ty = 0; }
       const W = prod.offsetWidth, H = prod.offsetHeight;
-      const ox = fx * W, oy = fy * H;
+      const ox = (.5 + (fx - .5) * MARG) * W, oy = (.5 + (fy - .5) * MARG) * H;
+      const tq = Math.min(1, Math.max(0, (q - .72) / .25)); yawAtual = reduz ? 0 : 28 * Math.sin(tq * Math.PI * 2);
       const desloc = -innerHeight * (cel ? .24 : .2) * alto;
       prod.style.transformOrigin = `${ox}px ${oy}px`;
       prod.style.transform = `translate(${-ox}px, ${-oy + desloc}px) translateY(${ty}%) scale(${esc.toFixed(4)})`;
@@ -461,6 +519,7 @@ const progresso = sec => { const r = sec.getBoundingClientRect(), total = sec.of
       ingrEls.forEach((el, j) => el.classList.toggle("on", q > jan[j][0] + (j ? 0 : .04) && q < jan[j][1]));
       info.classList.toggle("on", q > .82 && (q < .95 || k === PRODS.length - 1));
     }
+    if (GL && yawAtual !== ultimoYaw && desenha(atual, yawAtual)){ ultimoYaw = yawAtual; prod.classList.add("gl"); }
     requestAnimationFrame(quadro);
   })();
   monta(0);
